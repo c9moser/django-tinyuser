@@ -1,0 +1,33 @@
+#!/bin/sh
+
+echo "Verifying staged Python files with flake8 before commit..."
+
+# Verify staged Python files with flake8 before commit.
+
+set -eu
+
+if ! command -v git >/dev/null 2>&1; then
+	echo "[pre-commit:flake8] git is required" >&2
+	exit 1
+fi
+
+if ! command -v flake8 >/dev/null 2>&1; then
+	echo "[pre-commit:flake8] flake8 is not installed or not in PATH" >&2
+	echo "Install it (for example: poetry add --group dev flake8) and retry." >&2
+	exit 1
+fi
+
+if [ -z "$(git diff --cached --name-only --diff-filter=ACMR -- '*.py')" ]; then
+	exit 0
+fi
+
+echo "[pre-commit:flake8] Checking staged Python files..."
+
+git diff --cached --name-only -z --diff-filter=ACMR -- '*.py' | xargs -0 flake8
+rc=$?
+if [ $rc -ne 0 ]; then
+    echo "[pre-commit:flake8] flake8 found issues in staged Python files. Please fix them before committing." >&2
+    exit $rc
+fi
+echo "[pre-commit:flake8] All staged Python files passed flake8 checks."
+exit 0

@@ -1,0 +1,72 @@
+FROM docker.io/library/python:3.13-slim-trixie
+ENV DEBUG=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PTHON_POETRY=YES
+ENV VIRTUAL_ENV=.venv
+ENV CONTAINERIZED=1
+ENV DATA_DIR=/data
+ENV RUN_DIR=/run
+ENV HTTP_PORT=8000
+ENV HTTPS_PORT=8443
+ENV HTTPS_ENABLED=0
+ENV HTTP_SERVER=django
+ENV APACHE_ENABLED=1
+ENV PATH=/venv/bin:/usr/sbin:$PATH
+ENV MEDIA_ROOT=$DATA_DIR/media
+ENV STATIC_ROOT=$DATA_DIR/static
+ENV VIRTUAL_ENV=/venv
+ENV MEDIA_ROOT=/data/media
+ENV STATIC_ROOT=/data/static
+ENV VIRTUAL_ENV=/venv
+ENV HTTP_PORT=8000
+ENV HTTPS_PORT=8443
+
+VOLUME /data
+VOLUME /run
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
+        acl \
+        pkgconf \
+        build-essential \
+        python3-dev \
+        gettext \
+        libreadline-dev \
+        libpq-dev \
+        libmariadb-dev \
+        apache2 \
+        apache2-utils \
+        apache2-bin \
+        apache2-dev \
+        libapache2-mod-wsgi-py3 \
+        uwsgi \
+        uwsgi-plugin-python3 \
+    && sh -c "echo 'daemon off;' >> /etc/apache2/apache2.conf" \
+    && a2enmod wsgi ssl rewrite auth_form \
+    && a2enconf security \
+    && rm -rf /etc/apache2/sites-enabled /etc/apache2/sites-available \
+    && ln -s '$DATA_DIR/sites-available' /etc/apache2/sites-available \
+    && ln -s '$DATA_DIR/sites-enabled' /etc/apache2/sites-enabled \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /venv /app /data/media /data/static /data/.config \
+    && ln -s /venv /app/.venv \
+    && pip install --upgrade pip setuptools wheel \
+    && pip install poetry
+
+COPY . /app
+WORKDIR /app
+
+RUN poetry config virtualenvs.in-project true \
+    && touch /data/.config/__init__.py \
+    && cp /app/httpd/options-ssl-apache.conf /etc/apache2/options-ssl.conf \
+    && if [ -d /app/django_project/local_settings ]; then rm -rf /app/django_project/local_settings; fi \
+    && ln -s /data/.config /app/django_project/local_settings \
+    && poetry install --no-interaction --all-groups --no-root \
+    && chmod +x /app/run.sh \
+    && ln -s /app/run.sh /usr/local/bin/run.sh \
+    && ln -s /app/run.sh /usr/local/bin/run \
+    && ln -s /app/run.sh /usr/local/bin/entrypoint.sh \
+    && ln -s /data/config/uwsgi.ini /etc/uwsgi/apps-available/uwsgi.ini \
+    && ln -s /etc/uwsgi/apps-available/uwsgi.ini /etc/uwsgi/apps-enabled/uwsgi.ini

@@ -1,0 +1,46 @@
+[project]
+name = "package"
+version = "0.1.0"
+description = "__project_description__"
+authors = [
+    {name = "Christian Moser",email = "development@cmoser.eu"}
+]
+license = "0BSD"
+readme = "README.md"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+    "django (>=6.0.4,<7.0)",
+    "django-allauth[openid,saml,socialaccount] (>=65.16.1,<66.0.0)",
+    "pillow (>=12.1.1,<13.0.0)",
+    "django-environ (>=0.12.0,<0.13.0)",
+    "django-widget-tweaks (>=1.5.0,<2.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "django-extensions (>=4.1,<5.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "django-browser-reload (>=1.21.0,<2.0.0)",
+    "django-debug-toolbar (>=6.3.0,<7.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)"
+]
+uswgi = [
+    "uwsgi[emperor] (>=2.0.31,<3.0.0)",
+]
+daphne = [ 
+    "daphne (>=4.2.1,<5.0.0)"
+]
+postgresql = [
+    "psycopg2 (>=2.9.12,<3.0.0)"
+]
+mysql = [
+    "mysqlclient (>=2.2.8,<3.0.0)"
+]
+uwsgi = [
+    "uwsgi (>=2.0.31,<3.0.0)"
+]

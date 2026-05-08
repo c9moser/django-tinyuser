@@ -1,0 +1,4 @@
+django-project:dockerfiles/Dockerfile.prod.trixie:main:latest,trixie
+django-project-dev:dockerfiles/Dockerfile.dev.trixie:main:dev,dev-trixie
+django-project-dev-trixie-py313:dockerfiles/Dockerfile.dev.py313-trixie:main:dev-py313-trixie
+django-project-dev-trixie-py314:dockerfiles/Dockerfile.dev.py314-trixie:main:dev-py314-trixie

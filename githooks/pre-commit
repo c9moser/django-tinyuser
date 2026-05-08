@@ -1,0 +1,19 @@
+#!/bin/sh
+self="$(realpath "$0")"
+GIT_HOOKS_DIR="$(dirname "$self")" ; export GIT_HOOKS_DIR
+PRE_COMMIT_HOOKS_DIR="$GIT_HOOKS_DIR/pre-commit.d" ; export PRE_COMMIT_HOOKS_DIR
+if [ -d "$GIT_HOOKS_DIR/../.git" ]; then
+    BASE_DIR="$(dirname "$GIT_HOOKS_DIR")" ; export BASE_DIR
+else
+    BASE_DIR="$(dirname "$(dirname "$GIT_HOOKS_DIR")")" ; export BASE_DIR
+fi
+
+_ifs_save="$IFS"
+
+IFS=$'\n'
+for i in $(find "$PRE_COMMIT_HOOKS_DIR" -type f -executable); do
+    "$i" "$@" || exit $?
+done
+# A hook script to verify what is about to be committed.
+
+IFS="$_ifs_save"
