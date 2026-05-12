@@ -57,7 +57,9 @@ third_party_apps = [
     'widget_tweaks',
 ]
 
-project_apps = []
+project_apps = [
+    'django_tinyuser',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -98,7 +100,7 @@ if ENV('DATABASE_CONFIG_METHOD') == 'url':
     DATABASES = {
         'default': ENV.db_url('DATABASE_URL'),
     }
-elif ENV('DATABASE_CONFIG_METHOD') in ['postgresql','pgsql', 'postgres', 'psql']:
+elif ENV('DATABASE_CONFIG_METHOD') in ('postgresql','pgsql', 'postgres', 'psql'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -109,7 +111,7 @@ elif ENV('DATABASE_CONFIG_METHOD') in ['postgresql','pgsql', 'postgres', 'psql']
             'PORT': ENV('POSTGRES_PORT'),
         }
     }
-elif ENV('DATABASE_CONFIG_METHOD') in ['mysql', 'mariadb']:
+elif ENV('DATABASE_CONFIG_METHOD') in ('mysql', 'mariadb'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -120,7 +122,7 @@ elif ENV('DATABASE_CONFIG_METHOD') in ['mysql', 'mariadb']:
             'PORT': ENV('MYSQL_PORT'),
         }
     }
-elif ENV('DATABASE_CONFIG_METHOD') == 'sqlite':
+elif ENV('DATABASE_CONFIG_METHOD') in ('sqlite','sqlite3'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -180,6 +182,8 @@ if ENV('CONTAINERIZED'):
     if Path('/etc/django-env').exists():
         ENV.read_env('/etc/django-env')
 
+
+AUTH_USER_MODEL = 'django_tinyuser.TinyUser'
 
 if DEBUG:
     _debug_settings_file = SETTINGS_DIR / "debug_settings.py"

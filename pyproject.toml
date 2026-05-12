@@ -1,11 +1,20 @@
 [project]
-name = "package"
-version = "0.1.0"
-description = "__project_description__"
+name="django-tinyuser"
+version="0.0.1"
+
+description = "A small minimal user for django using allauth-integration"
 authors = [
-    {name = "Christian Moser",email = "development@cmoser.eu"}
+    {name = "Christian Moser",email = "dev@c-moser.at"}
+]
+maintainers = [
+	{name = "Christian Moser",email = "dev@c-moser.at"}
 ]
 license = "0BSD"
+license_files = [
+	"LICENSE",
+	"LICENSE.md"
+]
+
 readme = "README.md"
 requires-python = ">=3.13,<3.15"
 dependencies = [
@@ -16,8 +25,19 @@ dependencies = [
     "django-widget-tweaks (>=1.5.0,<2.0.0)",
     "flake8 (>=7.3.0,<8.0.0)",
     "django-extensions (>=4.1,<5.0)",
+    "django-rest-framework (>=0.1.0,<0.2.0)",
 ]
 
+repositories = [
+    {url = "https://codeberg.org/c9moser/django-tinyuser.git", type = "git"},
+    {url = "https://git.c-moser.at/django-tinytools/django-tinyuser.git", type = "git"},
+]
+
+[tool.poetry]
+package-mode = true
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.15"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -32,7 +52,7 @@ dev = [
 uswgi = [
     "uwsgi[emperor] (>=2.0.31,<3.0.0)",
 ]
-daphne = [ 
+daphne = [
     "daphne (>=4.2.1,<5.0.0)"
 ]
 postgresql = [

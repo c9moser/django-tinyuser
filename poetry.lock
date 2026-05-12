@@ -619,6 +619,20 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "django-rest-framework"
+version = "0.1.0"
+description = "alias."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "django-rest-framework-0.1.0.tar.gz", hash = "sha256:47a8f496fa69e3b6bd79f68dd7a1527d907d6b77f009e9db7cf9bb21cc565e4a"},
+]
+
+[package.dependencies]
+djangorestframework = "*"
+
+[[package]]
 name = "django-widget-tweaks"
 version = "1.5.1"
 description = "Tweak the form field rendering in templates, not in python-level form definitions."
@@ -628,6 +642,21 @@ groups = ["main"]
 files = [
     {file = "django_widget_tweaks-1.5.1-py3-none-any.whl", hash = "sha256:3f5080f8365740fc1c14607498c975cbfed896dd0c40e1b563095716ee31e3b5"},
     {file = "django_widget_tweaks-1.5.1.tar.gz", hash = "sha256:084acc9eeb5a3208f2670522de6284287973e54d54488ce6d402f4b99bc5f452"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[[package]]
+name = "djangorestframework"
+version = "3.17.1"
+description = "Web APIs for Django, made easy."
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "djangorestframework-3.17.1-py3-none-any.whl", hash = "sha256:c3c74dd3e83a5a3efc37b3c18d92bd6f86a6791c7b7d4dff62bb068500e76457"},
+    {file = "djangorestframework-3.17.1.tar.gz", hash = "sha256:a6def5f447fe78ff853bff1d47a3c59bf38f5434b031780b351b0c73a62db1a5"},
 ]
 
 [package.dependencies]
@@ -1667,4 +1696,4 @@ testing = ["coverage[toml]", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.15"
-content-hash = "46cc3f501bd578258954e55b65fd636ab7049d251d0cc3b0f62e36caa4d51172"
+content-hash = "f576670883e1b6169b34d71d9031d3b2b6f6081dd0008e0f0dc281e421fa0a60"
