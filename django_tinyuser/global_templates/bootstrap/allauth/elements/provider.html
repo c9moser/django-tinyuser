@@ -1,0 +1,21 @@
+{% load static %}
+{% if not attrs.name|lower == "openid" %}
+<li class="list-group-item">
+    <a title="{{ attrs.name }}" href="{{ attrs.href }}" class="icon-link">
+        {% if attrs.name|lower == "steam" %}
+            <svg class="bi">
+                <use xlink:href="{% static "img/bootstrap-icons.svg" %}#steam"></use>
+            </svg>
+        {% elif attrs.name|lower == "github" %}
+            <svg class="bi">
+                <use xlink:href="{% static "img/bootstrap-icons.svg" %}#github"></use>
+            </svg>
+        {% elif attrs.name|lower == "google" %}
+            <svg class="bi">
+                <use xlink:href="{% static "img/bootstrap-icons.svg" %}#google"></use>
+            </svg>
+        {% endif %}
+        {{ attrs.name }}
+    </a>
+</li>
+{% endif %}
