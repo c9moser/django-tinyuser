@@ -1,0 +1,63 @@
+
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% translate "TinyUser" %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container min-vh-100 d-flex flex-column">
+        <header class="row mb-4">
+            <div class="px-3">
+                <h1>
+                    <a href="/" class="text-decoration-none link-body-emphasis">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
+                        {% translate "TinyUser" %}
+                    </a>
+
+                </h1>
+            </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <ul class="navbar-nav ms-3">
+                    <li class="nav-item"><a class="nav-link" href="/">{% translate "Home" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{# url 'tinyuser:profile' #}">{% translate "Profile" %}</a></li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto me-3">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_change_password' %}">{% translate "Change Password" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">{% translate "Logout" %}</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">{% translate "Login" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">{% translate "Register" %}</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
+
+        <div class="row" style="min-height: calc(100vh - 201px);">
+            <div>
+                {% block content %}
+                <h1>{% translate "Welcome to TinyUser!" %}</h1>
+                <p>{% translate "This is the base template. Extend this template for your views." %}</p>
+                {% endblock %}
+            </div>
+        </div>
+        <footer class="row bg-secondary text-white text-center py-2 px-3 mt-4">
+            &copy; 2026 {% translate "TinyUser" %}. {% translate "All rights reserved." %}
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

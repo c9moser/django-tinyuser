@@ -994,3 +994,4 @@ httpd/sites-available/
 https/nginx/sites-available/
 uwsgi.ini
 
+doc/_build/

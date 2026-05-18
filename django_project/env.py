@@ -36,6 +36,11 @@ ENV = Env(
         STATIC_URL=(str, "static/"),
         STATIC_ROOT=(str, str(BASE_DIR / ".data" / "static")),
         VENV_DIR=(str, str(BASE_DIR / ".venv")),
+        CSS_FRAMEWORK=(str, "bootstrap"),
+        USE_POSTGRES_SCHEMAS=(bool, False),
+        DJANGO_POSTGRES_SCHEMA=(str, "public"),
+        POSTGRES_SCHEMA=(str, "public"),
+        TINYUSER_SHOW_INDEX_PAGE=(bool, False),
 )
 
 CONTAINERIZED = ENV("CONTAINERIZED")

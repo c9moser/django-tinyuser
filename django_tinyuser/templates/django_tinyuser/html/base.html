@@ -8,7 +8,8 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header>
+<div class="container">
+    <header class="row">
         <h1><a href="{% url 'tinyuser:home' %}">TinyUser</a></h1>
         <nav>
             <ul>
@@ -20,14 +21,25 @@
             </ul>
         </nav>
     </header>
-    <main>
-        {% block content %}
-        <h1>Welcome to TinyUser!</h1>
-        This is the base template. Extend this template for your views.
-        {% endblock %}
-    </main>
+
+    <div class="row" style="height: 100%;">
+        <div class="col-md-2 col-lg-3">
+            <!-- Optional left sidebar content can go here -->
+        </div>
+        <div class="col-md-8 col-lg-6">
+            {% block content %}
+            <h1>Welcome to TinyUser!</h1>
+            This is the base template. Extend this template for your views.
+            {% endblock %}
+        </div>
+        <div class="col-md-2 col-lg-3">
+            <!-- Optional right sidebar content can go here -->
+        </div>
+    </div>
     <footer>
         <p>&copy; 2026 TinyUser. All rights reserved.</p>
     </footer>
+</div> <!-- .container -->
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>
