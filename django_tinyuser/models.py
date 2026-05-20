@@ -1,65 +1,13 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-
-class TinyUserManager(BaseUserManager):
-    """
-    Custom user manager for TinyUser model.
-
-    Provides methods to create regular users and superusers.
-    """
-
-    def create_user(self, email, username, password=None, **extra_fields):
-        """
-        Create and save a regular user with the given email, username, and password.
-
-        :param email: The email address of the user.
-        :type email: str
-        :param username: The username of the user.
-        :type username: str
-        :param password: The password for the user, defaults to None
-        :type password: str, optional
-        :raises ValueError: If the email is not provided.
-        :raises ValueError: If the username is not provided.
-        :return: The created user instance.
-        :rtype: TinyUser
-        """
-        if not email:
-            raise ValueError(_('The Email field must be set'))
-        email = self.normalize_email(email)
-        if not username:
-            raise ValueError(_('The Username field must be set'))
-        user = self.model(email=email, username=username, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, username, password=None, **extra_fields):
-        """
-        Create and save a superuser with the given email, username, and password.
-
-        :param email: The email address of the superuser.
-        :type email: str
-        :param username: The username of the superuser.
-        :type username: str
-        :param password: The password for the superuser, defaults to None
-        :type password: str, optional
-        :raises ValueError: If is_staff is not True.
-        :raises ValueError: If is_superuser is not True.
-        :return: The created superuser instance.
-        :rtype: TinyUser
-        """
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError(_('Superuser must have is_staff=True.'))
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(_('Superuser must have is_superuser=True.'))
-
-        return self.create_user(email, username, password, **extra_fields)
+from django.conf import settings
+from django_tinyuser.managers import TinyUserManager
+from django_tinyuser.enums import (
+    FriendshipStatus,
+    FriendshipBlockedStatus
+)
 
 
 class TinyUser(AbstractBaseUser, PermissionsMixin):
@@ -197,7 +145,7 @@ class TinyUserProfile(models.Model):
     #: The user field is a one-to-one relationship with the TinyUser model, linking each profile to a specific user.
     #: It is required and will be deleted if the associated user is deleted.
     user = models.OneToOneField(
-        TinyUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='profile')
 
@@ -206,7 +154,6 @@ class TinyUserProfile(models.Model):
     first_name = models.CharField(
         max_length=30,
         blank=True,
-
     )
     #: The last_name field stores the user's last name.
     #: It is optional and can be left blank.
@@ -229,7 +176,7 @@ class TinyUserProfile(models.Model):
         ]
 
 
-class UserGroup(models.Model):
+class UserFriendsGroup(models.Model):
     """Model to represent groups of friends for TinyUser instances."""
 
     #: The name field is a character field that stores the name of the friend group.
@@ -249,14 +196,14 @@ class UserGroup(models.Model):
     description = models.TextField(blank=True)
 
     owner = models.ForeignKey(
-        TinyUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='owned_friend_groups'
     )
 
     #: The members field is a many-to-many relationship with the TinyUser model,
     #: allowing multiple users to be part of the same friend group.
-    members = models.ManyToManyField(TinyUser, related_name='friend_groups')
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='friend_groups')
 
     def __str__(self):
         return self.name
@@ -269,6 +216,7 @@ class UserGroup(models.Model):
         indexes = [
             models.Index(fields=['name'], name='friend_group_name_idx'),
         ]
+        unique_together = [('owner', 'name'),]
 
 
 class UserFriendship(models.Model):
@@ -277,7 +225,7 @@ class UserFriendship(models.Model):
     #: The from_user field is a foreign key to the TinyUser model, representing the user who initiated the friendship.
     #: It is required and will be deleted if the associated user is deleted.
     from_user = models.ForeignKey(
-        TinyUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendships_initiated'
     )
@@ -285,7 +233,7 @@ class UserFriendship(models.Model):
     #: The to_user field is a foreign key to the TinyUser model, representing the user who is the recipient of the friendship.
     #: It is required and will be deleted if the associated user is deleted.
     to_user = models.ForeignKey(
-        TinyUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendships_received'
     )
@@ -294,22 +242,122 @@ class UserFriendship(models.Model):
     #: It is automatically set to the current date and time when the friendship is created.
     created_at = models.DateTimeField(default=timezone.now)
 
-    #: The status field indicates the status of the friendship, such as 'pending', 'accepted', or 'rejected'.
+    #: The status field indicates the status of the friendship, such as 'pending', 'accepted', 'rejected' or 'blocked'.
     #: It is a character field with a maximum length of 20 characters, and it defaults to 'pending'.
-    status = models.CharField(max_length=20, default='pending')
+    status_data = models.CharField(
+        max_length=20,
+        default=FriendshipStatus.PENDING.value,
+        verbose_name=_('friendship status'),
+        db_column='status'
+    )
+
+    @property
+    def status(self):
+        """
+        Return the current status of the friendship as a FriendshipStatus enum member.
+        :return: The current status of the friendship.
+        :rtype: FriendshipStatus
+        """
+        return FriendshipStatus.from_string(self.status_data)
+
+    @status.setter
+    def status(self, value: FriendshipStatus | str):
+        """
+        Set the status of the friendship using a FriendshipStatus enum member or a valid string.
+        :param value: The new status of the friendship.
+        :type value: FriendshipStatus or str
+        """
+        if isinstance(value, FriendshipStatus):
+            self.status_data = value.value
+        elif isinstance(value, str):
+            try:
+                self.status_data = FriendshipStatus.from_string(value).value
+            except ValueError:
+                raise ValueError(f"Invalid status value: {value}. Must be a valid FriendshipStatus or string.")
+        else:
+            raise TypeError("Status must be a FriendshipStatus enum member or a valid string.")
+
+    blocked_status_data = models.CharField(
+        max_length=20,
+        default=FriendshipBlockedStatus.NOT_BLOCKED.value,
+        verbose_name=_('friendship blocked status'),
+        db_column='blocked_status'
+    )
+
+    @property
+    def blocked_status(self):
+        """
+        Return the current blocked status of the friendship as a FriendshipBlockedStatus enum member.
+        :return: The current blocked status of the friendship.
+        :rtype: FriendshipBlockedStatus
+        """
+        return FriendshipBlockedStatus.from_string(self.blocked_status_data)
+
+    @blocked_status.setter
+    def blocked_status(self, value: FriendshipBlockedStatus | str):
+        """
+        Set the blocked status of the friendship using a FriendshipBlockedStatus enum member or a valid string.
+        :param value: The new blocked status of the friendship.
+        :type value: FriendshipBlockedStatus or str
+        """
+        if isinstance(value, FriendshipBlockedStatus):
+            self.blocked_status_data = value.value
+        elif isinstance(value, str):
+            try:
+                self.blocked_status_data = FriendshipBlockedStatus.from_string(value).value
+            except ValueError:
+                raise ValueError(f"Invalid blocked status value: {value}. Must be a valid FriendshipBlockedStatus or string.")
+        else:
+            raise TypeError("Blocked status must be a FriendshipBlockedStatus enum member or a valid string.")
+
+    @blocked_status.deleter
+    def blocked_status(self):
+        """Delete the blocked status of the friendship by setting it to 'not blocked'."""
+        self.blocked_status_data = FriendshipBlockedStatus.NOT_BLOCKED.value
+
+    @property
+    def is_pending(self):
+        """Return True if the friendship is currently pending, False otherwise."""
+        return self.status == FriendshipStatus.PENDING
+
+    @property
+    def is_accepted(self):
+        """Return True if the friendship is currently accepted, False otherwise."""
+        other_status = self.__class__.objects.filter(from_user=self.to_user, to_user=self.from_user)[0].status
+        return self.status == FriendshipStatus.ACCEPTED and other_status == FriendshipStatus.ACCEPTED
 
     def accept(self):
         """Accept the friendship request by setting the status to 'accepted'."""
-        self.status = 'accepted'
+        self.status_data = FriendshipStatus.ACCEPTED.value
         self.save()
 
     def reject(self):
         """Reject the friendship request by setting the status to 'rejected'."""
-        self.status = 'rejected'
+        self.status_data = FriendshipStatus.REJECTED.value
         self.save()
 
+    def block(self):
+        """Block the user by setting the status to 'blocked'."""
+        self.status_data = FriendshipStatus.BLOCKED.value
+        self.block_initiator = True
+        self.save()
+        self.__class__.objects.filter(
+            from_user=self.to_user,
+            to_user=self.from_user
+        ).update(status_data=FriendshipStatus.BLOCKED.value)
+
     def __str__(self):
-        return f"{self.from_user.username} is friends with {self.to_user.username}"
+        return f"{self.from_user.username} is {self.status.name} friends with {self.to_user.username}"
+
+    def unblock(self):
+        """Unblock the user by setting the status back to 'pending'."""
+        self.status_data = FriendshipStatus.PENDING.value
+        self.block_initiator = False
+        self.save()
+        self.__class__.objects.filter(
+            from_user=self.to_user,
+            to_user=self.from_user
+        ).update(status_data=FriendshipStatus.PENDING.value)
 
     class Meta:
         verbose_name = _('user friendship')
@@ -321,3 +369,4 @@ class UserFriendship(models.Model):
             models.Index(fields=['to_user'], name='to_user_idx'),
             models.Index(fields=['from_user', 'to_user'], name='friendship_idx'),
         ]
+        unique_together = [('from_user', 'to_user'),]

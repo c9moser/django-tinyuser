@@ -995,3 +995,9 @@ https/nginx/sites-available/
 uwsgi.ini
 
 doc/_build/
+
+# django directories
+media
+static
+.data
+

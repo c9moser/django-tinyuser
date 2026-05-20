@@ -99,6 +99,23 @@ TEMPLATES = [
 ...
 ]
 ```
+You also need to set the `CSS_FRAMEWORK` option in your settings.py to the css framework you use,
+otherwise the templates will not work.
+
+```python
+CSS_FRAMEWORK = 'bootstrap' # if you use Bootstrap
+# or
+CSS_FRAMEWORK = 'tailwindcss' # if you use Tailwind CSS
+# or
+CSS_FRAMEWORK = 'custom' # if you use custom templates
+```
+
+And you need to set the `AUTH_USER_MODEL` to `django_tinyuser.TinyUser` in your settings.py or
+to an overloaded model if you have customized the user model.
+
+```python
+AUTH_USER_MODEL = 'django_tinyuser.TinyUser'
+```
 
 Then add the urls of *django-allauth* to your urls.py
 
@@ -110,6 +127,13 @@ urlpatterns = [
     ...
 ]
 ```
+
+Finally run the migrations to create the required tables for *django-tinyuser*.
+
+```bash
+    python manage.py migrate django_tinyuser
+```
+
 
 ## Configuration options to be added to your settings.py
 ### CSS\_FRAMEWORK

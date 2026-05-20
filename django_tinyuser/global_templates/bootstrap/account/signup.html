@@ -1,0 +1,97 @@
+{% extends "account/base_entrance.html" %}
+{% load allauth i18n widget_tweaks%}
+{% block head_title %}
+    {% trans "Signup" %}
+{% endblock head_title %}
+{% block content %}
+    {% element h1 %}
+        {% trans "Sign Up" %}
+    {% endelement %}
+    {% setvar link %}
+        <a href="{{ login_url }}">
+        {% endsetvar %}
+        {% setvar end_link %}
+        </a>
+    {% endsetvar %}
+    {% element p %}
+        {% blocktranslate %}Already have an account? Then please {{ link }}sign in{{ end_link }}.{% endblocktranslate %}
+    {% endelement %}
+
+    {% if not SOCIALACCOUNT_ONLY %}
+        {% url 'account_signup' as action_url %}
+        <form method="post" action="{{ action_url }}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <ul>
+                    {% for error in form.non_field_errors %}
+                        <li class="p-2 my-2 text-red-700 bg-red-50 rounded-md border-red-300 border">
+                            {{ error }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if form.errors %}
+                {% for field, errors in form.errors.items %}
+                    <ul>
+                        <li class="p-2 my-2 text-red-700 bg-red-50 rounded-md border-red-300 border">
+                            {{ field }}: {{ errors }}
+                        </li>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-floating mb-3">
+                {% translate "Email address" as email_placeholder %}
+                {% render_field form.email class="form-control" placeholder=email_placeholder %}
+                <label for="{{ form.email.id_for_label }}">{{ email_placeholder }}</label>
+            </div>
+            <div class="form-floating mb-3">
+                {% translate "Username" as username_placeholder %}
+                {% render_field form.username class="form-control" placeholder=username_placeholder %}
+                <label for="{{ form.username.id_for_label }}">{{ username_placeholder }}</label>
+            </div>
+            {% if form.password1.errors %}
+                <ul>
+                    {% for error in form.password1.errors %}
+                        <li class="p-2 my-2 text-red-700 bg-red-50 rounded-md border-red-300 border">
+                            {{ error }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="form-floating mb-3">
+                {% translate "Password" as password_placeholder %}
+                {% render_field form.password1 class="form-control" placeholder=password_placeholder %}
+                <label for="{{ form.password1.id_for_label }}">{{ password_placeholder }}</label>
+            </div>
+            {% if form.password2.errors %}
+                <ul>
+                    {% for error in form.password2.errors %}
+                        <li class="p-2 my-2 text-red-700 bg-red-50 rounded-md border-red-300 border">
+                            {{ error }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="form-floating mb-3">
+                {% translate "Confirm password" as confirm_password_placeholder %}
+                {% render_field form.password2 class="form-control" placeholder=confirm_password_placeholder %}
+                <label for="{{ form.password2.id_for_label }}">{{ confirm_password_placeholder }}</label>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-success">{% translate "Sign up" %}</button>
+            </div>
+        </form>
+    {% endif %}
+    {% if PASSKEY_SIGNUP_ENABLED %}
+        {% element hr %}
+        {% endelement %}
+        {% element button href=signup_by_passkey_url tags="prominent,signup,outline,primary" %}
+            {% trans "Sign up using a passkey" %}
+        {% endelement %}
+    {% endif %}
+    {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+{% endblock content %}

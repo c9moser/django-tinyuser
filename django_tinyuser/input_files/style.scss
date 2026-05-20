@@ -1,0 +1,6 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+// Update the import directory to point to it‘s location within node_modules
+$bootstrap-icons-font-dir: "../../node_modules/bootstrap-icons/font/fonts";
+
+// Import the Sass files as usual
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons";

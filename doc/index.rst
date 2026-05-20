@@ -11,7 +11,10 @@ django-tinyuser documentation
    :caption: Contents
 
    Installation <installation.rst>
+   Configuration <config.rst>
    Usage <usage.rst>
    API Reference <api_reference.rst>
    Contributing <contributing.rst>
-   License <../LICENSE.django-tinyuser.md>
+   Todo <todo.rst>
+   Changelog <changelog.rst>
+   License <LICENSE.django-tinyuser.md>

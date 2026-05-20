@@ -7,11 +7,17 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import sys
+import os
 from pathlib import Path
+import django
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 sys.path.insert(0, str(BASE_DIR))
+
+# Setup Django environment for autodoc
+os.environ['DJANGO_SETTINGS_MODULE'] = 'django_project.settings'
+django.setup()
+
 
 project = 'django-tinyuser'
 copyright = '2026, Christian Moser'
@@ -25,6 +31,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
+    'recommonmark',
 ]
 
 templates_path = ['_templates']
@@ -34,5 +41,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'bootstrap'
+html_theme = 'sphinx_rtd_theme'
+
 html_static_path = ['_static']
+html_show_sourcelink = False
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
