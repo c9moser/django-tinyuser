@@ -2,7 +2,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
+from django.conf import settings as django_settings
+from django_tinyuser import settings
 from django_tinyuser.managers import TinyUserManager
 from django_tinyuser.enums import (
     FriendshipStatus,
@@ -131,7 +132,15 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-        db_table = 'tinyuser_user'
+        if settings.TINYUSER_EXTERNAL_MANAGED or settings.AUTH_EXTERNAL_MANAGED:
+            managed = False
+        else:
+            managed = True
+
+        if settings.USE_POSTGRESQL_SCHEMAS:
+            db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_user"
+        else:
+            db_table = 'tinyuser_user'
 
         indexes = [
             models.Index(fields=['email'], name='email_idx'),
@@ -145,7 +154,7 @@ class TinyUserProfile(models.Model):
     #: The user field is a one-to-one relationship with the TinyUser model, linking each profile to a specific user.
     #: It is required and will be deleted if the associated user is deleted.
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+        django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='profile')
 
@@ -170,13 +179,21 @@ class TinyUserProfile(models.Model):
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
 
-        db_table = 'tinyuser_profile'
+        if settings.AUTH_EXTERNAL_MANAGED:
+            managed = False
+        else:
+            managed = True
+
+        if settings.USE_POSTGRESQL_SCHEMAS:
+            db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_profile"
+        else:
+            db_table = 'tinyuser_profile'
         indexes = [
             models.Index(fields=['user'], name='user_idx'),
         ]
 
 
-class UserFriendsGroup(models.Model):
+class UserFriendGroup(models.Model):
     """Model to represent groups of friends for TinyUser instances."""
 
     #: The name field is a character field that stores the name of the friend group.
@@ -196,14 +213,14 @@ class UserFriendsGroup(models.Model):
     description = models.TextField(blank=True)
 
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='owned_friend_groups'
     )
 
     #: The members field is a many-to-many relationship with the TinyUser model,
     #: allowing multiple users to be part of the same friend group.
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='friend_groups')
+    members = models.ManyToManyField(django_settings.AUTH_USER_MODEL, related_name='friend_groups')
 
     def __str__(self):
         return self.name
@@ -212,7 +229,15 @@ class UserFriendsGroup(models.Model):
         verbose_name = _('friend group')
         verbose_name_plural = _('friend groups')
 
-        db_table = 'tinyuser_friend_group'
+        if settings.AUTH_EXTERNAL_MANAGED:
+            managed = False
+        else:
+            managed = True
+
+        if settings.USE_POSTGRESQL_SCHEMAS:
+            db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_friend_group"
+        else:
+            db_table = 'tinyuser_friend_group'
         indexes = [
             models.Index(fields=['name'], name='friend_group_name_idx'),
         ]
@@ -225,7 +250,7 @@ class UserFriendship(models.Model):
     #: The from_user field is a foreign key to the TinyUser model, representing the user who initiated the friendship.
     #: It is required and will be deleted if the associated user is deleted.
     from_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendships_initiated'
     )
@@ -233,7 +258,7 @@ class UserFriendship(models.Model):
     #: The to_user field is a foreign key to the TinyUser model, representing the user who is the recipient of the friendship.
     #: It is required and will be deleted if the associated user is deleted.
     to_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendships_received'
     )
@@ -363,7 +388,16 @@ class UserFriendship(models.Model):
         verbose_name = _('user friendship')
         verbose_name_plural = _('user friendships')
 
-        db_table = 'tinyuser_friendship'
+        if settings.AUTH_EXTERNAL_MANAGED:
+            managed = False
+        else:
+            managed = True
+
+        if settings.USE_POSTGRESQL_SCHEMAS:
+            db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_friendship"
+        else:
+            db_table = 'tinyuser_friendship'
+
         indexes = [
             models.Index(fields=['from_user'], name='from_user_idx'),
             models.Index(fields=['to_user'], name='to_user_idx'),

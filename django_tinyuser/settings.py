@@ -23,12 +23,10 @@ else:
     CSS_FRAMEWORK_CUSTOM = True
 
 
-USE_POSTGRES_SCHEMAS = getattr(settings, 'USE_POSTGRES_SCHEMAS', False)
-DJANGO_POSTGRES_SCHEMA = getattr(
-    settings,
-    'DJANGO_POSTGRES_SCHEMA',
-    getattr(settings, 'POSTGRES_SCHEMA', 'public')
-)
+USE_POSTGRESQL_SCHEMAS = getattr(settings, 'USE_POSTGRESQL_SCHEMAS', False)
+POSTGRESQL_AUTH_SCHEMA = getattr(settings, 'POSTGRESQL_AUTH_SCHEMA', 'public')
+TINYUSER_EXTERNAL_MANAGED = getattr(settings, 'TINYUSER_EXTERNAL_MANAGED', False)
+AUTH_EXTERNAL_MANAGED = getattr(settings, 'AUTH_EXTERNAL_MANAGED', False)
 
 TINYUSER_SHOW_INDEX_PAGE = getattr(settings, 'TINYUSER_SHOW_INDEX_PAGE', False)
 
@@ -45,3 +43,6 @@ if not BASE_TEMPLATE:
         BASE_TEMPLATE = 'django_tinyuser/tailwindcss/base.html'
     else:
         BASE_TEMPLATE = 'django_tinyuser/html/base.html'
+
+ALLOW_SIGNUP = getattr(settings, 'ALLOW_SIGNUP', True)
+DEFAULT_USER_GROUPS = getattr(settings, 'DEFAULT_USER_GROUPS', [])

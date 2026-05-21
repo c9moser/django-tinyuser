@@ -31,11 +31,20 @@
 
                 <ul class="navbar-nav ms-auto me-3">
                     {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account_change_password' %}">{% translate "Change Password" %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">{% translate "Logout" %}</a></li>
+                    <li class="nav-item">{{ user.username }}
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}">{% translate "Change Password" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_logout' %}">{% translate "Logout" %}</a></li>
+                            </ul>
+                        </div>
+                    </li>
                     {% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">{% translate "Login" %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a></li>
                     {% endif %}
                 </ul>
             </nav>

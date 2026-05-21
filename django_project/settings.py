@@ -52,6 +52,11 @@ allauth_apps = (
     'allauth.socialaccount',
 )
 
+api_apps = (
+    'drf_spectacular',
+    'drf_spectacular_sidecar',  # required for Django collectstatic discovery
+)
+
 third_party_apps = [
     'django_extensions',
     'widget_tweaks',
@@ -98,6 +103,14 @@ USE_POSTGRES_SCHEMAS = ENV('USE_POSTGRES_SCHEMAS')
 DJANGO_POSTGRES_SCHEMA = ENV('DJANGO_POSTGRES_SCHEMA')
 POSTGRES_SCHEMA = ENV('POSTGRES_SCHEMA')
 TINYUSER_SHOW_INDEX_PAGE = ENV('TINYUSER_SHOW_INDEX_PAGE')
+
+SPECTACULAR_SETTINGS = {
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    # OTHER SETTINGS
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -213,6 +226,8 @@ else:
         from .production_settings import *
     del _production_settings_file
 
+
+
 # Load local settings if available, these can override all other settings and are not tracked in version control
 if _local_settings_file.exists():
     from .local_settings.settings import * # noqa: F401, F403
@@ -246,6 +261,7 @@ SETTINGS_MODULE = 'django_project.settings'
 INSTALLED_APPS = tuple({
     *django_apps,
     *allauth_apps,
+    *api_apps,
     *third_party_apps,
     *project_apps
 })

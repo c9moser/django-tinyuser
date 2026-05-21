@@ -96,6 +96,7 @@ to an overloaded model if you have customized the user model.
 Then add the urls of *django-allauth* to your urls.py
 
 .. code-block:: python
+
     from django.urls import path, include
     urlpatterns = [
         ...
