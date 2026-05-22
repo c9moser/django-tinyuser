@@ -18,10 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django_tinyuser import api_urls as tinyuser_api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+]
+
+
+urlpatterns += [
+    path('tinyuser/', include(tinyuser_api_urls, namespace='api')),
 ]
 
 if settings.DEBUG:

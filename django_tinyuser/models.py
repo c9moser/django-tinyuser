@@ -212,15 +212,43 @@ class UserFriendGroup(models.Model):
     #: It is optional and can be left blank.
     description = models.TextField(blank=True)
 
-    owner = models.ForeignKey(
+    user = models.ForeignKey(
         django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='owned_friend_groups'
+        related_name='user_friend_groups'
     )
 
     #: The members field is a many-to-many relationship with the TinyUser model,
     #: allowing multiple users to be part of the same friend group.
     members = models.ManyToManyField(django_settings.AUTH_USER_MODEL, related_name='friend_groups')
+
+    def add_member(self, user):
+        """Add a user to the friend group.
+
+        :param user: The user to be added to the friend group.
+        :type user: TinyUser
+        """
+        self.members.add(user)
+
+    def remove_member(self, user):
+        """Remove a user from the friend group.
+
+        :param user: The user to be removed from the friend group.
+        :type user: TinyUser
+        """
+        self.members.remove(user)
+
+    def is_member(self, user):
+        """Check if a user is a member of the friend group.
+
+        :param user: The user to check for membership in the friend group.
+        :type user: TinyUser
+        :return: True if the user is a member of the friend group, False otherwise.
+        :rtype: bool
+        """
+        if self.owner == user:
+            return True
+        return self.members.filter(id=user.id).exists()
 
     def __str__(self):
         return self.name
@@ -241,7 +269,7 @@ class UserFriendGroup(models.Model):
         indexes = [
             models.Index(fields=['name'], name='friend_group_name_idx'),
         ]
-        unique_together = [('owner', 'name'),]
+        unique_together = [('user', 'name'),]
 
 
 class UserFriendship(models.Model):
@@ -255,13 +283,28 @@ class UserFriendship(models.Model):
         related_name='friendships_initiated'
     )
 
-    #: The to_user field is a foreign key to the TinyUser model, representing the user who is the recipient of the friendship.
+    #: The to_user field is a foreign key to the TinyUser model, representing the user who is
+    #: the recipient of the friendship.
+    #:
     #: It is required and will be deleted if the associated user is deleted.
     to_user = models.ForeignKey(
         django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendships_received'
     )
+
+    #: The is_initiator field indicates whether the user is the initiator of the friendship request.
+    #: It is a boolean field that defaults to False.
+    is_initiator = models.BooleanField(
+        default=False,
+        verbose_name=_('friendship initiator'),
+        db_column='is_initiator'
+    )
+
+    @property
+    def is_recipient(self):
+        """Return True if the user is the recipient of the friendship, False otherwise."""
+        return not self.is_initiator
 
     #: The created_at field stores the date and time when the friendship was created.
     #: It is automatically set to the current date and time when the friendship is created.
@@ -331,7 +374,7 @@ class UserFriendship(models.Model):
             try:
                 self.blocked_status_data = FriendshipBlockedStatus.from_string(value).value
             except ValueError:
-                raise ValueError(f"Invalid blocked status value: {value}. Must be a valid FriendshipBlockedStatus or string.")
+                raise ValueError(f"Invalid blocked status value: {value}. Must be a valid FriendshipBlockedStatus or string.")  # noqa: E501
         else:
             raise TypeError("Blocked status must be a FriendshipBlockedStatus enum member or a valid string.")
 
@@ -348,41 +391,91 @@ class UserFriendship(models.Model):
     @property
     def is_accepted(self):
         """Return True if the friendship is currently accepted, False otherwise."""
+        others = self.__class__.objects.filter(from_user=self.to_user, to_user=self.from_user)
+        if others.exists():
+            return (
+                self.status == FriendshipStatus.ACCEPTED
+                and others[0].status == FriendshipStatus.ACCEPTED
+            )
+        return False
+
+    @property
+    def is_rejected(self):
+        """Return True if the friendship is currently rejected, False otherwise."""
         other_status = self.__class__.objects.filter(from_user=self.to_user, to_user=self.from_user)[0].status
-        return self.status == FriendshipStatus.ACCEPTED and other_status == FriendshipStatus.ACCEPTED
+        return self.status == FriendshipStatus.REJECTED or other_status == FriendshipStatus.REJECTED
+
+    @property
+    def is_blocked(self):
+        """Return True if the friendship is currently blocked, False otherwise."""
+        other_status = self.__class__.objects.filter(from_user=self.to_user, to_user=self.from_user)[0].status
+        return (
+            self.blocked_status != FriendshipBlockedStatus.NOT_BLOCKED
+            or other_status != FriendshipBlockedStatus.NOT_BLOCKED
+        )
 
     def accept(self):
         """Accept the friendship request by setting the status to 'accepted'."""
+        if self.is_initiator:
+            raise ValueError(_('Only the recipient of a friendship request can accept it.'))
+
         self.status_data = FriendshipStatus.ACCEPTED.value
+        self.other_status = self.__class__.objects.get_or_create(
+            from_user=self.to_user,
+            to_user=self.from_user
+        )[0]
+
+        if self.other_status.status == FriendshipStatus.PENDING:
+            self.other_status.status_data = FriendshipStatus.ACCEPTED.value
+            self.other_status.save()
+
         self.save()
 
     def reject(self):
         """Reject the friendship request by setting the status to 'rejected'."""
         self.status_data = FriendshipStatus.REJECTED.value
+        self.other_status = self.__class__.objects.get_or_create(
+            from_user=self.to_user,
+            to_user=self.from_user
+        )[0]
+        self.other_status.status_data = FriendshipStatus.REJECTED.value
+        self.other_status.save()
         self.save()
 
     def block(self):
         """Block the user by setting the status to 'blocked'."""
-        self.status_data = FriendshipStatus.BLOCKED.value
+        self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_FROM_USER
         self.block_initiator = True
         self.save()
-        self.__class__.objects.filter(
+
+        friendship2 = self.__class__.objects.filter(
             from_user=self.to_user,
             to_user=self.from_user
-        ).update(status_data=FriendshipStatus.BLOCKED.value)
-
-    def __str__(self):
-        return f"{self.from_user.username} is {self.status.name} friends with {self.to_user.username}"
+        )[0]
+        if friendship2 and friendship2.blocked_status == FriendshipBlockedStatus.NOT_BLOCKED:
+            friendship2.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_TO_USER
+            friendship2.save()
 
     def unblock(self):
         """Unblock the user by setting the status back to 'pending'."""
-        self.status_data = FriendshipStatus.PENDING.value
+        self.blocked_status = FriendshipBlockedStatus.NOT_BLOCKED
         self.block_initiator = False
         self.save()
-        self.__class__.objects.filter(
+
+        friendship2 = self.__class__.objects.filter(
             from_user=self.to_user,
             to_user=self.from_user
-        ).update(status_data=FriendshipStatus.PENDING.value)
+        )[0]
+        if friendship2 and friendship2.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_TO_USER:
+            friendship2.blocked_status = FriendshipBlockedStatus.NOT_BLOCKED
+            friendship2.save()
+
+    def __str__(self):
+        return _("{from_user} is {status} friends with {to_user}").format(
+            from_user=self.from_user.username,
+            status=self.status.name,
+            to_user=self.to_user.username
+        )
 
     class Meta:
         verbose_name = _('user friendship')

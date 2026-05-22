@@ -67,7 +67,7 @@ class FriendshipStatus(StrEnum):
         return self.value
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}: {self.value.upper()}>"
+        return f"<{self.__class__.__name__}.{self.value.upper()}>"
 
 
 class FriendshipBlockedStatus(StrEnum):
@@ -135,4 +135,4 @@ class FriendshipBlockedStatus(StrEnum):
         return self.value
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}: {self.value.upper()}>"
+        return f"<{self.__class__.__name__}.{self.value.upper()}>"

@@ -70,7 +70,8 @@ class FriendshipManager(Manager):
     """
     Custom manager for the Friendship model.
 
-    Provides methods to manage friendships between users, such as creating, accepting, rejecting, and blocking friendships.
+    Provides methods to manage friendships between users, such as creating, accepting,
+    rejecting, and blocking friendships.
     """
 
     def create_friendship(self, from_user, to_user):

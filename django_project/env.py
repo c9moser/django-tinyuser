@@ -41,6 +41,20 @@ ENV = Env(
         DJANGO_POSTGRES_SCHEMA=(str, "public"),
         POSTGRES_SCHEMA=(str, "public"),
         TINYUSER_SHOW_INDEX_PAGE=(bool, False),
+        EMAIL_BACKEND=(str, "django.core.mail.backends.smtp.EmailBackend"),
+        EMAIL_HOST=(str, "localhost"),
+        EMAIL_PORT=(int, 25),
+        EMAIL_USE_TLS=(bool, False),
+        EMAIL_USE_SSL=(bool, False),
+        EMAIL_HOST_USER=(str, ""),
+        EMAIL_HOST_PASSWORD=(str, ""),
+        ADMIN_EMAIL_BACKEND=(str, "django.core.mail.backends.console.EmailBackend"),
+        ADMIN_EMAIL_HOST=(str, "localhost"),
+        ADMIN_EMAIL_PORT=(int, 25),
+        ADMIN_EMAIL_USE_TLS=(bool, False),
+        ADMIN_EMAIL_USE_SSL=(bool, False),
+        ADMIN_EMAIL_HOST_USER=(str, ""),
+        ADMIN_EMAIL_HOST_PASSWORD=(str, ""),
 )
 
 CONTAINERIZED = ENV("CONTAINERIZED")

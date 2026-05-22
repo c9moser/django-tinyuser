@@ -4,6 +4,7 @@ from django_tinyuser import settings
 from django_tinyuser.models import TinyUser
 from django.forms import Form
 
+
 class TinyUserAccountAdapter(DefaultAccountAdapter):
 
     def save_user(self,

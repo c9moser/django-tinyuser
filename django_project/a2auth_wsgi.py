@@ -23,7 +23,14 @@ APACHE_PASS_KEY = u"pw"
 BASE_DIR = Path(__file__).resolve().parent.parent
 venv_dir = ENV("VENV_DIR")
 if venv_dir and Path(venv_dir).is_dir():
-    sys.path.insert(0, str(Path(venv_dir) / "lib" / "python" / f"{sys.version_info.major}.{sys.version_info.minor}" / "site-packages"))
+    sys.path.insert(
+        0,
+        str(Path(venv_dir)
+            / "lib"
+            / "python"
+            / f"{sys.version_info.major}.{sys.version_info.minor}"
+            / "site-packages"))
+
 sys.path.insert(0, str(BASE_DIR))
 
 # Set the Django settings module environment variable before importing Django
