@@ -1,0 +1,21 @@
+django-tinyuser:
+  build:
+    context: .
+    dockerfile: dockerfiles/Dockerfile.prod.trixie
+  auto_build: true
+django-tinyuser-dev:
+  build:
+    context: .
+    dockerfile: Dockerfile.dev.trixie
+django-tinyuser-dev-trixie:
+  build:
+    context: .
+    dockerfile: Dockerfile.dev.trixie
+django-tinyuser-dev-trixie-py314:
+  build:
+    context: .
+    dockerfile: Dockerfile.dev.py314-trixie
+django-tinyuser-dev-trixie-py313:
+  build:
+    context: .
+    dockerfile: Dockerfile.dev.py313-trixie

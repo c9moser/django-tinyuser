@@ -1,0 +1,502 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-25 08:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: django_tinyuser/admin.py:16
+msgid "Personal info"
+msgstr ""
+
+#: django_tinyuser/admin.py:17
+msgid "Permissions"
+msgstr ""
+
+#: django_tinyuser/admin.py:18
+msgid "Important dates"
+msgstr ""
+
+#: django_tinyuser/apps.py:7
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:8
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:21
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:71
+msgid "TinyUser"
+msgstr ""
+
+#: django_tinyuser/enums.py:40
+msgid "pending"
+msgstr ""
+
+#: django_tinyuser/enums.py:41
+msgid "accepted"
+msgstr ""
+
+#: django_tinyuser/enums.py:42
+msgid "rejected"
+msgstr ""
+
+#: django_tinyuser/enums.py:108
+msgid "not blocked"
+msgstr ""
+
+#: django_tinyuser/enums.py:109
+msgid "blocked by from user"
+msgstr ""
+
+#: django_tinyuser/enums.py:110
+msgid "blocked by to user"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:4
+#: django_tinyuser/global_templates/bootstrap/account/email.html:8
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:42
+msgid "Email Addresses"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:12
+msgid "The following email addresses are associated with your account:"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:25
+msgid "Verified"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:29
+msgid "Unverified"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:34
+msgid "Primary"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:46
+msgid "Make Primary"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:49
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:37
+msgid "Re-send Verification"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:52
+#: django_tinyuser/global_templates/bootstrap/socialaccount/connections.html:41
+msgid "Remove"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:63
+msgid "Add Email Address"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:77
+msgid "Add Email"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email.html:88
+msgid "Do you really want to remove the selected email address?"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:5
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:9
+msgid "Email Address"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:21
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:29
+msgid "Current email"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:31
+msgid "Changing to"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:35
+msgid "Your email address is still pending verification."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:41
+msgid "Cancel Change"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:49
+msgid "Change to"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_change.html:55
+msgid "Change Email"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:6
+#: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:10
+msgid "Confirm Email Address"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:16
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an email "
+"address for user %(user_display)s."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:25
+msgid "Confirm"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:32
+#, python-format
+msgid ""
+"Unable to confirm %(email)s because it is already confirmed by a different "
+"account."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:38
+#, python-format
+msgid ""
+"This email confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new email confirmation request</a>."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:4
+msgid "Log in"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:11
+msgid "Log into your account"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:25
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:44
+msgid "Email address"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:30
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:63
+msgid "Password"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:39
+msgid "Sign in"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:45
+msgid "Or use your social account"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/password_change.html:4
+#: django_tinyuser/global_templates/bootstrap/account/password_change.html:8
+#: django_tinyuser/global_templates/bootstrap/account/password_change.html:34
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:41
+msgid "Change Password"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/password_change.html:32
+msgid "Forgot Password?"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/password_reset.html:4
+#: django_tinyuser/global_templates/bootstrap/account/password_reset.html:8
+msgid "Password Reset"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/password_reset.html:14
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll send you "
+"an email allowing you to reset it."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/password_reset.html:30
+msgid "Reset My Password"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/password_reset.html:36
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:4
+msgid "Signup"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:8
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:56
+msgid "Sign Up"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:17
+#, python-format
+msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:49
+msgid "Username"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:77
+msgid "Confirm password"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:83
+msgid "Sign up"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/account/signup.html:91
+msgid "Sign up using a passkey"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/socialaccount/connections.html:6
+#: django_tinyuser/global_templates/bootstrap/socialaccount/connections.html:10
+msgid "Account Connections"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/socialaccount/connections.html:14
+msgid ""
+"You can sign in to your account using any of the following third-party "
+"accounts:"
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/socialaccount/connections.html:47
+msgid "You currently have no third-party accounts connected to this account."
+msgstr ""
+
+#: django_tinyuser/global_templates/bootstrap/socialaccount/connections.html:51
+msgid "Add a Third-Party Account"
+msgstr ""
+
+#: django_tinyuser/managers.py:34
+msgid "The Email field must be set"
+msgstr ""
+
+#: django_tinyuser/managers.py:37
+msgid "The Username field must be set"
+msgstr ""
+
+#: django_tinyuser/managers.py:62
+msgid "Superuser must have is_staff=True."
+msgstr ""
+
+#: django_tinyuser/managers.py:64
+msgid "Superuser must have is_superuser=True."
+msgstr ""
+
+#: django_tinyuser/managers.py:89
+msgid "Users cannot be friends with themselves."
+msgstr ""
+
+#: django_tinyuser/managers.py:91
+msgid "Friendship request already exists."
+msgstr ""
+
+#: django_tinyuser/managers.py:93
+msgid "A friendship request from the other user already exists."
+msgstr ""
+
+#: django_tinyuser/models.py:33
+msgid "email address"
+msgstr ""
+
+#: django_tinyuser/models.py:44
+msgid "username"
+msgstr ""
+
+#: django_tinyuser/models.py:54
+msgid "active"
+msgstr ""
+
+#: django_tinyuser/models.py:64
+msgid "staff status"
+msgstr ""
+
+#: django_tinyuser/models.py:74
+msgid "superuser status"
+msgstr ""
+
+#: django_tinyuser/models.py:85
+msgid "verified"
+msgstr ""
+
+#: django_tinyuser/models.py:93
+msgid "joined at"
+msgstr ""
+
+#: django_tinyuser/models.py:132
+msgid "user"
+msgstr ""
+
+#: django_tinyuser/models.py:133
+msgid "users"
+msgstr ""
+
+#: django_tinyuser/models.py:179
+msgid "user profile"
+msgstr ""
+
+#: django_tinyuser/models.py:180
+msgid "user profiles"
+msgstr ""
+
+#: django_tinyuser/models.py:203
+msgid "description type"
+msgstr ""
+
+#: django_tinyuser/models.py:206
+msgid "Text"
+msgstr ""
+
+#: django_tinyuser/models.py:207
+msgid "Markdown"
+msgstr ""
+
+#: django_tinyuser/models.py:208
+msgid "BBCode"
+msgstr ""
+
+#: django_tinyuser/models.py:257
+msgid "friend group"
+msgstr ""
+
+#: django_tinyuser/models.py:258
+msgid "friend groups"
+msgstr ""
+
+#: django_tinyuser/models.py:300
+msgid "friendship initiator"
+msgstr ""
+
+#: django_tinyuser/models.py:318
+msgid "friendship status"
+msgstr ""
+
+#: django_tinyuser/models.py:351
+msgid "friendship blocked status"
+msgstr ""
+
+#: django_tinyuser/models.py:420
+msgid "Only the recipient of a friendship request can accept it."
+msgstr ""
+
+#: django_tinyuser/models.py:474
+#, python-brace-format
+msgid "{from_user} is {status} friends with {to_user}"
+msgstr ""
+
+#: django_tinyuser/models.py:481
+msgid "user friendship"
+msgstr ""
+
+#: django_tinyuser/models.py:482
+msgid "user friendships"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:28
+msgid "Home"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:29
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:3
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:6
+msgid "Profile"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:43
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:3
+msgid "Invite"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:48
+msgid "Logout"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:55
+msgid "Login"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:65
+msgid "Welcome to TinyUser!"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:66
+msgid "This is the base template. Extend this template for your views."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:71
+msgid "All rights reserved."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/index.html:7
+msgid "Welcome to TinyUser"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/index.html:8
+msgid "This is a simple user management app."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:3
+msgid "Invitation Not Sent"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:6
+msgid "Invitation Not Sent!"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:7
+msgid "There was an error sending your invitation. Please try again."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:8
+msgid "Try Again"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:3
+msgid "Invitation Sent"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:6
+msgid "Invitation Sent!"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:7
+msgid "Your invitation has been sent successfully."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:8
+msgid "Invite Another User"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:6
+msgid "Invite a new user"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:7
+msgid "Enter the email address of the person you want to invite."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:10
+msgid "Invitation sent successfully!"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:20
+msgid "Send Invitation"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:7
+msgid "This is your profile page."
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:10
+msgid "Profile updated successfully!"
+msgstr ""
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:30
+msgid "Save"
+msgstr ""

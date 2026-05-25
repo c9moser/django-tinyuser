@@ -6,6 +6,8 @@ from django_tinyuser import settings
 app_name = 'tinyuser'
 
 urlpatterns = [
+    path("profile/", views.ProfileView.as_view(), name='profile'),
+    path("invite/", views.InviteView.as_view(), name='invite'),
 ]
 
 if settings.TINYUSER_SHOW_INDEX_PAGE:

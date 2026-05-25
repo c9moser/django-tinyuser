@@ -18,16 +18,45 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django_tinyuser import api_urls as tinyuser_api_urls
+from django_tinyuser.tinyuser_api import urls as tinyuser_api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('accounts/', include('django_tinyuser.urls')),
+    path("invitations/", include('invitations.urls', namespace='invitations'))
 ]
+
+if 'rest_framework' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        path('api/accounts/', include('rest_framework.urls', namespace='rest_framework')),
+    ]
+
+if 'drf_spectacular' in settings.INSTALLED_APPS:
+    from drf_spectacular.views import (
+        SpectacularAPIView,
+        SpectacularSwaggerView,
+        SpectacularRedocView
+    )
+    urlpatterns += [
+        path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+        path(
+            'api/doc/',
+            SpectacularSwaggerView.as_view(url_name='api-schema'),
+            name='api-doc'
+        ),
+        path(
+            'api/redoc/',
+            SpectacularRedocView.as_view(url_name='api-schema'),
+            name='api-redoc'
+        ),
+    ]
+
+
 
 
 urlpatterns += [
-    path('tinyuser/', include(tinyuser_api_urls, namespace='api')),
+    path('api/', include(tinyuser_api_urls)),
 ]
 
 if settings.DEBUG:

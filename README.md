@@ -1,3 +1,4 @@
+
 # Django TinyUser
 
 **Neither the app nor the documentation is finished yet, but I wanted to publish the project anyway, because I need it for my projects and I want to share it with others. If you want to contribute to the project, feel free to open a pull request or an issue.**
@@ -10,9 +11,7 @@ It uses *[django-allauth](https://docs.allauth.org/en/latest/)* as backend and
 overloads the templates for *Bootstrap* and *Tailwind CSS*.
 
 
-It is ment to be used by projects that need a small user authentication for for
-their projects and don't want to implmenent their own. It is used by my
-projects and docker images for basic user authentication using *django-allauth*.
+It is meant to be used by projects that need a small user authentication for their projects and don't want to implement their own. It is used by my projects and docker images for basic user authentication using *django-allauth*.
 
 
 ## Installation
@@ -148,3 +147,5 @@ One of the following values:
 Note that the default value is 'bootstrap', so if you use Bootstrap, you don't need to set this option.
 
 **If you use Tailwind CSS, you need to set this option to 'tailwindcss', otherwise the templates will not work.**
+
+<a href="https://social.c-moser.at/@chris" target="_blank" rel="me">Mastodon</a>

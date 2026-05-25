@@ -1,0 +1,33 @@
+{% extends "django_tinyuser/bootstrap/base.html" %}
+{% load i18n widget_tweaks %}
+{% block title %}{% translate "Profile" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Profile" %}</h1>
+<p>{% translate "This is your profile page." %}</p>
+{% if success %}
+<div class="alert alert-success mt-3" role="alert">
+    {% translate "Profile updated successfully!" %}
+</div>
+{% endif %}
+
+<form method="post" class="mt-4">
+    {% csrf_token %}
+
+    <div class="mb-3 form-floating">
+        {% render_field form.first_name class="form-control" placeholder=form.first_name.label %}
+        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+    </div>
+    <div class="mb-3 form-floating">
+        {% render_field form.last_name class="form-control" placeholder=form.last_name.label %}
+        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+    </div>
+    <div class="mb-3 form-floating">
+        {% render_field form.bio class="form-control" placeholder=form.bio.label style="height: 15rem;" %}
+        <label for="{{ form.bio.id_for_label }}">{{ form.bio.label }}</label>
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+    </div>
+</form>
+{% endblock %}

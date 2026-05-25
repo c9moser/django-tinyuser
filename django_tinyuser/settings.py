@@ -3,6 +3,7 @@ Django settings for the TinyUser project.
 """
 
 from django.conf import settings
+from django_tinyuser.default_templates import CUSTOM_TEMPLATES
 from django_tinyuser.global_templates.bootstrap import PATH as BOOTSTRAP_TEMPLATES_PATH
 from django_tinyuser.global_templates.trailwindcss import PATH as TAILWIND_TEMPLATES_PATH
 
@@ -46,3 +47,21 @@ if not BASE_TEMPLATE:
 
 ALLOW_SIGNUP = getattr(settings, 'ALLOW_SIGNUP', True)
 DEFAULT_USER_GROUPS = getattr(settings, 'DEFAULT_USER_GROUPS', [])
+
+TEMPLATE_MAPPING = getattr(
+    settings,
+    'TINYUSER_TEMPLATES',
+    getattr(settings, 'TEMPLATES_MAPPING', {})
+)
+
+if CSS_FRAMEWORK_BOOTSTRAP:
+    from django_tinyuser.default_templates import BOOTSTRAP_TEMPLATES
+    for key, value in BOOTSTRAP_TEMPLATES.items():
+        TEMPLATE_MAPPING.setdefault(key, value)
+elif CSS_FRAMEWORK_TAILWIND:
+    from django_tinyuser.default_templates import TAILWIND_TEMPLATES
+    for key, value in TAILWIND_TEMPLATES.items():
+        TEMPLATE_MAPPING.setdefault(key, value)
+else:
+    for key, value in CUSTOM_TEMPLATES.items():
+        TEMPLATE_MAPPING.setdefault(key, value)

@@ -1,0 +1,9 @@
+{% extends tinyuser_base_template %}
+{% load i18n %}
+{% block title %}{% translate "Invitation Sent" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Invitation Sent!" %}</h1>
+<p>{% translate "Your invitation has been sent successfully." %}</p>
+<a href="{% url 'tinyuser:invite' %}" class="btn btn-primary mt-3">{% translate "Invite Another User" %}</a>
+{% endblock %}

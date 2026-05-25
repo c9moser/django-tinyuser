@@ -5,9 +5,11 @@ from environ import Env
 from .env_files import CONFIG_ENV_FILES, ENV_FILES
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOCAL_SETTINGS_DIR = BASE_DIR / "django_project" / "local_settings"
 
 ENV = Env(
         DEBUG=(bool, False),
+        BASE_TEMPLATE=(str, ""),
         ALLOWED_HOSTS=(list, ['*']),  # allow all hosts by default, override in production  # noqa: E501
         DJANGO_SETTINGS_MODULE=(str, "django_project.settings"),
         DJANGO_DATA_DIR=(str, str(BASE_DIR / ".data")),
@@ -48,6 +50,9 @@ ENV = Env(
         EMAIL_USE_SSL=(bool, False),
         EMAIL_HOST_USER=(str, ""),
         EMAIL_HOST_PASSWORD=(str, ""),
+        DEFAULT_FROM_EMAIL=(str, "Django Webmaster <webmaster@localhost>"),
+        EMAIL_SUBJECT_PREFIX=(str, "[Django] "),
+        ADMINS=(list, []),  # noqa: E501
         ADMIN_EMAIL_BACKEND=(str, "django.core.mail.backends.console.EmailBackend"),
         ADMIN_EMAIL_HOST=(str, "localhost"),
         ADMIN_EMAIL_PORT=(int, 25),
@@ -55,9 +60,23 @@ ENV = Env(
         ADMIN_EMAIL_USE_SSL=(bool, False),
         ADMIN_EMAIL_HOST_USER=(str, ""),
         ADMIN_EMAIL_HOST_PASSWORD=(str, ""),
+        ADMIN_DEFAULT_FROM_EMAIL=(str, "Django Admin <admin@localhost>"),
+        ADMIN_EMAIL_SUBJECT_PREFIX=(str, "[Django Admin] "),
+        MANAGERS=(list, []),  # noqa: E501
+        MANAGER_EMAIL_BACKEND=(str, "django.core.mail.backends.console.EmailBackend"),
+        MANAGER_EMAIL_HOST=(str, "localhost"),
+        MANAGER_EMAIL_PORT=(int, 25),
+        MANAGER_EMAIL_USE_TLS=(bool, False),
+        MANAGER_EMAIL_USE_SSL=(bool, False),
+        MANAGER_EMAIL_HOST_USER=(str, ""),
+        MANAGER_EMAIL_HOST_PASSWORD=(str, ""),
+        MANAGER_DEFAULT_FROM_EMAIL=(str, "Django Manager <manager@localhost>"),
+        MANAGER_EMAIL_SUBJECT_PREFIX=(str, "[Django Manager] "),
 )
 
 CONTAINERIZED = ENV("CONTAINERIZED")
+
+
 
 for env_file in (Path(i).resolve() for i in CONFIG_ENV_FILES):
     if env_file.is_file():
@@ -75,7 +94,7 @@ if CONTAINERIZED:
     if env_file.is_file():
         ENV.read_env(env_file)
 
-LOCAL_ENV_DIR = Path(__file__).resolve().parent / "local_settings"
+LOCAL_ENV_DIR = BASE_DIR / "django_project" / "local_settings"
 env_file = LOCAL_ENV_DIR / 'env.local'
 if env_file.is_file():
     ENV.read_env(env_file)

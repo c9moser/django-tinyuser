@@ -1,0 +1,23 @@
+{% extends tinyuser_base_template %}
+{% load i18n widget_tweaks %}
+{% block title %}{% translate "Invite" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Invite a new user" %}</h1>
+<p>{% translate "Enter the email address of the person you want to invite." %}</p>
+{% if success %}
+<div class="alert alert-success mt-3" role="alert">
+    {% translate "Invitation sent successfully!" %}
+</div>
+{% endif %}
+<form method="post" class="mt-4">
+    {% csrf_token %}
+    <div class="mb-3 form-floating">
+        {% render_field form.email class="form-control" placeholder=form.email.label %}
+        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+    </div>
+    <div class="text-end">
+        <button type="submit" class="btn btn-primary">{% translate "Send Invitation" %}</button>
+    </div>
+</form>
+{% endblock %}

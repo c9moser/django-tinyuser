@@ -26,19 +26,28 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <ul class="navbar-nav ms-3">
                     <li class="nav-item"><a class="nav-link" href="/">{% translate "Home" %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{# url 'tinyuser:profile' #}">{% translate "Profile" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'tinyuser:profile' %}">{% translate "Profile" %}</a></li>
                 </ul>
 
                 <ul class="navbar-nav ms-auto me-3">
                     {% if user.is_authenticated %}
-                    <li class="nav-item">{{ user.username }}
+                    <li class="nav-item">
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-nav dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-person"></i>
+                                {{ user.username }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
-                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}">{% translate "Change Password" %}</a></li>
-                                <li><a class="dropdown-item" href="{% url 'account_logout' %}">{% translate "Logout" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}"><i class="bi bi-key"></i> {% translate "Change Password" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_email' %}"><i class="bi bi-envelope"></i> {% translate "Email Addresses" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'tinyuser:invite' %}"><i class="bi bi-person-plus"></i> {% translate "Invite" %}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'account_logout' %}" class="form-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i> {% translate "Logout" %}</button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </li>

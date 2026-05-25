@@ -1,3 +1,4 @@
+from invitations.adapters import BaseInvitationsAdapter
 from allauth.account.adapter import DefaultAccountAdapter
 from django.http import HttpRequest
 from django_tinyuser import settings
@@ -5,7 +6,7 @@ from django_tinyuser.models import TinyUser
 from django.forms import Form
 
 
-class TinyUserAccountAdapter(DefaultAccountAdapter):
+class TinyUserAccountAdapter(DefaultAccountAdapter, BaseInvitationsAdapter):
 
     def save_user(self,
                   request: HttpRequest,
