@@ -54,6 +54,7 @@ allauth_apps = (
 
 api_apps = (
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_spectacular',
     'drf_spectacular_sidecar',  # required for Django collectstatic discovery
 )

@@ -12,5 +12,5 @@ router = DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('accounts/create/', views.CreateUserView.as_view(), name='user-create'),
-
+    path('accounts/token/', views.CreateTokenView.as_view(), name='token'),
 ]
