@@ -148,4 +148,6 @@ Note that the default value is 'bootstrap', so if you use Bootstrap, you don't n
 
 **If you use Tailwind CSS, you need to set this option to 'tailwindcss', otherwise the templates will not work.**
 
-<a href="https://social.c-moser.at/@chris" target="_blank" rel="me">Mastodon</a>
+You can contact me under my <a href="https://social.c-moser.at/@chris" target="_blank" rel="me">Mastodon</a> account
+if you have any questions or suggestions for the project. I am also open for contributions, so if you want to
+contribute to the project, feel free to open a pull request or an issue.

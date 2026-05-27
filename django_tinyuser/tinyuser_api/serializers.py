@@ -58,6 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
+
 class SafeUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -80,6 +81,7 @@ class SafeUserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
 
 class UserProfileSerializer(serializers.Serializer):
     """Serializer for the user profile object."""
