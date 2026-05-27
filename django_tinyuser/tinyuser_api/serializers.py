@@ -6,19 +6,108 @@ from django.contrib.auth import (
 )
 from django.utils.translation import gettext as _
 from rest_framework import serializers
+from django_tinyuser.models import TinyUserProfile as UserProfile
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """Serializer for the TinyUserProfile model."""
+
+    class Meta:
+        model = UserProfile
+        fields = ('first_name', 'last_name', 'bio')
+        extra_kwargs = {
+            'first_name': {'required': False},
+            'last_name': {'required': False},
+            'bio': {'required': False},
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
-
     class Meta:
         model = get_user_model()
         fields = ('email', 'password', 'username')
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
+        extra_kwargs = {
+            'password': {'write_only': True, 'min_length': 8},
+        }
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it."""
-        return get_user_model().objects.create_user(**validated_data)
+        if not validated_data.get('email'):
+            raise serializers.ValidationError(_("Email is required."))
+        if not validated_data.get('username'):
+            raise serializers.ValidationError(_("Username is required."))
+        if not validated_data.get('password'):
+            raise serializers.ValidationError(_("Password is required."))
+
+        user = get_user_model().objects.create_user(**validated_data)
+
+        return user
+
+    def update(self, instance, validated_data):
+        """Update a user, setting the password correctly and return it."""
+        password = validated_data.pop('password', None)
+        if 'email' in validated_data:
+            raise serializers.ValidationError(_("Email cannot be updated."))
+
+        user = super().update(instance, validated_data)
+
+        if password:
+            user.set_password(password)
+            user.save()
+
+        return user
+
+class SafeUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('email', 'password', 'username')
+        extra_kwargs = {
+            'password': {'write_only': True, 'min_length': 8},
+            'email': {'read_only': True},
+        }
+
+    def update(self, instance, validated_data):
+        """Update a user, setting the password correctly and return it."""
+        password = validated_data.pop('password', None)
+        if 'email' in validated_data:
+            raise serializers.ValidationError(_("Email cannot be updated."))
+
+        user = super().update(instance, validated_data)
+
+        if password:
+            user.set_password(password)
+            user.save()
+
+        return user
+
+class UserProfileSerializer(serializers.Serializer):
+    """Serializer for the user profile object."""
+
+    profile = ProfileSerializer(required=False)
+
+    class Meta:
+        model = UserProfile
+        fields = ['email', 'username', 'profile', 'password']
+        extra_kwargs = {
+            'password': {'write_only': True, 'min_length': 8},
+            'email': {'read_only': True},
+        }
+
+    def update(self, instance, validated_data):
+        """Update user profile."""
+        profile_data = validated_data.pop('profile', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if profile_data:
+            profile = instance.profile
+            for attr, value in profile_data.items():
+                setattr(profile, attr, value)
+            profile.save()
+
+        return instance
 
 
 class AuthTokenSerializer(serializers.Serializer):
@@ -36,7 +125,7 @@ class AuthTokenSerializer(serializers.Serializer):
 
         user = authenticate(
             request=self.context.get('request'),
-            username=email,
+            email=email,
             password=password,
         )
         if not user:
