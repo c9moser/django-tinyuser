@@ -1,0 +1,3 @@
+[submodule "django-tinyuser.wiki"]
+	path = django-tinyuser.wiki
+	url = ssh://git@git.c-moser.at/django-tinytools/django-tinyuser.wiki.git

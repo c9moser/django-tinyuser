@@ -50,6 +50,8 @@ allauth_apps = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.oauth2',
+    'allauth.socialaccount.providers.github',
 )
 
 api_apps = (
@@ -297,8 +299,9 @@ else:
 if CSS_FRAMEWORK == 'bootstrap':
     from django_tinyuser.global_templates.bootstrap import PATH as BOOTSTRAP_TEMPLATES_PATH
     if 'DIRS' not in TEMPLATES[0]:
-        TEMPLATES[0]['DIRS'] = []
-    TEMPLATES[0]['DIRS'].insert(0, str(BOOTSTRAP_TEMPLATES_PATH))
+        TEMPLATES[0]['DIRS'] = [BOOTSTRAP_TEMPLATES_PATH]
+    else:
+        TEMPLATES[0]['DIRS'].insert(0, str(BOOTSTRAP_TEMPLATES_PATH))
 elif CSS_FRAMEWORK == 'tailwindcss':
     from django_tinyuser.global_templates.trailwindcss import PATH as TAILWIND_TEMPLATES_PATH
     if 'DIRS' not in TEMPLATES[0]:

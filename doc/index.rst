@@ -13,7 +13,8 @@ django-tinyuser documentation
    Installation <installation.rst>
    Configuration <config.rst>
    Usage <usage.rst>
-   API Reference <api_reference.rst>
+   API <api_reference.rst>
+   WebAPI <tinyuser_api/index.rst>
    Contributing <contributing.rst>
    Todo <todo.rst>
    Changelog <changelog.rst>
