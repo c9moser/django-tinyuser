@@ -29,10 +29,6 @@ dependencies = [
     "django-oauth-toolkit (>=3.2.0,<4.0.0)",
 ]
 
-repositories = [
-    {url = "https://codeberg.org/c9moser/django-tinyuser.git", type = "git"},
-    {url = "https://git.c-moser.at/django-tinytools/django-tinyuser.git", type = "git"},
-]
 
 [tool.poetry]
 package-mode = true
