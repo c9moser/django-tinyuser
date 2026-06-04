@@ -3,7 +3,6 @@
 
 **Neither the app nor the documentation is finished yet, but I wanted to publish the project anyway, because I need it for my projects and I want to share it with others. If you want to contribute to the project, feel free to open a pull request or an issue.**
 
-+ [Official documentation](https://doc.c-moser.at/pub/projekte/django-tinyuser/latest/)
 
 *Django TinyUser* is a small user authentication app for django. It is meant to be used by projects that need a small user authentication for their projects and don't want to implement their own. It is used by my projects and docker images for basic user authentication using *django-allauth*.
 
@@ -12,6 +11,16 @@ This project is distributed under the [*0BSD*-License](./LICENSE.django-tinyuser
 It uses *[django-allauth](https://docs.allauth.org/en/latest/)* as backend and
 overloads the templates for *Bootstrap* and *Tailwind CSS*.
 
+## Links and Documentation
++ [Official documentation](https://doc.c-moser.at/pub/projects/django/django-tinyuser/latest/)
++ [Django TinyUser on Codeberg](https://codeberg.org/c9moser/django-tinyuser)
+
++ Documentation of the dependencies:
+    * [Django documentation](https://docs.djangoproject.com/en/stable/)
+    * [Allauth documentation](https://docs.allauth.org/en/latest/)
+    * [Django REST Framework documentation](https://www.django-rest-framework.org/)
+    * [Bootstrap documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+    * [Tailwind CSS documentation](https://tailwindcss.com/docs/installation)
 
 ## Installation
 
