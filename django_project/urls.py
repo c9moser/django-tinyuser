@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django_tinyuser.tinyuser_api import urls as tinyuser_api_urls
+from django_tinyuser.webapi import urls as tinyuser_api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -53,11 +53,10 @@ if 'drf_spectacular' in settings.INSTALLED_APPS:
     ]
 
 
-
-
-urlpatterns += [
-    path('api/', include(tinyuser_api_urls)),
-]
+if 'django_tinyuser.webapi' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        path('api/', include('django_tinyuser.webapi.urls', namespace='tinyuser-api')),
+    ]
 
 if settings.DEBUG:
     urlpatterns += [

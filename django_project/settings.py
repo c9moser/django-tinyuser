@@ -69,7 +69,7 @@ third_party_apps = [
 
 project_apps = [
     'django_tinyuser',
-    'django_tinyuser.tinyuser_api',
+    'django_tinyuser.webapi',
 ]
 
 MIDDLEWARE = [

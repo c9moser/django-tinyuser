@@ -3,15 +3,14 @@
 
 **Neither the app nor the documentation is finished yet, but I wanted to publish the project anyway, because I need it for my projects and I want to share it with others. If you want to contribute to the project, feel free to open a pull request or an issue.**
 
-*Django TinyUser* is a small user authentication app for django.
++ [Official documentation](https://doc.c-moser.eu/pub/projekte/django-tinyuser/latest/)
+
+*Django TinyUser* is a small user authentication app for django. It is meant to be used by projects that need a small user authentication for their projects and don't want to implement their own. It is used by my projects and docker images for basic user authentication using *django-allauth*.
 
 This project is distributed under the [*0BSD*-License](./LICENSE.django-tinyuser.md).
 
 It uses *[django-allauth](https://docs.allauth.org/en/latest/)* as backend and
 overloads the templates for *Bootstrap* and *Tailwind CSS*.
-
-
-It is meant to be used by projects that need a small user authentication for their projects and don't want to implement their own. It is used by my projects and docker images for basic user authentication using *django-allauth*.
 
 
 ## Installation
@@ -21,9 +20,6 @@ Add *TinyUser* to your project using poetry
 ```sh
 poetry add https+git://codeberg.org/c9moser/django-tinyuser.git
 ```
-
-
-## Usage
 
 ### Configuration of your project
 
@@ -127,10 +123,10 @@ urlpatterns = [
 ]
 ```
 
-Finally run the migrations to create the required tables for *django-tinyuser*.
+Finally run the migrations to create the required tables added by required apps, `django-allauth` and `django-tinyuser`.
 
 ```bash
-    python manage.py migrate django_tinyuser
+    python manage.py migrate
 ```
 
 
