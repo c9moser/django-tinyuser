@@ -4,3 +4,18 @@ $bootstrap-icons-font-dir: "../../node_modules/bootstrap-icons/font/fonts";
 
 // Import the Sass files as usual
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons";
+
+.login-card {
+    max-width: 400px;
+    background-color: $bg-dark;
+    color: $text-light;
+}
+
+.login-card .card-header {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.login-card .card-body {
+
+}

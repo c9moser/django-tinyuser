@@ -34,9 +34,11 @@ class FriendshipBlockedStatusEnumTestCase(TestCase):
         self.assertEqual(FriendshipBlockedStatus.from_string('not_blocked'),
                          FriendshipBlockedStatus.NOT_BLOCKED)
         self.assertEqual(FriendshipBlockedStatus.from_string('blocked_by_from_user'),
-                         FriendshipBlockedStatus.BLOCKED_BY_FROM_USER)
+                         FriendshipBlockedStatus.BLOCKED_BY_USER1)
         self.assertEqual(FriendshipBlockedStatus.from_string('blocked_by_to_user'),
-                         FriendshipBlockedStatus.BLOCKED_BY_TO_USER)
+                         FriendshipBlockedStatus.BLOCKED_BY_USER2)
+        self.assertEqual(FriendshipBlockedStatus.from_string('blocked_by_both'),
+                         FriendshipBlockedStatus.BLOCKED_BY_BOTH)
 
     def test_from_string_invalid(self):
         with self.assertRaises(ValueError):
@@ -44,19 +46,24 @@ class FriendshipBlockedStatusEnumTestCase(TestCase):
 
     def test_name_raw(self):
         self.assertEqual(FriendshipBlockedStatus.NOT_BLOCKED.name_raw, 'not blocked')
-        self.assertEqual(FriendshipBlockedStatus.BLOCKED_BY_FROM_USER.name_raw, 'blocked by from user')
-        self.assertEqual(FriendshipBlockedStatus.BLOCKED_BY_TO_USER.name_raw, 'blocked by to user')
+        self.assertEqual(FriendshipBlockedStatus.BLOCKED_BY_USER1.name_raw, 'blocked by from user')
+        self.assertEqual(FriendshipBlockedStatus.BLOCKED_BY_USER2.name_raw, 'blocked by to user')
+        self.assertEqual(FriendshipBlockedStatus.BLOCKED_BY_BOTH.name_raw, 'blocked by both')
 
     def test_str_and_repr(self):
         self.assertEqual(str(FriendshipBlockedStatus.NOT_BLOCKED),
                          'not_blocked')
         self.assertEqual(repr(FriendshipBlockedStatus.NOT_BLOCKED),
                          '<FriendshipBlockedStatus.NOT_BLOCKED>')
-        self.assertEqual(str(FriendshipBlockedStatus.BLOCKED_BY_FROM_USER),
+        self.assertEqual(str(FriendshipBlockedStatus.BLOCKED_BY_USER1),
                          'blocked_by_from_user')
-        self.assertEqual(repr(FriendshipBlockedStatus.BLOCKED_BY_FROM_USER),
-                         '<FriendshipBlockedStatus.BLOCKED_BY_FROM_USER>')
-        self.assertEqual(str(FriendshipBlockedStatus.BLOCKED_BY_TO_USER),
+        self.assertEqual(repr(FriendshipBlockedStatus.BLOCKED_BY_USER1),
+                         '<FriendshipBlockedStatus.BLOCKED_BY_USER1>')
+        self.assertEqual(str(FriendshipBlockedStatus.BLOCKED_BY_USER2),
                          'blocked_by_to_user')
-        self.assertEqual(repr(FriendshipBlockedStatus.BLOCKED_BY_TO_USER),
-                         '<FriendshipBlockedStatus.BLOCKED_BY_TO_USER>')
+        self.assertEqual(repr(FriendshipBlockedStatus.BLOCKED_BY_USER2),
+                         '<FriendshipBlockedStatus.BLOCKED_BY_USER2>')
+        self.assertEqual(str(FriendshipBlockedStatus.BLOCKED_BY_BOTH),
+                         'blocked_by_both')
+        self.assertEqual(repr(FriendshipBlockedStatus.BLOCKED_BY_BOTH),
+                         '<FriendshipBlockedStatus.BLOCKED_BY_BOTH>')

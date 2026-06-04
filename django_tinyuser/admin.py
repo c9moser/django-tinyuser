@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from .models import (
     TinyUser,
     TinyUserProfile,
-    UserFriendship,
-    UserFriendGroup,
+    Friendship,
+    FriendGroup,
 )
 
 
@@ -31,5 +31,5 @@ class TinyUserAdmin(BaseUserAdmin):
 
 admin.site.register(TinyUser, TinyUserAdmin)
 admin.site.register(TinyUserProfile)
-admin.site.register(UserFriendship)
-admin.site.register(UserFriendGroup)
+admin.site.register(Friendship)
+admin.site.register(FriendGroup)

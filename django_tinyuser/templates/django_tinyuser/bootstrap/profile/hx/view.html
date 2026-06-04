@@ -1,0 +1,21 @@
+{% load i18n %}
+{% block title %}{% translate "Profile" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Profile" %}</h1>
+<p>{% translate "This is profile_page of {{ profile.user.username }}." %}</p>
+{% if profile.user.profile.name_visibility == "public" %}
+<p><span class="fw-bold">{% translate "Name:" %}</span> {{ profile.user.full_name }}</p>
+{% elif user.is_authenticated %}
+    {% if profile.user.profile.name_visibility == "members" %}
+        <p><span class="fw-bold">{% translate "Name:" %}</span> {{ profile.user.full_name }}</p>
+    {% elif request.user == profile.user %}
+        <p><span class="fw-bold">{% translate "Name:" %}</span> {{ profile.user.full_name }}</p>
+    {% else %}
+        <p><span class="fw-bold">{% translate "Name:" %}</span> {% translate "Hidden (visible to authorized members only)" %}</p>
+    {% endif %}
+{% else %}
+    <p><span class="fw-bold">{% translate "Name:" %}</span> {% translate "Hidden (visible to members only)" %}</p>
+{% endif %}
+{{ profile.profile.bio|linebreaks }}
+{% endblock %}

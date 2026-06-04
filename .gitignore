@@ -997,7 +997,7 @@ uwsgi.ini
 doc/_build/
 
 # django directories
-media
-static
-.data
+./media
+./static
+./.data
 

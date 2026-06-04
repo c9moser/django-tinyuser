@@ -73,8 +73,9 @@ class FriendshipStatus(StrEnum):
 class FriendshipBlockedStatus(StrEnum):
     """Enumeration for representing the blocked status of a friendship."""
     NOT_BLOCKED = 'not_blocked'
-    BLOCKED_BY_FROM_USER = 'blocked_by_from_user'
-    BLOCKED_BY_TO_USER = 'blocked_by_to_user'
+    BLOCKED_BY_USER1 = 'blocked_by_user1'
+    BLOCKED_BY_USER2 = 'blocked_by_user2'
+    BLOCKED_BY_BOTH = 'blocked_by_both'
 
     @staticmethod
     def from_string(status_str):
@@ -88,8 +89,9 @@ class FriendshipBlockedStatus(StrEnum):
         """
         mapping = {
             'not_blocked': FriendshipBlockedStatus.NOT_BLOCKED,
-            'blocked_by_from_user': FriendshipBlockedStatus.BLOCKED_BY_FROM_USER,
-            'blocked_by_to_user': FriendshipBlockedStatus.BLOCKED_BY_TO_USER,
+            'blocked_by_user1': FriendshipBlockedStatus.BLOCKED_BY_USER1,
+            'blocked_by_user2': FriendshipBlockedStatus.BLOCKED_BY_USER2,
+            'blocked_by_both': FriendshipBlockedStatus.BLOCKED_BY_BOTH,
         }
         try:
             return mapping[status_str.lower()]
@@ -106,8 +108,9 @@ class FriendshipBlockedStatus(StrEnum):
         """
         mapping = {
             self.NOT_BLOCKED: _('not blocked'),
-            self.BLOCKED_BY_FROM_USER: _('blocked by from user'),
-            self.BLOCKED_BY_TO_USER: _('blocked by to user'),
+            self.BLOCKED_BY_USER1: _('blocked by user1'),
+            self.BLOCKED_BY_USER2: _('blocked by user2'),
+            self.BLOCKED_BY_BOTH: _('blocked by both users'),
         }
         return mapping.get(self.value, self.value)
 

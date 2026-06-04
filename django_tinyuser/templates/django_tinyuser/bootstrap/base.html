@@ -1,18 +1,21 @@
 
-{% load i18n %}
+{% load i18n static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% translate "TinyUser" %}{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> -->
+     <link href="{% static '' %}"
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="{% static 'tinyuser/css/style.css' %}" rel="stylesheet">
 
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <div class="container min-vh-100 d-flex flex-column">
+    <div class="container-fluid min-vh-100 d-flex flex-column">
         <header class="row mb-4">
             <div class="px-3">
                 <div class="display-6">
@@ -57,10 +60,29 @@
                     {% endif %}
                 </ul>
             </nav>
+            {% block extra_header %}{% endblock %}
         </header>
 
-        <div class="row" style="min-height: calc(100vh - 201px);">
-            <div>
+        <div class="row" style="min-height: calc(100vh - 195px);">
+            <div class="d-none d-lg-block col-lg-3">
+                {% block sidebar %}
+                <div class="card w-75 mx-auto">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="bi bi-person me-2"></i>{% translate "User Menu" %}</h5>
+                    </div>
+
+                    <div class="list-group">
+                        <a href="{% url 'tinyuser:profile' %}" class="list-group-item list-group-item-action">{% translate "My Profile" %}</a>
+                        <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action">{% translate "Change Password" %}</a>
+                        <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">{% translate "Email Addresses" %}</a>
+                        <a href="{% url 'tinyuser:invite' %}" class="list-group-item list-group-item-action">{% translate "Invite" %}</a>
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+
+
+            <div class="col-12 col-lg-6">
                 {% block content %}
                 <h1>{% translate "Welcome to TinyUser!" %}</h1>
                 <p>{% translate "This is the base template. Extend this template for your views." %}</p>

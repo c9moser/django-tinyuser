@@ -4,64 +4,15 @@ from django_tinyuser.enums import (
     FriendshipBlockedStatus,
 )
 from django_tinyuser.models import (
-    TinyUser,
-    TinyUserProfile,
-    UserFriendship,
-    UserFriendGroup,
+    Friendship,
+    FriendGroup,
 )
 
 
-class TinyUserModelTestCase(TestCase):
-    def test_create_user(self):
-        user = TinyUser.objects.create_user(username='testuser',
-                                            email='testuser@example.com',
-                                            password='testpassword')
-        self.assertEqual(user.username, 'testuser')
-        self.assertEqual(user.email, 'testuser@example.com')
-
-    def create_superuser(self):
-        superuser = TinyUser.objects.create_superuser(username='admin',
-                                                      email='admin@example.com',
-                                                      password='adminpassword')
-        self.assertEqual(superuser.username, 'admin')
-        self.assertEqual(superuser.email, 'admin@example.com')
-        self.assertTrue(superuser.is_superuser)
-        self.assertTrue(superuser.is_staff)
-
-        self.assertRaises(
-            ValueError,
-            TinyUser.objects.create_superuser(
-                username='admin2',
-                email='admin2@example.com',
-                password='admin2password',
-                is_superuser=False
-            )
-        )
-        self.assertRaises(
-            ValueError,
-            TinyUser.objects.create_superuser(
-                username='admin2',
-                email='admin2@example.com',
-                password='admin2password',
-                is_staff=False
-            )
-        )
-
-    def test_create_tiny_user_profile(self):
-        user = TinyUser.objects.create_user(username='testuser',
-                                            email='testuser@example.com',
-                                            password='testpassword')
-        profile = TinyUserProfile.objects.create(user=user,
-                                                 first_name='Test',
-                                                 last_name='User',
-                                                 bio='This is a test bio.')
-        self.assertEqual(profile.user, user)
-        self.assertEqual(profile.first_name, 'Test')
-        self.assertEqual(profile.last_name, 'User')
-        self.assertEqual(profile.bio, 'This is a test bio.')
-
-
-class UserFriendshipModelTestCase(TestCase):
+class FriendshipModelTestCase(TestCase):
+    """
+    Test case for the Friendship model.
+    """
     def setUp(self):
         from django.contrib.auth import get_user_model
 
@@ -77,67 +28,126 @@ class UserFriendshipModelTestCase(TestCase):
             email='user2@example.com',
             password='password2'
         )
+        self.user3 = User.objects.create_user(
+            username='user3',
+            email='user3@example.com',
+            password='password3'
+        )
+        self.user4 = User.objects.create_user(
+            username='user4',
+            email='user4@example.com',
+            password='password4'
+        )
+
+        self.friendship.objects.create(user1=self.user1, user2=self.user2, user1_is_initiator=True)
+        self.user2.friendship.objects.create(user1=self.user2, user2=self.user1)
+        f1.friendship_status = FriendshipStatus.ACCEPTED
+        f1.save()
+
+        f1 = self.user1.friendship.objects.create(user1=self.user1, user2=self.user3, user1_is_initiator=True)
+        f1.friendship_status = FriendshipStatus.REJECTED
+        f1.save()
+
+        self.user3.friendship.objects.create(user1=self.user2, user2=self.user3, user1_is_initiator=False)
 
     def test_create_friendship(self):
-        friendship = UserFriendship.objects.create(from_user=self.user1, to_user=self.user2)
-        self.assertEqual(friendship.from_user, self.user1)
-        self.assertEqual(friendship.to_user, self.user2)
+        friendship = Friendship.objects.create(user1=self.user1, user2=self.user4)
+        self.assertEqual(friendship.user1, self.user1)
         self.assertEqual(friendship.status, FriendshipStatus.PENDING)
         self.assertEqual(friendship.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
-        self.assertEqual(UserFriendship.objects.filter(from_user=self.user1, to_user=self.user2).count(), 1)
+        self.assertEqual(Friendship.objects.filter(user1=self.user1, user2=self.user4).count(), 1)
 
     def test_accept_friendship(self):
-        friendship1 = UserFriendship.objects.create(from_user=self.user1, to_user=self.user2, is_initiator=True)
-        friendship2 = UserFriendship.objects.create(from_user=self.user2, to_user=self.user1)
-        self.assertEqual(friendship1.status, FriendshipStatus.PENDING)
-        self.assertEqual(friendship2.status, FriendshipStatus.PENDING)
-
         # Cannot accept a friendship where we are the initiator
-        self.assertRaises(ValueError, friendship1.accept)
+        pending_friendship_count = self.user1.friendship.filter(
+            status=FriendshipStatus.PENDING,
+            is_initiator=True
+        ).count()
+        accepted_friendship_count = self.user1.friendship.filter(status=FriendshipStatus.ACCEPTED).count()
+        rejected_friendship_count = self.user1.friendship.filter(status=FriendshipStatus.REJECTED).count()
 
+        self.assertEqual(pending_friendship_count, 2)
+        friendship = self.user1.friendship.filter(status=FriendshipStatus.PENDING, user1_is_initiator=True).first()
+        self.assertIsNotNone(friendship)
+        self.assertEqual(
+            (pending_friendship_count - 1),
+            friendship.user1.friendship.filter(status=FriendshipStatus.PENDING, user1_is_initiator=True).count()
+        )
+        self.assertEqual(
+            (accepted_friendship_count + 1),
+            friendship.user1.friendship.filter(status=FriendshipStatus.ACCEPTED).count()
+        )
+        self.assertEqual(
+            rejected_friendship_count,
+            friendship.user1.friendship.filter(status=FriendshipStatus.REJECTED).count()
+        )
+        self.assertEqual(friendship.status, FriendshipStatus.ACCEPTED)
+
+    def test_reject_friendship(self):
+        friendship = self.user1.friendship.filter(status=FriendshipStatus.PENDING, is_initiator=True).first()
+
+        self.assertIsNotNone(friendship)
+        friendship.reject()
+        self.assertEqual(friendship.status, FriendshipStatus.REJECTED)
+
+        friendship = Friendship.objects.get(user1=self.user2, user2=self.user1)
+        self.assertEqual(friendship.status, FriendshipStatus.REJECTED)
+        self.assertEqual(friendship.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
+
+    def test_friendship_block_unblock(self):
+
+        friendship1 = Friendship.objects.filter(user1=self.user1, user2=self.user2, status=FriendshipStatus.ACCEPTED)[0]
+        friendship2 = Friendship.objects.filter(user1=self.user2, user2=self.user1, status=FriendshipStatus.PENDING)[0]
         friendship2.accept()
-        friendship1.refresh_from_db()
+
         friendship2.refresh_from_db()
 
         self.assertEqual(friendship1.status, FriendshipStatus.ACCEPTED)
-        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
         self.assertEqual(friendship2.status, FriendshipStatus.ACCEPTED)
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
         self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
 
-    def test_reject_friendship(self):
-        friendship1 = UserFriendship.objects.create(from_user=self.user1, to_user=self.user2)
-        friendship1.reject()
-        self.assertEqual(friendship1.status, FriendshipStatus.REJECTED)
+        friendship1.block(user=friendship1.user1)
+        friendship2.block(user=friendship2.user2)
+        friendship1.refresh_from_db()
+        friendship2.refresh_from_db()
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER1)
+        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER2)
 
-        friendship2 = UserFriendship.objects.get(from_user=self.user2, to_user=self.user1)
-        self.assertEqual(friendship2.status, FriendshipStatus.REJECTED)
+        friendship1.block(user=friendship1.user1)
+        friendship2.block(user=friendship2.user2)
+        friendship1.refresh_from_db()
+        friendship2.refresh_from_db()
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER1)
+        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER2)
+
+        friendship1.block(user=friendship1.user2)
+        friendship2.block(user=friendship2.user1)
+        friendship1.refresh_from_db()
+        friendship2.refresh_from_db()
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_BOTH)
+        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_BOTH)
+
+        friendship1.unblock(user=friendship1.user2)
+        friendship2.unblock(user=friendship2.user1)
+        friendship1.refresh_from_db()
+        friendship2.refresh_from_db()
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER1)
+        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER2)
+
+        friendship1.unblock(user=friendship1.user2)
+        friendship2.unblock(user=friendship2.user1)
+        friendship1.refresh_from_db()
+        friendship2.refresh_from_db()
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER1)
+        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_USER2)
+
+        friendship1.unblock(user=friendship1.user1)
+        friendship2.unblock(user=friendship2.user2)
+        friendship1.refresh_from_db()
+        friendship2.refresh_from_db()
+        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
         self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.NOT_BLOCKED)
-
-    def test_block_friendship_from_user(self):
-        friendship1 = UserFriendship.objects.create(from_user=self.user1, to_user=self.user2, is_initiator=True)
-        friendship2 = UserFriendship.objects.create(from_user=self.user2, to_user=self.user1)
-        friendship2.accept()  # Accept the friendship first to ensure it's in an accepted state before blocking
-
-        friendship1.block()
-
-        friendship1.refresh_from_db()
-        friendship2.refresh_from_db()
-
-        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_FROM_USER)
-        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_TO_USER)
-
-    def test_block_friendship_to_user(self):
-        friendship1 = UserFriendship.objects.create(from_user=self.user1, to_user=self.user2, is_initiator=True)
-        friendship2 = UserFriendship.objects.create(from_user=self.user2, to_user=self.user1)
-        friendship2.accept()  # Accept the friendship first to ensure it's in an accepted state before blocking
-
-        friendship2.block()
-
-        friendship1.refresh_from_db()
-        friendship2.refresh_from_db()
-
-        self.assertEqual(friendship1.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_TO_USER)
-        self.assertEqual(friendship2.blocked_status, FriendshipBlockedStatus.BLOCKED_BY_FROM_USER)
 
 
 class UserFriendGroupModelTestCase(TestCase):

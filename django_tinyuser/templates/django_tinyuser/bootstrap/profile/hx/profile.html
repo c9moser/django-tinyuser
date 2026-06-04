@@ -1,0 +1,35 @@
+{% load i18n widget_tweaks %}
+<div id="profile-container">
+    {% if success %}
+    <div class="alert alert-success mt-3" role="alert">
+        {% translate "Profile updated successfully!" %}
+    </div>
+    {% endif %}
+
+    <form method="post" class="mt-4" hx-post="{% url 'tinyuser:profile' %}" hx-target="#profile-container" hx-swap="outerHTML">
+        {% csrf_token %}
+
+        {% if form.errors.first_name %}
+        {% for error in form.errors.first_name %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="mb-3 form-floating">
+            {% render_field form.first_name class="form-control" placeholder=form.first_name.label %}
+            <label for="{{ form.first_name.id_for_label }} {% if form.errors.first_name %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.first_name.label }}</label>
+        </div>
+        <div class="mb-3 form-floating">
+            {% render_field form.last_name class="form-control" placeholder=form.last_name.label %}
+            <label for="{{ form.last_name.id_for_label }} {% if form.errors.last_name %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.last_name.label }}</label>
+        </div>
+        <div class="mb-3 form-floating">
+            {% render_field form.bio class="form-control" placeholder=form.bio.label style="height: 15rem;" %}
+            <label for="{{ form.bio.id_for_label }} {% if form.errors.bio %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.bio.label }}</label>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
+        </div>
+    </form>
+</div>

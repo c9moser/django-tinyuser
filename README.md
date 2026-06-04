@@ -12,10 +12,11 @@ It uses *[django-allauth](https://docs.allauth.org/en/latest/)* as backend and
 overloads the templates for *Bootstrap* and *Tailwind CSS*.
 
 ## Links and Documentation
+
 + [Official documentation](https://doc.c-moser.at/pub/projects/django/django-tinyuser/latest/)
 + [Django TinyUser on Codeberg](https://codeberg.org/c9moser/django-tinyuser)
-
-+ Documentation of the dependencies:
++ [Django TinyUser on GitHub](https://github.com/c9moser/django-tinyuser)
++ **Documentation of the dependencies:**
     * [Django documentation](https://docs.djangoproject.com/en/stable/)
     * [Allauth documentation](https://docs.allauth.org/en/latest/)
     * [Django REST Framework documentation](https://www.django-rest-framework.org/)
