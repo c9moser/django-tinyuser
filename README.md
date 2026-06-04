@@ -3,7 +3,7 @@
 
 **Neither the app nor the documentation is finished yet, but I wanted to publish the project anyway, because I need it for my projects and I want to share it with others. If you want to contribute to the project, feel free to open a pull request or an issue.**
 
-+ [Official documentation](https://doc.c-moser.eu/pub/projekte/django-tinyuser/latest/)
++ [Official documentation](https://doc.c-moser.at/pub/projekte/django-tinyuser/latest/)
 
 *Django TinyUser* is a small user authentication app for django. It is meant to be used by projects that need a small user authentication for their projects and don't want to implement their own. It is used by my projects and docker images for basic user authentication using *django-allauth*.
 
