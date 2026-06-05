@@ -8,6 +8,13 @@ from django_tinyuser.enums import (
     FriendshipStatus,
     FriendshipBlockedStatus
 )
+from django_tinyuser.managers import (
+    FriendshipManager,
+    FriendshipRequestManager,
+)
+
+from logging import getLogger
+logger = getLogger('django.' + __name__)
 
 
 class FriendshipRequest(models.Model):
@@ -47,17 +54,33 @@ class FriendshipRequest(models.Model):
             ),
         ]
 
+    objects = FriendshipRequestManager()
+
+    #: The from_user field is a foreign key to the TinyUser model, representing the user who
+    #: initiated the friendship request.
+    #: It is required and will be deleted if the associated user is deleted.
     from_user = models.ForeignKey(
         django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendship_requests_sent'
     )
+
+    #: The to_user field is a foreign key to the TinyUser model, representing the user who is the recipient
+    #: of the friendship request.
+    #:
+    #: It is required and will be deleted if the associated user is deleted.
     to_user = models.ForeignKey(
         django_settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='friendship_requests_received'
     )
+
+    #: The created_at field stores the date and time when the friendship request was created.
+    #: It is automatically set to the current date and time when the friendship request is created.
     created_at = models.DateTimeField(default=timezone.now)
+
+    #: The status_data field is a character field that stores the current status of the friendship request as a string.
+    #: It is required and has a maximum length of 20 characters. The default value is 'pending'.
     status_data = models.CharField(
         max_length=20,
         default=FriendshipStatus.PENDING.value,
@@ -95,29 +118,64 @@ class FriendshipRequest(models.Model):
 
     def accept(self):
         """Accept the friendship request by creating a Friendship instance and updating the status."""
+
         if self.status == FriendshipStatus.PENDING:
-            friendship = Friendship.objects.create(
-                user1=self.from_user,
-                user2=self.to_user,
-                user1_is_initiator=True,
-                status=FriendshipStatus.ACCEPTED.value
-            )
             self.status = FriendshipStatus.ACCEPTED
             self.save()
-            return friendship
 
-    def reject(self):
-        """Reject the friendship request by updating the status."""
-        if self.status == FriendshipStatus.PENDING:
-            friendship = Friendship.objects.create(
-                user1=self.from_user,
-                user2=self.to_user,
-                user1_is_initiator=True,
-                status=FriendshipStatus.REJECTED.value
+            friendships = FriendshipRequest.objects.filter(
+                models.Q(from_user=self.from_user, to_user=self.to_user) |
+                models.Q(from_user=self.to_user, to_user=self.from_user)
             )
-            self.status = FriendshipStatus.REJECTED
-            self.save()
-            return friendship
+            if not friendships.exists():
+                friendship = Friendship.objects.create(
+                    user1=self.from_user,
+                    user2=self.to_user,
+                    user1_is_initiator=True,
+                    status_data=FriendshipStatus.ACCEPTED.value
+                )
+                friendship.status = FriendshipStatus.ACCEPTED
+                friendship.save()
+                friendship.refresh_from_db()
+                return friendship
+
+            else:
+                friendships.update(status_data=FriendshipStatus.ACCEPTED.value)
+                friendships.first().refresh_from_db()
+                return friendships.first()
+
+        else:
+            raise ValueError("Friendship request must be in 'pending' status to be accepted.")
+
+    def reject(self, reason=None):
+        """Reject the friendship request by updating the status."""
+
+        friendships = Friendship.objects.filter(
+            models.Q(user1=self.from_user, user2=self.to_user)
+            | models.Q(user1=self.to_user, user2=self.from_user)
+        )
+        if self.status in (FriendshipStatus.PENDING, FriendshipStatus.ACCEPTED):
+
+            if friendships.exists():
+                friendships.update(status_data=FriendshipStatus.REJECTED.value)
+                friendship = friendships.first().refresh_from_db()
+            else:
+                friendship = Friendship.objects.create(
+                    user1=self.from_user,
+                    user2=self.to_user,
+                    status_data=FriendshipStatus.REJECTED.value
+                )
+                friendship.status = FriendshipStatus.REJECTED
+                friendship.save()
+                friendship.refresh_from_db()
+        else:
+            friendship = friendships.first() if friendships.exists() else None
+
+        self.status = FriendshipStatus.REJECTED
+        self.save()
+        self.refresh_from_db()
+
+        return friendship
 
 
 class FriendGroup(models.Model):
@@ -142,6 +200,8 @@ class FriendGroup(models.Model):
             models.Index(fields=['name']),
         ]
         unique_together = [('user', 'name'),]
+
+    objects = FriendshipManager()
 
     #: The name field is a character field that stores the name of the friend group.
     #: It is required and has a maximum length of 255 characters.
@@ -224,6 +284,22 @@ class Friendship(models.Model):
         ]
         unique_together = [('user1', 'user2'),]
 
+        constraints = [
+            models.CheckConstraint(
+                condition=~models.Q(user1=models.F('user2')),
+                name='no_self_friendship'
+            ),
+            models.CheckConstraint(
+                condition=~models.Q(
+                    user1=models.F('user2'),
+                    user2=models.F('user1')
+                ),
+                name='no_duplicate'
+            ),
+        ]
+
+    objects = FriendshipManager()
+
     #: The from_user field is a foreign key to the TinyUser model, representing the user who initiated the friendship.
     #: It is required and will be deleted if the associated user is deleted.
     user1 = models.ForeignKey(
@@ -289,12 +365,89 @@ class Friendship(models.Model):
         else:
             raise TypeError("Status must be a FriendshipStatus enum member or a valid string.")
 
+    rejected_reason = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_('rejection reason'),
+        db_column='rejected_reason'
+    )
+
     blocked_status_data = models.CharField(
         max_length=20,
         default=FriendshipBlockedStatus.NOT_BLOCKED.value,
         verbose_name=_('friendship blocked status'),
         db_column='blocked_status'
     )
+    blocked_reason_user1 = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+        verbose_name=_('blocking reason'),
+        db_column='blocked_reason_user1'
+    )
+    blocked_reason_user2 = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+        verbose_name=_('blocking reason'),
+        db_column='blocked_reason_user2'
+    )
+
+    @property
+    def blocked_reason(self, blocking_user):
+        """Return the blocking reason for the specified user, or None if not blocked."""
+        if self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and blocking_user == self.user1:
+            return self.blocked_reason_user1
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and blocking_user == self.user2:
+            return self.blocked_reason_user2
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_BOTH:
+            if blocking_user == self.user1:
+                return self.blocked_reason_user1
+            elif blocking_user == self.user2:
+                return self.blocked_reason_user2
+        return None
+
+    @blocked_reason.setter
+    def blocked_reason(self, value, blocking_user):
+        """Set the blocking reason for the specified user."""
+        if self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and blocking_user == self.user1:
+            self.blocked_reason_user1 = value
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and blocking_user == self.user2:
+            self.blocked_reason_user2 = value
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_BOTH:
+            if blocking_user == self.user1:
+                self.blocked_reason_user1 = value
+            elif blocking_user == self.user2:
+                self.blocked_reason_user2 = value
+
+    @blocked_reason.deleter
+    def blocked_reason(self, blocking_user):
+        """Delete the blocking reason for the specified user by setting it to None."""
+        if self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and blocking_user == self.user1:
+            self.blocked_reason_user1 = None
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and blocking_user == self.user2:
+            self.blocked_reason_user2 = None
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_BOTH:
+            if blocking_user == self.user1:
+                self.blocked_reason_user1 = None
+            elif blocking_user == self.user2:
+                self.blocked_reason_user2 = None
+
+    @property
+    def blocked_because(self):
+        """Return a string describing the reason for blocking, or None if not blocked."""
+        if self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1:
+            return self.blocked_reason_user1
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2:
+            return self.blocked_reason_user2
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_BOTH:
+            reasons = []
+            if self.blocked_reason_user1:
+                reasons.append(f"{self.user1.username}: {self.blocked_reason_user1}")
+            if self.blocked_reason_user2:
+                reasons.append(f"{self.user2.username}: {self.blocked_reason_user2}")
+            return "; ".join(reasons) if reasons else None
+        return None
 
     @property
     def blocked_status(self):
@@ -334,47 +487,83 @@ class Friendship(models.Model):
             self.blocked_status != FriendshipBlockedStatus.NOT_BLOCKED
         )
 
-    def block(self, initiator_user) -> FriendshipBlockedStatus:
+    @property
+    def blocked_by(self):
+        """Return the user who blocked the friendship, or None if not blocked."""
+        if self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1:
+            return self.user1
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2:
+            return self.user2
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_BOTH:
+            return [self.user1, self.user2]
+        return None
+
+    def accept(self):
+        """Accept the friendship request by updating the status."""
+        if self.status != FriendshipStatus.PENDING:
+            raise ValueError("Friendship must be in 'pending' status to be accepted.")
+        self.status = FriendshipStatus.ACCEPTED
+        self.save()
+        self.refresh_from_db()
+        return self
+
+    def reject(self, reason=None):
+        """Reject the friendship request by updating the status."""
+        if self.status in [FriendshipStatus.PENDING, FriendshipStatus.ACCEPTED]:
+            logger.info(f"Friendship between {self.user1} and {self.user2} has been rejected. Reason: {reason}")  # noqa: E501
+            self.status = FriendshipStatus.REJECTED
+            self.save()
+        else:
+            logger.warning(f"Attempted to reject a friendship that is not in 'pending' or 'accepted' status. Current status: {self.status}")  # noqa: E501
+        self.refresh_from_db()
+
+        return self
+
+    def block(self, blocking_user, reason=None) -> FriendshipBlockedStatus:
         """Block the user by setting the status to 'blocked'."""
         if self.blocked_status == FriendshipBlockedStatus.NOT_BLOCKED:
-            if initiator_user == self.user1:
+            if blocking_user == self.user1:
                 self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_USER1
-            elif initiator_user == self.user2:
+                self.blocked_reason_user1 = reason
+            elif blocking_user == self.user2:
                 self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_USER2
+                self.blocked_reason_user2 = reason
             else:
-                raise ValueError("Initiator user must be either user1 or user2 of the friendship.")
+                raise ValueError("Blocking user must be either user1 or user2 of the friendship.")
             self.save()
-        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and initiator_user == self.user2:
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and blocking_user == self.user2:
             self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_BOTH
+            self.blocked_reason_user2 = reason
             self.save()
-        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and initiator_user == self.user1:
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and blocking_user == self.user1:
             self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_BOTH
+            self.blocked_reason_user1 = reason
             self.save()
 
         self.refresh_from_db()
         return self.blocked_status
 
-    def unblock(self, initiator_user) -> FriendshipBlockedStatus:
+    def unblock(self, unblocking_user) -> FriendshipBlockedStatus:
         """
         Unblock the user by setting the status back to 'pending'.
 
-        :param initiator_user: The user who is initiating the unblock action.
-        :type initiator_user: TinyUser or other related user model
+        :param unblocking_user: The user who is initiating the unblock action.
+        :type unblocking_user: TinyUser or other related user model
         :return: The new blocked status of the friendship after unblocking.
         :rtype: FriendshipBlockedStatus
         """
         if self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_BOTH:
-            if initiator_user == self.user1:
+            if unblocking_user == self.user1:
                 self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_USER2
-            elif initiator_user == self.user2:
+            elif unblocking_user == self.user2:
                 self.blocked_status = FriendshipBlockedStatus.BLOCKED_BY_USER1
             else:
-                raise ValueError("Initiator user must be either user1 or user2 of the friendship.")
+                raise ValueError("Unblocking user must be either user1 or user2 of the friendship.")
             self.save()
-        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and initiator_user == self.user1:
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER1 and unblocking_user == self.user1:
             self.blocked_status = FriendshipBlockedStatus.NOT_BLOCKED
             self.save()
-        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and initiator_user == self.user2:
+        elif self.blocked_status == FriendshipBlockedStatus.BLOCKED_BY_USER2 and unblocking_user == self.user2:
             self.blocked_status = FriendshipBlockedStatus.NOT_BLOCKED
             self.save()
 
@@ -387,16 +576,3 @@ class Friendship(models.Model):
             status=self.status.name,
             to_user=self.to_user.username
         )
-
-    def reject(self):
-        """Reject the friendship request by updating the status."""
-        if self.status == FriendshipStatus.PENDING:
-            friendship = Friendship.objects.create(
-                user1=self.user1,
-                user2=self.user2,
-                user1_is_initiator=True,
-                status=FriendshipStatus.REJECTED.value
-            )
-            self.status = FriendshipStatus.REJECTED
-            self.save()
-            return friendship

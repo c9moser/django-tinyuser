@@ -5,5 +5,5 @@ django_tinyuser.tinyuser_api Documentation
    :maxdepth: 2
    :glob:
 
-   serializers.rst
-   views.rst
+   serializers/serializers.rst
+   views/views.rst

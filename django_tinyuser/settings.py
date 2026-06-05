@@ -23,7 +23,7 @@ elif CSS_FRAMEWORK == 'tailwindcss':
 else:
     CSS_FRAMEWORK_CUSTOM = True
 
-
+SOCIALACCOUNT_ENABLED = getattr(settings, 'SOCIALACCOUNT_ENABLED', False)
 USE_POSTGRESQL_SCHEMAS = getattr(settings, 'USE_POSTGRESQL_SCHEMAS', False)
 POSTGRESQL_AUTH_SCHEMA = getattr(settings, 'POSTGRESQL_AUTH_SCHEMA', 'public')
 TINYUSER_EXTERNAL_MANAGED = getattr(settings, 'TINYUSER_EXTERNAL_MANAGED', False)

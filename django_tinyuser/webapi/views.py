@@ -14,11 +14,17 @@ from .serializers import (
 
 class CreateUserView(generics.CreateAPIView):
     """Create a new user in the system."""
+
+    #: serializer_class: The serializer class to use for validating
+    #: and deserializing input, and for serializing output.
     serializer_class = UserSerializer
+
+    #: authentication_classes: The authentication classes to use for
+    #: this view. In this case, no authentication is required to create a user.
     permission_classes = (permissions.AllowAny,)
 
 
-class ManageUserView(generics.RetrieveUpdateAPIView):
+class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
     """Manage the authenticated user."""
     serializer_class = SafeUserSerializer
     authentication_classes = (authentication.TokenAuthentication,)

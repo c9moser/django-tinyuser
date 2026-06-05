@@ -7,6 +7,7 @@ from .tinyuser import (
 from .friendship import (
     FriendGroup,
     Friendship,
+    FriendshipRequest,
     FriendshipBlockedStatus,
     FriendshipStatus,
 )
@@ -21,8 +22,9 @@ __all__ = [
     'TinyUserProfile',
     'FriendGroup',
     'Friendship',
-    'FriendshipStatus',
     'FriendshipBlockedStatus',
+    'FriendshipRequest',
+    'FriendshipStatus',
     'RestrictedImageField',
     'RestrictedSvgImageFileField',
 ]

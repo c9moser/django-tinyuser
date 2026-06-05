@@ -9,9 +9,9 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 
-CREATE_USER_URL = reverse('tinyuser-api:user-create')
-TOKEN_URL = reverse('tinyuser-api:token')
-ME_URL = reverse('tinyuser-api:me')
+CREATE_USER_URL = reverse('tinyuser.webapi:user-create')
+TOKEN_URL = reverse('tinyuser.webapi:token')
+ME_URL = reverse('tinyuser.webapi:me')
 
 
 def create_user(**params):

@@ -10,6 +10,4 @@ functionality and usage.
 .. toctree::
    :maxdepth: 2
 
-   index
-   invite
-   profile
+   index-views.rst

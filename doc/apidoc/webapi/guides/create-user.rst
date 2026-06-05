@@ -10,15 +10,17 @@ to create users directly through the API, which can be useful for various applic
 as user registration or administrative tasks.
 
 Example Request:
+
 .. code-block:: sh
 
     curl -X POST http://yourdomain.com/api/accounts/ \
         -H "Content-Type: application/json" \
         -d '{
-           "username": "newuser",
-           "email": "newuser@example.com",
-           "password": "your_password_here"
+            "username": "newuser",
+            "email": "newuser@example.com",
+            "password": "your_password_here"
         }'
+
 
 Make sure to replace `yourdomain.com` with your actual domain, and `your_token_here`
 with a valid token that has the necessary permissions to create users.

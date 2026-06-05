@@ -23,7 +23,7 @@ from django_tinyuser.webapi import urls as tinyuser_api_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('accounts/', include('django_tinyuser.urls')),
+    path('', include('django_tinyuser.urls')),
     path("invitations/", include('invitations.urls', namespace='invitations'))
 ]
 
@@ -55,7 +55,7 @@ if 'drf_spectacular' in settings.INSTALLED_APPS:
 
 if 'django_tinyuser.webapi' in settings.INSTALLED_APPS:
     urlpatterns += [
-        path('api/', include('django_tinyuser.webapi.urls', namespace='tinyuser-api')),
+        path('api/', include('django_tinyuser.webapi.urls', namespace='tinyuser.webapi')),
     ]
 
 if settings.DEBUG:

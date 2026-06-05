@@ -7,15 +7,21 @@ $bootstrap-icons-font-dir: "../../node_modules/bootstrap-icons/font/fonts";
 
 .login-card {
     max-width: 400px;
-    background-color: $bg-dark;
-    color: $text-light;
+    background-color: $body-bg-dark;
+    color: $light-text-emphasis-dark;
 }
 
 .login-card .card-header {
+    background-color: $body-bg-dark;
+    color: $light-text-emphasis-dark;
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
 }
-.login-card .card-body {
 
+.login-card .card-body {
+    padding: 2rem;
+    text-align: center;
+    color: $light-text-emphasis-dark;
+    background-color: $body-bg-dark;
 }

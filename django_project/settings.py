@@ -52,6 +52,8 @@ allauth_apps = (
     'allauth.socialaccount',
     'allauth.socialaccount.providers.oauth2',
     'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.openid',  # required for steam provider
+    'allauth.socialaccount.providers.steam',
 )
 
 api_apps = (
