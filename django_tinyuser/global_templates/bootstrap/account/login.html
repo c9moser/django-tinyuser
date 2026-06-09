@@ -33,21 +33,22 @@
                         {% render_field form.password class="form-control" placeholder=password_placeholder %}
                         <label for="{{ form.password.id_for_label }}">{{ password_placeholder }}</label>
                     </div>
-                    <div>
+                    <div class="mb-3">
                         {% render_field form.remember class="input-checked" %}
                         <label class="input-checked-label" for="{{ form.remember.id_for_label }}">{{ form.remember.label }}</label>
                     </div>
-                    <div class="text-end">
+                    <p class="mb-3"><a href="{% url 'account_reset_password' %}">{% translate "Forgot your password?" %}</a></p>
+
                     <button type="submit" class="btn btn-success">{% translate "Sign in" %}</button>
-                    </div>
                 </form>
             </div>
-            {% if SOCIALACCOUNT_ENABLED %}
+        {% if SOCIALACCOUNT_ENABLED and socialaccount_providers %}
             <hr class="mt-4">
             <h2 class="h4 text-center">{% translate "Or use your social account" %}</h2>
 
             {% include 'socialaccount/snippets/login.html' with page_layout="entrance" %}
         {% endif %}
+        </div>
     </div>
 </main>
 {% endblock content %}

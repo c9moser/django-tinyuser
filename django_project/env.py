@@ -13,6 +13,7 @@ ENV = Env(
         ALLOWED_HOSTS=(list, ['*']),  # allow all hosts by default, override in production  # noqa: E501
         DJANGO_SETTINGS_MODULE=(str, "django_project.settings"),
         DJANGO_DATA_DIR=(str, str(BASE_DIR / ".data")),
+        TEMP_DIR=(str, str(BASE_DIR / ".data" / "temp")),
         DJANGO_ADMIN_URL=(str, "admin/"),
         CONFIG_ENV_FILES=(list, []),
         CONTAINER_DATA_DIR=(str, "/data"),

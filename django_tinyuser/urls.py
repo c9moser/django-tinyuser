@@ -6,7 +6,7 @@ from django_tinyuser import settings
 app_name = 'tinyuser'
 
 urlpatterns = [
-    path("tinyuser/", views.IndexView.as_view(), name='tinyuser'),
+    path("user/", views.IndexView.as_view(), name='user'),
     path("accounts/profile/", views.ProfileView.as_view(), name='profile'),
     path("accounts/invite/", views.InviteView.as_view(), name='invite'),
 ]

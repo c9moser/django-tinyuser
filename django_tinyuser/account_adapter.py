@@ -48,9 +48,24 @@ class TinyUserAccountAdapter(DefaultAccountAdapter, BaseInvitationsAdapter):
 
         return user
 
-    def allow_signup(self, request):
-        # Override this method to control whether signups are allowed
+    def allow_signup(self, request: HttpRequest) -> bool:
+        """
+        Determines whether signups are allowed based on the current request and settings.
+
+        Logged in users are not allowed to sign up for new accounts,
+        and the setting ALLOW_SIGNUP is checked for unauthenticated users.
+
+        If ALLOW_SIGNUP is set to True, anyone can sign up.
+        If it's set to False, signups are disabled and only invited users can sign up.
+
+        :param request: The current HTTP request.
+        :type request: HttpRequest
+        :return: True if signups are allowed, False otherwise.
+        :rtype: bool
+        """
+
         if hasattr(request, 'user') and request.user.is_authenticated:
             return False  # Disable signups for authenticated users
 
+        # Check the ALLOW_SIGNUP setting for unauthenticated users
         return settings.ALLOW_SIGNUP

@@ -50,7 +50,6 @@ allauth_apps = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.oauth2',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.openid',  # required for steam provider
     'allauth.socialaccount.providers.steam',
@@ -198,7 +197,11 @@ TIME_ZONE = ENV('TIME_ZONE', default='UTC')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = ENV('STATIC_URL')
+STATIC_ROOT = ENV('STATIC_ROOT')
+MEDIA_URL = ENV('MEDIA_URL')
+MEDIA_ROOT = ENV('MEDIA_ROOT')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -259,6 +262,8 @@ LANGUAGES = [
     ('en', 'English'),
     ('de', 'German'),
 ]
+
+TEMP_DIR = Path(ENV('TEMP_DIR')).resolve()
 
 if DEBUG:
     _debug_settings_file = SETTINGS_DIR / "debug_settings.py"

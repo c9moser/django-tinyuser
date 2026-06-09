@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% translate "TinyUser" %}{% endblock %}</title>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> -->
-    <link href="{% static 'tinyuser/css/style.css' %}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- <link href="{% static 'tinyuser/css/style.css' %}" rel="stylesheet"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
 
 
@@ -36,7 +36,11 @@
                     <li class="nav-item">
                         <div class="dropdown">
                             <button class="btn btn-nav dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if request.user.profile.avatar_small %}
+                                <img src="{{ request.user.profile.avatar_small.url }}" alt="{% blocktranslate with username=request.user.username %}{{ username }}'s avatar{% endblocktranslate %}" class="rounded-circle me-2 my-0" width="25" height="25">
+                                {% else %}
                                 <i class="bi bi-person"></i>
+                                {% endif %}
                                 {{ user.username }}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">

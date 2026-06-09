@@ -202,29 +202,56 @@ class TinyUserProfile(models.Model):
     #: The birth_date field allows users to specify their date of birth. It is optional and can be left blank.
     birth_date = models.DateField(blank=True, null=True, verbose_name=_('birth date'))
 
-    #: The profile_picture fields allows users to upload a profile picture. It is optional and can be left blank.
-    profile_picture_small = RestrictedImageField(
-        upload_to='profile_pictures/',
+    #: The avatar_small field allows users to upload a small profile picture. It is optional and can be left blank.
+    #: The uploaded image must be less than 1 MiB in size and is rendered down to 128x128 pixels.
+    #: If not provided, the avatar_medium, avatar_large or avatar_full fields can be used as the source for
+    #: generating the small avatar size.
+    avatar_small = RestrictedImageField(
+        upload_to='user/avatars/',
         blank=True,
         null=True,
         max_file_size=1024 * 1024,  # 1 MiB
         verbose_name=_('small profile picture')
     )
 
-    profile_picture_medium = RestrictedImageField(
-        upload_to='profile_pictures/',
+    #: The avatar_medium field allows users to upload a medium profile picture. It is optional and can be left blank.
+    #: The uploaded image must be less than 2.5 MiB in size and is rendered down to 256x256 pixels.
+    #:
+    #: If not provided, the avatar_large or avatar_full fields can be used as the source for
+    #: generating the medium avatar size.
+    avatar_medium = RestrictedImageField(
+        upload_to='user/avatars/',
         blank=True,
         null=True,
         max_file_size=int(2.5 * 1024 * 1024),  # 2.5 MiB
         verbose_name=_('medium profile picture')
     )
 
-    profile_picture_large = RestrictedImageField(
-        upload_to='profile_pictures/',
+    #: The avatar_large field allows users to upload a large profile picture. It is optional and can be left blank.
+    #: The uploaded image must be less than 5 MiB in size and is rendered down to 512x512 pixels.
+    #:
+    #: If not provided, the avatar_full field can be used as the source for generating the large avatar size.
+    avatar_large = RestrictedImageField(
+        upload_to='user/avatars/',
         blank=True,
         null=True,
         max_file_size=int(5 * 1024 * 1024),  # 5 MiB
         verbose_name=_('large profile picture')
+    )
+
+    #: The avatar_full field allows users to upload a full-size profile picture. It is optional and can be left blank.
+    #: The uploaded image must be less than 10 MiB in size and is not rendered down.
+    #:
+    #: If avatar_full is uploaded, it can be used as the source for generating the smaller avatar sizes
+    #: if the avatar_small, avatar_medium or avatar_large fields are not provided.
+    #: This allows users to upload a single high-resolution image that can be used to generate all required
+    #: avatar sizes, while still allowing them to upload specific images for each size if they prefer.
+    avatar_full = RestrictedImageField(
+        upload_to='user/avatars/',
+        blank=True,
+        null=True,
+        max_file_size=int(10 * 1024 * 1024),  # 10 MiB
+        verbose_name=_('full size profile picture')
     )
 
     @property
