@@ -1,9 +1,13 @@
 from .index import IndexView
 from .invite import InviteView
-from .profile import ProfileView
+from .profile import (
+    ProfileEditView,
+    ProfileView,
+)
 
 __all__ = [
-    'IndexView',
-    'InviteView',
-    'ProfileView',
+    "IndexView",
+    "InviteView",
+    "ProfileEditView",
+    "ProfileView",
 ]

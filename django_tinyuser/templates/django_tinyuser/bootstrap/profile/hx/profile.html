@@ -1,124 +1,55 @@
-{% load i18n widget_tweaks %}
-<div id="profile-container" >
-    {% if success %}
-    <div class="alert alert-success mt-3" role="alert">
-        {% translate "Profile updated successfully!" %}
-    </div>
-    {% elif failed %}
-    <div class="alert alert-danger mt-3" role="alert">
-        {% translate "Failed to update profile." %}
-        {% if exception %}
-            <p>{{ exception }}</p>
+{% load i18n %}
+<div class="d-flex mb-3">
+    <div style="width=255">
+        {% if request.user.profile.avatar_medium %}
+        <img src="{{ request.user.profile.avatar_medium.url }}" alt="{% translate " Avatar" %}" class="me-3"
+            width="256px" height="256px">
+        {% elif request.user.profile.avatar_large %}
+        <img src="{{ request.user.profile.avatar_large.url }}" alt="{% translate " Avatar" %}" class="me-3"
+            width="256px" height="256px">
+        {% elif request.user.profile.avatar_full %}
+        <img src="{{ request.user.profile.avatar_full.url }}" alt="{% translate " Avatar" %}" class="me-3" width="256px"
+            height="256px">
+        {% elif request.user.profile.avatar_small %}
+        <img src="{{ request.user.profile.avatar_small.url }}" alt="{% translate " Avatar" %}" class="me-3"
+            width="256px" height="256px">
+        {% else %}
+        <i style="width: 256px; height: 256px;" class="me-3 bi bi-person-circle"></i>
         {% endif %}
     </div>
-    {% endif %}
-
-
-    <form method="post" enctype="multipart/form-data" class="mt-4" hx-post="{% url 'tinyuser:profile' %}" hx-target="#profile-container" hx-swap="outerHTML">
-        {% csrf_token %}
-
-        {% if form.errors.first_name %}
-        {% for error in form.errors.first_name %}
-        <div class="alert alert-danger" role="alert">
-            {{ error }}
+    <div class="d-grid column-gap-3 row-gap-1" style=" grid-template-columns: auto auto;">
+        <div><b>{% translate "Username:" %}</b></div>
+        <div>{{ request.user.username }}</div>
+        <div><b>{% translate "Email address:" %}</b></div>
+        <div>{{ request.user.email }}</div>
+        <div><b>{% translate "First name:" %}</b></div>
+        <div>{% if request.user.profile.first_name %}{{ request.user.profile.first_name }}{% else %}---{% endif %}</div>
+        <div><b>{% translate "Last name:" %}</b></div>
+        <div>{% if request.user.profile.last_name %}{{ request.user.profile.last_name }}{% else %}---{% endif %}</div>
+        <div><b>{% translate "Location:" %}</b></div>
+        <div>{% if request.user.profile.location %}{{ request.user.profile.location }}{% else %}---{% endif %}</div>
+        <div><b>{% translate "Birth date:" %}</b></div>
+        <div>{% if request.user.profile.birth_date %}{{ request.user.profile.birth_date }}{% else %}---{% endif %}</div>
+        <div><b>{% translate "Website:" %}</b></div>
+        <div>
+            {% if request.user.profile.website %}
+            <a href="{{ request.user.profile.website }}" target="_blank" rel="noopener noreferrer">
+                {{ request.user.profile.website }}
+            </a>
+            {% else %}---{% endif %}
         </div>
-        {% endfor %}
-        {% endif %}
-        <div class="mb-3 form-floating">
-            {% render_field form.first_name class="form-control" placeholder=form.first_name.label %}
-            <label for="{{ form.first_name.id_for_label }} {% if form.errors.first_name %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.first_name.label }}</label>
+        <div><b>{% translate "Mastodon URL:" %}</b></div>
+        <div>
+            {% if request.user.profile.mastodon_url %}
+            <a href="{{ requset.user.profile.mastodon_url }}" rel="me" target="_blank">
+                {{ request.user.profile.mastodon_url }}
+            </a>
+            {% else %}---{% endif %}
         </div>
-        <div class="mb-3 form-floating">
-            {% render_field form.last_name class="form-control" placeholder=form.last_name.label %}
-            <label for="{{ form.last_name.id_for_label }} {% if form.errors.last_name %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.last_name.label }}</label>
-        </div>
-        <div class="mb-3 form-floating">
-            {% render_field form.location class="form-control" placeholder=form.location.label %}
-            <label for="{{ form.location.id_for_label }} {% if form.errors.location %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.location.label }}</label>
-        </div>
-        <div class="mb-3 form-floating">
-            {% render_field form.website class="form-control" placeholder=form.website.label %}
-            <label for="{{ form.website.id_for_label }} {% if form.errors.website %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.website.label }}</label>
-        </div>
-        <div class="mb-3 form-floating">
-            {% render_field form.birth_date class="form-control" placeholder=form.birth_date.label %}
-            <label for="{{ form.birth_date.id_for_label }} {% if form.errors.birth_date %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.birth_date.label }}</label>
-        </div>
-        <div class="mb-3 form-floating">
-            {% render_field form.bio class="form-control" placeholder=form.bio.label style="height: 15rem;" %}
-            <label for="{{ form.bio.id_for_label }} {% if form.errors.bio %}is-invalid{% elif success %}is-valid{% endif %}">{{ form.bio.label }}</label>
-        </div>
-        <h2 class="h3">{% translate "Avatars" %}</h2>
-        <h3 class="h4">{% translate "Small avatar" %}</h3>
-        <div class="row">
-            <div class="mb-3 col-md-6">
-                <div class="input-group">
-                    <label for="{{ form.avatar_small.id_for_label }}" class="visually-hidden">{{ form.avatar_small.label }}</label>
-                    {% render_field form.avatar_small class="form-control" %}
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-            {% if form.instance.avatar_small %}
-                <img src="{{ form.instance.avatar_small.url }}" alt="{% translate "Current small avatar" %}" class="img-thumbnail" style="max-width: 128px; max-height: 128px;">
-            {% else %}
-                <p>{% translate "No small avatar uploaded." %}</p>
-            {% endif %}
-            </div>
-        </div>
-
-        <h3 class="h4">{% translate "Medium avatar" %}</h3>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="input-group">
-                    <label for="{{ form.avatar_medium.id_for_label }}" class="visually-hidden">{{ form.avatar_medium.label }}</label>
-                    {% render_field form.avatar_medium class="form-control" %}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-            {% if form.instance.avatar_medium %}
-                <img src="{{ form.instance.avatar_medium.url }}" alt="{% translate "Current Medium avatar" %}" class="img-thumbnail" style="max-width: 256px; max-height: 256px;">
-            {% else %}
-                <p>{% translate "No medium avatar uploaded." %}</p>
-            {% endif %}
-            </div>
-        </div>
-        <h3 class="h4">{% translate "Large avatar" %}</h3>
-        <div class="row">
-            <div class="mb-3 col-md-6">
-                <div class="input-group">
-                    <label for="{{ form.avatar_large.id_for_label }}" class="visually-hidden">{{ form.avatar_large.label }}</label>
-                    {% render_field form.avatar_large class="form-control" %}
-                </div>
-            </div>
-            <div class="mb-3 col-md-6">
-                {% if form.instance.avatar_large %}
-                <img src="{{ form.instance.avatar_large.url }}" alt="{% translate "Current large avatar" %}" class="img-thumbnail" style="max-width: 512px; max-height: 512px;">
-                {% else %}
-                <p>{% translate "No large avatar uploaded." %}</p>
-                {% endif %}
-            </div>
-        </div>
-
-        <h3 class="h4">{% translate "Full sized avatar" %}</h3>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <label for="{{ form.avatar_full.id_for_label }}" class="visually-hidden">{{ form.avatar_full.label }}</label>
-                    {% render_field form.avatar_full class="form-control" %}
-                </div>
-            </div>
-            <div class="col-md-6">
-                {% if form.instance.avatar_full %}
-                <img src="{{ form.instance.avatar_full.url }}" alt="{% translate "Current full avatar" %}" class="img-thumbnail" style="max-width: 512px; max-height: 512px;">
-                {% else %}
-                <p>{% translate "No full avatar uploaded." %}</p>
-                {% endif %}
-            </div>
-        </div>
-        <div class="text-end">
-            <button type="submit" class="btn btn-primary">{% translate "Save" %}</button>
-        </div>
-
-    </form>
+    </div>
 </div>
+
+{% if request.user.profile.bio %}
+<h2>{% translate "Biography" %}</h2>
+{{ request.user.profile.bio_html }}
+{% endif %}

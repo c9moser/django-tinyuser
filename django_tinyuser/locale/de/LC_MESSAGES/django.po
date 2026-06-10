@@ -6,63 +6,41 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: django_tinyuser 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-25 08:05+0000\n"
+"POT-Creation-Date: 2026-06-10 18:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Last-Translator: Christian Moser <devel@c-moser.at>\n"
+"Language-Team: German <LL@li.org>\n"
+"Language: de \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: django_tinyuser/admin.py:16
+
+#: django_tinyuser/admin.py:14
 msgid "Personal info"
 msgstr "Persönliche Informationen"
 
-#: django_tinyuser/admin.py:17
+#: django_tinyuser/admin.py:15
 msgid "Permissions"
 msgstr "Berechtigungen"
 
-#: django_tinyuser/admin.py:18
+#: django_tinyuser/admin.py:16
 msgid "Important dates"
 msgstr "Wichtige Daten"
 
 #: django_tinyuser/apps.py:7
 #: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:8
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:21
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:71
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:23
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:96
 msgid "TinyUser"
 msgstr "TinyUser"
 
-#: django_tinyuser/enums.py:40
-msgid "pending"
-msgstr "ausstehend"
-
-#: django_tinyuser/enums.py:41
-msgid "accepted"
-msgstr "akzeptiert"
-
-#: django_tinyuser/enums.py:42
-msgid "rejected"
-msgstr "abgelehnt"
-
-#: django_tinyuser/enums.py:108
-msgid "not blocked"
-msgstr "nicht blockiert"
-
-#: django_tinyuser/enums.py:109
-msgid "blocked by from user"
-msgstr "blockiert vom \"vom Benutzer\""
-
-#: django_tinyuser/enums.py:110
-msgid "blocked by to user"
-msgstr "blockiert vom \"zum Benutzer\""
-
 #: django_tinyuser/global_templates/bootstrap/account/email.html:4
 #: django_tinyuser/global_templates/bootstrap/account/email.html:8
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:42
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:48
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:80
 msgid "Email Addresses"
 msgstr "E-Mail-Adressen"
 
@@ -148,7 +126,9 @@ msgstr "E-Mail-Adresse bestätigen"
 msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an email "
 "address for user %(user_display)s."
-msgstr "Bitte bestätigen Sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> eine E-Mail-Adresse für den Benutzer %(user_display)s ist."
+msgstr ""
+"Bitte bestätigen Sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> eine E-"
+"Mail-Adresse für den Benutzer %(user_display)s ist."
 
 #: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:25
 msgid "Confirm"
@@ -159,45 +139,57 @@ msgstr "Bestätigen"
 msgid ""
 "Unable to confirm %(email)s because it is already confirmed by a different "
 "account."
-msgstr "Konnte %(email)s nicht bestätigen, da es bereits von einem anderen Konto bestätigt wurde."
+msgstr ""
+"Konnte %(email)s nicht bestätigen, da es bereits von einem anderen Konto "
+"bestätigt wurde."
 
 #: django_tinyuser/global_templates/bootstrap/account/email_confirm.html:38
 #, python-format
 msgid ""
 "This email confirmation link expired or is invalid. Please <a "
 "href=\"%(email_url)s\">issue a new email confirmation request</a>."
-msgstr "Dieser Bestätigungslink für die E-Mail ist abgelaufen oder ungültig. Bitte <a href=\"%(email_url)s\">stellen Sie eine neue E-Mail-Bestätigungsanforderung</a>."
+msgstr ""
+"Dieser Bestätigungslink für die E-Mail ist abgelaufen oder ungültig. Bitte "
+"<a href=\"%(email_url)s\">stellen Sie eine neue E-Mail-"
+"Bestätigungsanforderung</a>."
 
 #: django_tinyuser/global_templates/bootstrap/account/login.html:4
 msgid "Log in"
 msgstr "Anmelden"
 
-#: django_tinyuser/global_templates/bootstrap/account/login.html:11
+#: django_tinyuser/global_templates/bootstrap/account/login.html:9
 msgid "Log into your account"
 msgstr "Melden Sie sich bei Ihrem Konto an"
 
-#: django_tinyuser/global_templates/bootstrap/account/login.html:25
+#: django_tinyuser/global_templates/bootstrap/account/login.html:27
 #: django_tinyuser/global_templates/bootstrap/account/signup.html:44
 msgid "Email address"
 msgstr "E-Mail-Adresse"
 
-#: django_tinyuser/global_templates/bootstrap/account/login.html:30
+#: django_tinyuser/global_templates/bootstrap/account/login.html:32
 #: django_tinyuser/global_templates/bootstrap/account/signup.html:63
 msgid "Password"
 msgstr "Passwort"
 
-#: django_tinyuser/global_templates/bootstrap/account/login.html:39
+#: django_tinyuser/global_templates/bootstrap/account/login.html:40
+#, fuzzy
+#| msgid "Forgot Password?"
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+#: django_tinyuser/global_templates/bootstrap/account/login.html:42
 msgid "Sign in"
 msgstr "Anmelden"
 
-#: django_tinyuser/global_templates/bootstrap/account/login.html:45
+#: django_tinyuser/global_templates/bootstrap/account/login.html:47
 msgid "Or use your social account"
 msgstr "Oder verwenden Sie Ihr Social-Konto"
 
 #: django_tinyuser/global_templates/bootstrap/account/password_change.html:4
 #: django_tinyuser/global_templates/bootstrap/account/password_change.html:8
 #: django_tinyuser/global_templates/bootstrap/account/password_change.html:34
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:41
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:47
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:79
 msgid "Change Password"
 msgstr "Passwort ändern"
 
@@ -214,7 +206,9 @@ msgstr "Passwort zurücksetzen"
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll send you "
 "an email allowing you to reset it."
-msgstr "Du hast dein Passwort vergessen? Gib unten deine E-Mail-Adresse ein, und wir senden dir eine E-Mail, mit der du es zurücksetzen kannst."
+msgstr ""
+"Du hast dein Passwort vergessen? Gib unten deine E-Mail-Adresse ein, und wir "
+"senden dir eine E-Mail, mit der du es zurücksetzen kannst."
 
 #: django_tinyuser/global_templates/bootstrap/account/password_reset.html:30
 msgid "Reset My Password"
@@ -222,14 +216,16 @@ msgstr "Mein Passwort zurücksetzen"
 
 #: django_tinyuser/global_templates/bootstrap/account/password_reset.html:36
 msgid "Please contact us if you have any trouble resetting your password."
-msgstr "Bitte kontaktieren Sie uns, wenn Sie Probleme beim Zurücksetzen Ihres Passworts haben."
+msgstr ""
+"Bitte kontaktieren Sie uns, wenn Sie Probleme beim Zurücksetzen Ihres "
+"Passworts haben."
 
 #: django_tinyuser/global_templates/bootstrap/account/signup.html:4
 msgid "Signup"
 msgstr "Registrieren"
 
 #: django_tinyuser/global_templates/bootstrap/account/signup.html:8
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:56
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:62
 msgid "Sign Up"
 msgstr "Registrieren"
 
@@ -273,230 +269,419 @@ msgstr "Derzeit sind keine Drittanbieter-Konten mit diesem Konto verbunden."
 msgid "Add a Third-Party Account"
 msgstr "Ein Drittanbieter-Konto hinzufügen"
 
-#: django_tinyuser/managers.py:34
+#: django_tinyuser/managers.py:32
 msgid "The Email field must be set"
 msgstr "Das E-Mail-Feld muss ausgefüllt sein"
 
-#: django_tinyuser/managers.py:37
+#: django_tinyuser/managers.py:35
 msgid "The Username field must be set"
 msgstr "Das Benutzername-Feld muss ausgefüllt sein"
 
-#: django_tinyuser/managers.py:62
+#: django_tinyuser/managers.py:60
 msgid "Superuser must have is_staff=True."
 msgstr "Ein Superuser muss is_staff=True haben."
 
-#: django_tinyuser/managers.py:64
+#: django_tinyuser/managers.py:62
 msgid "Superuser must have is_superuser=True."
 msgstr "Ein Superuser muss is_superuser=True haben."
 
-#: django_tinyuser/managers.py:89
-msgid "Users cannot be friends with themselves."
-msgstr "Benutzer können keine Freunde von sich selbst sein."
+#: django_tinyuser/models/fields.py:27
+#, python-format
+msgid "Unsupported file type. Allowed types are: %(types)s."
+msgstr "Nicht unterstützter Dateityp. Erlaubte Typen sind: %(types)s."
 
-#: django_tinyuser/managers.py:91
-msgid "Friendship request already exists."
-msgstr "Freundschaftsanfrage existiert bereits."
+#: django_tinyuser/models/fields.py:48
+msgid "Unsupported file type. Only SVG images are allowed."
+msgstr "Nicht unterstützter Dateityp. Es sind nur SVG-Bilder erlaubt."
 
-#: django_tinyuser/managers.py:93
-msgid "A friendship request from the other user already exists."
-msgstr "Eine Freundschaftsanfrage vom anderen Benutzer existiert bereits."
+#: django_tinyuser/models/fields.py:51
+#, python-format
+msgid "File size exceeds the maximum limit of %(max_file_size)s bytes."
+msgstr "Die Dateigröße überschreitet das maximale Limit von %(max_file_size)s Bytes."
 
-#: django_tinyuser/models.py:33
-msgid "email address"
-msgstr "E-Mail-Adresse"
-
-#: django_tinyuser/models.py:44
-msgid "username"
-msgstr "Benutzername"
-
-#: django_tinyuser/models.py:54
-msgid "active"
-msgstr "aktiv"
-
-#: django_tinyuser/models.py:64
-msgid "staff status"
-msgstr "Mitarbeiterstatus"
-
-#: django_tinyuser/models.py:74
-msgid "superuser status"
-msgstr "Superuser-Status"
-
-#: django_tinyuser/models.py:85
-msgid "verified"
-msgstr "Verifiziert"
-
-#: django_tinyuser/models.py:93
-msgid "joined at"
-msgstr "Beigetreten am"
-
-#: django_tinyuser/models.py:132
+#: django_tinyuser/models/tinyuser.py:24
 msgid "user"
 msgstr "Benutzer"
 
-#: django_tinyuser/models.py:133
+#: django_tinyuser/models/tinyuser.py:25
 msgid "users"
 msgstr "Benutzer"
 
-#: django_tinyuser/models.py:179
+#: django_tinyuser/models/tinyuser.py:63
+msgid "email address"
+msgstr "E-Mail-Adresse"
+
+#: django_tinyuser/models/tinyuser.py:74
+msgid "username"
+msgstr "Benutzername"
+
+#: django_tinyuser/models/tinyuser.py:82
+msgid "active"
+msgstr "aktiv"
+
+#: django_tinyuser/models/tinyuser.py:90
+msgid "staff status"
+msgstr "Mitarbeiterstatus"
+
+#: django_tinyuser/models/tinyuser.py:98
+msgid "superuser status"
+msgstr "Superuser-Status"
+
+#: django_tinyuser/models/tinyuser.py:102
+msgid "system user"
+msgstr "Systembenutzer"
+
+#: django_tinyuser/models/tinyuser.py:111
+msgid "verified"
+msgstr "Verifiziert"
+
+#: django_tinyuser/models/tinyuser.py:117
+msgid "joined at"
+msgstr "Beigetreten am"
+
+#: django_tinyuser/models/tinyuserprofile.py:34
+msgid "biography (Markdown supported)"
+msgstr "Biography (Markdown unterstützt)"
+
+#: django_tinyuser/models/tinyuserprofile.py:37
+msgid "location"
+msgstr "Ort"
+
+#: django_tinyuser/models/tinyuserprofile.py:41
+msgid "website"
+msgstr "Website"
+
+#: django_tinyuser/models/tinyuserprofile.py:45
+msgid "Mastodon profile URL"
+msgstr "Mastodon Profil-URL"
+
+#: django_tinyuser/models/tinyuserprofile.py:48
+msgid "birth date"
+msgstr "Geburtsdatum"
+
+#: django_tinyuser/models/tinyuserprofile.py:59
+msgid "small profile picture"
+msgstr "Kleines Profilbild"
+
+#: django_tinyuser/models/tinyuserprofile.py:72
+msgid "medium profile picture"
+msgstr "Mittleres Profilbild"
+
+#: django_tinyuser/models/tinyuserprofile.py:84
+msgid "large profile picture"
+msgstr "Großes Profilbild"
+
+#: django_tinyuser/models/tinyuserprofile.py:99
+msgid "full size profile picture"
+msgstr "Volles Profilbild"
+
+#: django_tinyuser/models/tinyuserprofile.py:119
 msgid "user profile"
 msgstr "Benutzerprofil"
 
-#: django_tinyuser/models.py:180
+#: django_tinyuser/models/tinyuserprofile.py:120
 msgid "user profiles"
 msgstr "Benutzerprofile"
 
-#: django_tinyuser/models.py:203
-msgid "description type"
-msgstr "Beschreibungstyp"
-
-#: django_tinyuser/models.py:206
-msgid "Text"
-msgstr "Text"
-
-#: django_tinyuser/models.py:207
-msgid "Markdown"
-msgstr "Markdown"
-
-#: django_tinyuser/models.py:208
-msgid "BBCode"
-msgstr "BBCode"
-
-#: django_tinyuser/models.py:257
-msgid "friend group"
-msgstr "Freundesgruppe"
-
-#: django_tinyuser/models.py:258
-msgid "friend groups"
-msgstr "Freundesgruppen"
-
-#: django_tinyuser/models.py:300
-msgid "friendship initiator"
-msgstr "Freundschaftsinitiator"
-
-#: django_tinyuser/models.py:318
-msgid "friendship status"
-msgstr "Freundschaftsstatus"
-
-#: django_tinyuser/models.py:351
-msgid "friendship blocked status"
-msgstr "Freundschaft blockiert Status"
-
-#: django_tinyuser/models.py:420
-msgid "Only the recipient of a friendship request can accept it."
-msgstr "Nur der Empfänger einer Freundschaftsanfrage kann diese akzeptieren."
-
-#: django_tinyuser/models.py:474
-#, python-brace-format
-msgid "{from_user} is {status} friends with {to_user}"
-msgstr "{from_user} ist {status} mit {to_user} befreundet"
-
-#: django_tinyuser/models.py:481
-msgid "user friendship"
-msgstr "Benutzerfreundschaft"
-
-#: django_tinyuser/models.py:482
-msgid "user friendships"
-msgstr "Benutzerfreundschaften"
-
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:28
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:30
 msgid "Home"
 msgstr "Startseite"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:29
-#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:3
-#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:6
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:31
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/edit.html:3
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/profile.html:3
 msgid "Profile"
 msgstr "Profil"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:43
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:3
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:40
+#, python-format
+msgid "%(username)s's avatar"
+msgstr "%(benutzername)s's Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:49
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:81
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/invite.html:3
 msgid "Invite"
 msgstr "Einladen"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:48
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:54
 msgid "Logout"
 msgstr "Abmelden"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:55
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:61
 msgid "Login"
 msgstr "Anmelden"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:65
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:74
+msgid "User Menu"
+msgstr "Nutzer-Menü"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:78
+msgid "My Profile"
+msgstr "Mein Profil"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:90
 msgid "Welcome to TinyUser!"
 msgstr "Willkommen bei TinyUser!"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:66
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:91
 msgid "This is the base template. Extend this template for your views."
-msgstr "Dies ist die Basisschablone. Erweitern Sie diese Schablone für Ihre Ansichten."
+msgstr ""
+"Dies ist die Basisschablone. Erweitern Sie diese Schablone für Ihre "
+"Ansichten."
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:71
+#: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:96
 msgid "All rights reserved."
 msgstr "Alle Rechte vorbehalten."
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/index.html:7
+#: django_tinyuser/templates/django_tinyuser/bootstrap/index/index.html:7
 msgid "Welcome to TinyUser"
 msgstr "Willkommen bei TinyUser"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/index.html:8
+#: django_tinyuser/templates/django_tinyuser/bootstrap/index/index.html:8
 msgid "This is a simple user management app."
 msgstr "Dies ist eine einfache Benutzerverwaltungsanwendung."
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:3
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/failed.html:3
 msgid "Invitation Not Sent"
 msgstr "Einladung nicht gesendet"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:6
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/failed.html:6
 msgid "Invitation Not Sent!"
 msgstr "Einladung nicht gesendet!"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:7
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/failed.html:7
 msgid "There was an error sending your invitation. Please try again."
-msgstr "Beim Senden Ihrer Einladung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+msgstr ""
+"Beim Senden Ihrer Einladung ist ein Fehler aufgetreten. Bitte versuchen Sie "
+"es erneut."
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-failed.html:8
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/failed.html:8
 msgid "Try Again"
 msgstr "Erneut versuchen"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:3
-msgid "Invitation Sent"
-msgstr "Einladung gesendet"
-
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:6
-msgid "Invitation Sent!"
-msgstr "Einladung gesendet!"
-
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:7
-msgid "Your invitation has been sent successfully."
-msgstr "Ihre Einladung wurde erfolgreich gesendet."
-
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite-success.html:8
-msgid "Invite Another User"
-msgstr "Einen weiteren Benutzer einladen"
-
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:6
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/invite.html:6
 msgid "Invite a new user"
 msgstr "Einen neuen Benutzer einladen"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:7
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/invite.html:7
 msgid "Enter the email address of the person you want to invite."
 msgstr "Geben Sie die E-Mail-Adresse der Person ein, die Sie einladen möchten."
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:10
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/invite.html:10
 msgid "Invitation sent successfully!"
 msgstr "Einladung erfolgreich gesendet!"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/invite.html:20
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/invite.html:20
 msgid "Send Invitation"
 msgstr "Einladung senden"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:7
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/success.html:3
+msgid "Invitation Sent"
+msgstr "Einladung gesendet"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/success.html:6
+msgid "Invitation Sent!"
+msgstr "Einladung gesendet!"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/success.html:7
+msgid "Your invitation has been sent successfully."
+msgstr "Ihre Einladung wurde erfolgreich gesendet."
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/invite/success.html:8
+msgid "Invite Another User"
+msgstr "Einen weiteren Benutzer einladen"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/edit.html:6
+#, fuzzy
+#| msgid "user profile"
+msgid "Edit your Profile"
+msgstr "Benutzerprofil"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/edit.html:7
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/profile.html:10
 msgid "This is your profile page."
 msgstr "Dies ist Ihre Profilseite."
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:10
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:5
 msgid "Profile updated successfully!"
 msgstr "Profil erfolgreich aktualisiert!"
 
-#: django_tinyuser/templates/django_tinyuser/bootstrap/profile.html:30
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:9
+msgid "Failed to update profile."
+msgstr "Aktualisieren des Profils fehlgeschlagen."
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:77
+msgid "Avatars"
+msgstr "Avatare"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:78
+msgid "Small avatar"
+msgstr "Kleiner Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:90
+msgid " Current small avatar"
+msgstr "Aktueller kleiner Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:93
+msgid "No small avatar uploaded."
+msgstr "Kein kleiner Avatar hochgeladen."
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:98
+msgid "Medium avatar"
+msgstr "Mittlerer Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:109
+msgid " Current Medium avatar"
+msgstr "Aktueller mittlerer Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:112
+msgid "No medium avatar uploaded."
+msgstr "Kein mittlerer Avatar hochgeladen."
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:116
+msgid "Large avatar"
+msgstr "Großer Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:127
+msgid " Current large avatar"
+msgstr "Aktueller großer Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:130
+msgid "No large avatar uploaded."
+msgstr "Kein großer Avatar hochgeladen."
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:135
+msgid "Full sized avatar"
+msgstr "Avatar in voller Größe"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:146
+msgid " Current full avatar"
+msgstr " Derzeitger voller Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:149
+msgid "No full avatar uploaded."
+msgstr "Kein voller Avatar hochgeladen."
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/edit.html:154
 msgid "Save"
 msgstr "Speichern"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:5
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:8
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:11
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:14
+msgid " Avatar"
+msgstr " Avatar"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:21
+msgid "Username:"
+msgstr "Benutzername:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:23
+msgid "Email address:"
+msgstr "E-Mail-Adresse:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:25
+msgid "First name:"
+msgstr "Vorname:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:27
+msgid "Last name:"
+msgstr "Nachname:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:29
+msgid "Location:"
+msgstr "Ort"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:31
+msgid "Birth date:"
+msgstr "Geburtsdatum:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:33
+msgid "Website:"
+msgstr "Website:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:41
+msgid "Mastodon URL:"
+msgstr "Mastodon URL:"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:53
+msgid "Biography"
+msgstr "Biografie"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/profile.html:6
+msgid "Your Profile"
+msgstr "Dein Benutzerprofil"
+
+#: django_tinyuser/templates/django_tinyuser/bootstrap/profile/profile.html:8
+msgid "Edit your profile"
+msgstr "Bearbeite dein Profil"
+
+#~ msgid "pending"
+#~ msgstr "ausstehend"
+
+#~ msgid "accepted"
+#~ msgstr "akzeptiert"
+
+#~ msgid "rejected"
+#~ msgstr "abgelehnt"
+
+#~ msgid "not blocked"
+#~ msgstr "nicht blockiert"
+
+#~ msgid "blocked by from user"
+#~ msgstr "blockiert vom \"vom Benutzer\""
+
+#~ msgid "blocked by to user"
+#~ msgstr "blockiert vom \"zum Benutzer\""
+
+#~ msgid "Users cannot be friends with themselves."
+#~ msgstr "Benutzer können keine Freunde von sich selbst sein."
+
+#~ msgid "Friendship request already exists."
+#~ msgstr "Freundschaftsanfrage existiert bereits."
+
+#~ msgid "A friendship request from the other user already exists."
+#~ msgstr "Eine Freundschaftsanfrage vom anderen Benutzer existiert bereits."
+
+#~ msgid "description type"
+#~ msgstr "Beschreibungstyp"
+
+#~ msgid "Text"
+#~ msgstr "Text"
+
+#~ msgid "Markdown"
+#~ msgstr "Markdown"
+
+#~ msgid "BBCode"
+#~ msgstr "BBCode"
+
+#~ msgid "friend group"
+#~ msgstr "Freundesgruppe"
+
+#~ msgid "friend groups"
+#~ msgstr "Freundesgruppen"
+
+#~ msgid "friendship initiator"
+#~ msgstr "Freundschaftsinitiator"
+
+#~ msgid "friendship status"
+#~ msgstr "Freundschaftsstatus"
+
+#~ msgid "friendship blocked status"
+#~ msgstr "Freundschaft blockiert Status"
+
+#~ msgid "Only the recipient of a friendship request can accept it."
+#~ msgstr ""
+#~ "Nur der Empfänger einer Freundschaftsanfrage kann diese akzeptieren."
+
+#, python-brace-format
+#~ msgid "{from_user} is {status} friends with {to_user}"
+#~ msgstr "{from_user} ist {status} mit {to_user} befreundet"
+
+#~ msgid "user friendship"
+#~ msgstr "Benutzerfreundschaft"
+
+#~ msgid "user friendships"
+#~ msgstr "Benutzerfreundschaften"

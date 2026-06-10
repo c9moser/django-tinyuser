@@ -40,6 +40,10 @@ class TinyUserProfile(models.Model):
     #: It is optional and can be left blank.
     website = models.URLField(blank=True, verbose_name=_("website"))
 
+    #: The mastodon_url field allows users to provide a URL to their Mastodon profile.
+    #: It is optional and can be left blank.
+    mastodon_url = models.URLField(blank=True, verbose_name=_("Mastodon profile URL"))
+
     #: The birth_date field allows users to specify their date of birth. It is optional and can be left blank.
     birth_date = models.DateField(blank=True, null=True, verbose_name=_("birth date"))
 

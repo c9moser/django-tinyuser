@@ -3,10 +3,7 @@
 {% block title %}{% translate "Profile" %}{% endblock %}
 
 {% block content %}
-<h1>{% translate "Your Profile" %}</h1>
-<div class="mb-3">
-    <a class="btn btn-primary" href="{% url 'tinyuser:profile-edit' %}">{% translate "Edit your profile" %}</a>
-</div>
+<h1>{% translate "Edit your Profile" %}</h1>
 <p>{% translate "This is your profile page." %}</p>
-{% include "tinyuser/hx/profile"|tinyuser_template %}
+{% include "tinyuser/hx/profile/edit"|tinyuser_template %}
 {% endblock %}

@@ -4,11 +4,13 @@ BOOTSTRAP_TEMPLATES = {
     "tinyuser/hx/invite/failed": "django_tinyuser/bootstrap/invite/hx/failed.html",
     "tinyuser/hx/invite/success": "django_tinyuser/bootstrap/invite/hx/success.html",
     "tinyuser/hx/profile": "django_tinyuser/bootstrap/profile/hx/profile.html",
+    "tinyuser/hx/profile/edit": "django_tinyuser/bootstrap/profile/hx/edit.html",
     "tinyuser/index": "django_tinyuser/bootstrap/index/index.html",
     "tinyuser/invite": "django_tinyuser/bootstrap/invite/invite.html",
     "tinyuser/invite/success": "django_tinyuser/bootstrap/invite/success.html",
     "tinyuser/invite/failed": "django_tinyuser/bootstrap/invite/failed.html",
     "tinyuser/profile": "django_tinyuser/bootstrap/profile/profile.html",
+    "tinyuser/profile/edit": "django_tinyuser/bootstrap/profile/edit.html",
 }
 
 TAILWIND_TEMPLATES = {
@@ -22,6 +24,7 @@ TAILWIND_TEMPLATES = {
     "tinyuser/invite/success": "django_tinyuser/tailwindcss/invite/success.html",
     "tinyuser/invite/failed": "django_tinyuser/tailwindcss/invite/failed.html",
     "tinyuser/profile": "django_tinyuser/tailwindcss/profile/profile.html",
+    "tinyuser/profile/edit": "django_tinyuser/tailwindcss/profile/edit.html",
 }
 
 
@@ -36,6 +39,7 @@ CUSTOM_TEMPLATES = {
     "tinyuser/invite/success": "django_tinyuser/html/invite/success.html",
     "tinyuser/invite/failed": "django_tinyuser/html/invite/failed.html",
     "tinyuser/profile": "django_tinyuser/html/profile/profile.html",
+    "tinyuser/profile/edit": "django_tinyuser/html/profile/edit.html",
 }
 
 
