@@ -1,0 +1,7 @@
+{
+  "prettier": {
+    "allowed": false
+  },
+  "soft_wrap": "prefer_line",
+  "preferred_line_length": 120
+}

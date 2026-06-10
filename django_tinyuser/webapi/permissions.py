@@ -15,7 +15,8 @@ class IsInvitor(BasePermission):
 
         Only staff and superusers can always invite others.
 
-        Authenticated users can invite others if `INVITE_ALLOW_ALL_AUTHENTICATED_USERS` is `True` or they are in `INVITE_GROUPS`.
+        Authenticated users can invite others if `INVITE_ALLOW_ALL_AUTHENTICATED_USERS` is `True` or they
+        are in `INVITE_GROUPS`.
 
         :param request: The request object.
         :param view: The view object.

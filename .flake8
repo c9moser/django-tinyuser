@@ -1,4 +1,4 @@
 [flake8]
 max-line-length = 120
-exclude = .git,__pycache__,env,venv,.venv,.data,build,dist,migrations,staticfiles,node_modules,.eggs,*.egg,.tox,.nox,.venv,env.py,settings.py,production_settings.py,debug_settings.py,urls.py,*/migrations/*,*/*/migrations/*
+exclude = .git,__pycache__,env,venv,.venv,.data,build,dist,migrations,staticfiles,node_modules,.eggs,*.egg,.tox,.nox,.venv,env.py,settings.py,production_settings.py,debug_settings.py,urls.py,*/migrations/*,*/*/migrations/*,tests,*/tests,*/*/tests
 

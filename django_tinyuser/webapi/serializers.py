@@ -1,7 +1,5 @@
 """Serializers for the user API Views."""
 
-from this import s
-
 from allauth.account.adapter import get_adapter
 from django.contrib.auth import (
     authenticate,

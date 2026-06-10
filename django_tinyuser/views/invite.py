@@ -56,9 +56,12 @@ class InviteView(UserPassesTestMixin, FormView):
                     INVITE_GROUPS
                     and self.request.user.groups.filter(name__in=INVITE_GROUPS).exists()
                 ):
-                    return True  # If no specific invite group is set, allow all authenticated users to access the invite view
+                    # If no specific invite group is set, allow only superusers and staff to access the invite view
+                    # except INVITE_ALLOW_ALL_AUTHENTICATED_USERS is set to True
+                    return True
                 elif INVITE_ALLOW_ALL_AUTHENTICATED_USERS:
-                    return True  # If no specific invite group is set, allow all authenticated users to access the invite view
+                    # Allow all authenticated users to access the invite view
+                    return True
         return False
 
     def get_context_data(self, **kwargs):

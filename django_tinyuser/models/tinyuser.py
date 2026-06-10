@@ -3,12 +3,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-import markdown
 from django_tinyuser import settings
 from django_tinyuser.managers import TinyUserManager
-from .fields import RestrictedImageField
-
-from django.conf import settings as django_settings
+from django_tinyuser.models.tinyuserprofile import TinyUserProfile
 
 
 class TinyUser(AbstractBaseUser, PermissionsMixin):
@@ -22,9 +19,10 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
     :return: The created user instance.
     :rtype: TinyUser
     """
+
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
         if settings.TINYUSER_EXTERNAL_MANAGED or settings.AUTH_EXTERNAL_MANAGED:
             managed = False
@@ -34,22 +32,24 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
         if settings.USE_POSTGRESQL_SCHEMAS:
             db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_user"
         else:
-            db_table = 'tinyuser_user'
+            db_table = "tinyuser_user"
 
         indexes = [
-            models.Index(fields=['email'], name='email_idx'),
-            models.Index(fields=['username'], name='username_idx'),
+            models.Index(fields=["email"], name="email_idx"),
+            models.Index(fields=["username"], name="username_idx"),
         ]
 
         constraints = [
             models.UniqueConstraint(
-                fields=['email'],
+                fields=["email"],
                 condition=(models.Q(email__isnull=False)),
-                name='unique_email'
+                name="unique_email",
             ),
             models.CheckConstraint(
-                condition=(models.Q(email__isnull=True) | models.Q(is_system_user=False)),
-                name='email_not_system_user'
+                condition=(
+                    models.Q(email__isnull=True) | models.Q(is_system_user=False)
+                ),
+                name="email_not_system_user",
             ),
         ]
 
@@ -59,8 +59,8 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
     #: It is required and must be unique.
     email = models.EmailField(
         unique=True,
-        db_column='email',
-        verbose_name=_('email address'),
+        db_column="email",
+        verbose_name=_("email address"),
         blank=True,
         null=True,
     )
@@ -71,10 +71,7 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
 
     #: It is required and must be unique.
     username = models.CharField(
-        max_length=127,
-        unique=True,
-        db_column='username',
-        verbose_name=_('username')
+        max_length=127, unique=True, db_column="username", verbose_name=_("username")
     )
 
     #: The is_active field indicates whether the user's account is active.
@@ -82,9 +79,7 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
     #:
     #: It is a boolean field that defaults to True.
     is_active = models.BooleanField(
-        default=True,
-        db_column='is_active',
-        verbose_name=_('active')
+        default=True, db_column="is_active", verbose_name=_("active")
     )
 
     #: The is_staff field indicates whether the user has staff status, which
@@ -92,9 +87,7 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
     #:
     #: It is a boolean field that defaults to False.
     is_staff = models.BooleanField(
-        default=False,
-        db_column='is_staff',
-        verbose_name=_('staff status')
+        default=False, db_column="is_staff", verbose_name=_("staff status")
     )
 
     #: The is_superuser field indicates whether the user has superuser status,
@@ -102,15 +95,11 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
     #:
     #: It is a boolean field that defaults to False.
     is_superuser = models.BooleanField(
-        default=False,
-        db_column='is_superuser',
-        verbose_name=_('superuser status')
+        default=False, db_column="is_superuser", verbose_name=_("superuser status")
     )
 
     is_system_user = models.BooleanField(
-        default=False,
-        db_column='is_system_user',
-        verbose_name=_('system user')
+        default=False, db_column="is_system_user", verbose_name=_("system user")
     )
 
     #: The is_verified field indicates whether the user's email address has
@@ -119,23 +108,19 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
     #:
     #: It is a boolean field that defaults to False.
     is_verified = models.BooleanField(
-        default=False,
-        db_column='is_verified',
-        verbose_name=_('verified')
+        default=False, db_column="is_verified", verbose_name=_("verified")
     )
 
     #: The joined_at field stores the date and time when the user account was created.
     #: It is automatically set to the current date and time when the user is created.
     joined_at = models.DateTimeField(
-        default=timezone.now,
-        db_column='joined_at',
-        verbose_name=_('joined at')
+        default=timezone.now, db_column="joined_at", verbose_name=_("joined at")
     )
 
     objects = TinyUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     @property
     def display_name(self):
@@ -145,18 +130,17 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
         :return: The display name of the user.
         :rtype: str
         """
-        self.profile = getattr(self, 'profile', None)
+        self.profile = getattr(self, "profile", None)
         if not self.profile and self.id:
             try:
                 self.profile = TinyUserProfile.objects.filter(user_id=self.id).first()
             except TinyUserProfile.DoesNotExist:
-                self.profile = TinyUserProfile.objects.create(user=self,
-                                                              first_name='',
-                                                              last_name='',
-                                                              bio='')
+                self.profile = TinyUserProfile.objects.create(
+                    user=self, first_name="", last_name="", bio=""
+                )
 
         if self.profile:
-            if (self.profile.first_name or self.profile.last_name):
+            if self.profile.first_name or self.profile.last_name:
                 return f"{self.profile.first_name} {self.profile.last_name}".strip()
             elif self.profile.first_name:
                 return self.profile.first_name
@@ -166,122 +150,3 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
-
-
-class TinyUserProfile(models.Model):
-    """Model to store additional profile information for TinyUser."""
-
-    #: The user field is a one-to-one relationship with the TinyUser model, linking each profile to a specific user.
-    #: It is required and will be deleted if the associated user is deleted.
-    user = models.OneToOneField(
-        django_settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='profile')
-
-    #: The first_name field stores the user's first name.
-    #: It is optional and can be left blank.
-    first_name = models.CharField(
-        max_length=30,
-        blank=True,
-    )
-    #: The last_name field stores the user's last name.
-    #: It is optional and can be left blank.
-    last_name = models.CharField(max_length=30, blank=True)
-
-    #: The bio field allows users to provide a short biography or description
-    #: about themselves. It is optional and can be left blank.
-    bio = models.TextField(blank=True, verbose_name=_('biography (Markdown supported)'))
-
-    #: The location field allows users to specify their location. It is optional and can be left blank.
-    location = models.CharField(max_length=255, blank=True, verbose_name=_('location'))
-
-    #: The website field allows users to provide a URL to their personal website or social media profile.
-    #: It is optional and can be left blank.
-    website = models.URLField(blank=True, verbose_name=_('website'))
-
-    #: The birth_date field allows users to specify their date of birth. It is optional and can be left blank.
-    birth_date = models.DateField(blank=True, null=True, verbose_name=_('birth date'))
-
-    #: The avatar_small field allows users to upload a small profile picture. It is optional and can be left blank.
-    #: The uploaded image must be less than 1 MiB in size and is rendered down to 128x128 pixels.
-    #: If not provided, the avatar_medium, avatar_large or avatar_full fields can be used as the source for
-    #: generating the small avatar size.
-    avatar_small = RestrictedImageField(
-        upload_to='user/avatars/',
-        blank=True,
-        null=True,
-        max_file_size=1024 * 1024,  # 1 MiB
-        verbose_name=_('small profile picture')
-    )
-
-    #: The avatar_medium field allows users to upload a medium profile picture. It is optional and can be left blank.
-    #: The uploaded image must be less than 2.5 MiB in size and is rendered down to 256x256 pixels.
-    #:
-    #: If not provided, the avatar_large or avatar_full fields can be used as the source for
-    #: generating the medium avatar size.
-    avatar_medium = RestrictedImageField(
-        upload_to='user/avatars/',
-        blank=True,
-        null=True,
-        max_file_size=int(2.5 * 1024 * 1024),  # 2.5 MiB
-        verbose_name=_('medium profile picture')
-    )
-
-    #: The avatar_large field allows users to upload a large profile picture. It is optional and can be left blank.
-    #: The uploaded image must be less than 5 MiB in size and is rendered down to 512x512 pixels.
-    #:
-    #: If not provided, the avatar_full field can be used as the source for generating the large avatar size.
-    avatar_large = RestrictedImageField(
-        upload_to='user/avatars/',
-        blank=True,
-        null=True,
-        max_file_size=int(5 * 1024 * 1024),  # 5 MiB
-        verbose_name=_('large profile picture')
-    )
-
-    #: The avatar_full field allows users to upload a full-size profile picture. It is optional and can be left blank.
-    #: The uploaded image must be less than 10 MiB in size and is not rendered down.
-    #:
-    #: If avatar_full is uploaded, it can be used as the source for generating the smaller avatar sizes
-    #: if the avatar_small, avatar_medium or avatar_large fields are not provided.
-    #: This allows users to upload a single high-resolution image that can be used to generate all required
-    #: avatar sizes, while still allowing them to upload specific images for each size if they prefer.
-    avatar_full = RestrictedImageField(
-        upload_to='user/avatars/',
-        blank=True,
-        null=True,
-        max_file_size=int(10 * 1024 * 1024),  # 10 MiB
-        verbose_name=_('full size profile picture')
-    )
-
-    @property
-    def bio_html(self):
-        """
-        Return the bio field rendered as HTML using Markdown.
-
-        :return: The bio field rendered as HTML.
-        :rtype: SafeString
-        """
-
-        from django.utils.safestring import mark_safe
-        return mark_safe(markdown.markdown(self.bio, extensions=['extra', 'nl2br']))
-
-    def __str__(self):
-        return f"{self.user.username}'s profile"
-
-    class Meta:
-        verbose_name = _('user profile')
-        verbose_name_plural = _('user profiles')
-
-        if settings.AUTH_EXTERNAL_MANAGED:
-            managed = False
-        else:
-            managed = True
-
-        if settings.USE_POSTGRESQL_SCHEMAS:
-            db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_profile"
-        else:
-            db_table = 'tinyuser_profile'
-        indexes = [
-            models.Index(fields=['user'], name='user_idx'),
-        ]
