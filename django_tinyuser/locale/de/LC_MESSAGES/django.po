@@ -396,7 +396,7 @@ msgstr "Profil"
 #: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:40
 #, python-format
 msgid "%(username)s's avatar"
-msgstr "%(benutzername)s's Avatar"
+msgstr "%(username)s's Avatar"
 
 #: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:49
 #: django_tinyuser/templates/django_tinyuser/bootstrap/base.html:81
@@ -493,10 +493,8 @@ msgid "Invite Another User"
 msgstr "Einen weiteren Benutzer einladen"
 
 #: django_tinyuser/templates/django_tinyuser/bootstrap/profile/edit.html:6
-#, fuzzy
-#| msgid "user profile"
 msgid "Edit your Profile"
-msgstr "Benutzerprofil"
+msgstr "Bearbeite dein Benutzerprofil"
 
 #: django_tinyuser/templates/django_tinyuser/bootstrap/profile/edit.html:7
 #: django_tinyuser/templates/django_tinyuser/bootstrap/profile/profile.html:10
@@ -592,7 +590,7 @@ msgstr "Nachname:"
 
 #: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:29
 msgid "Location:"
-msgstr "Ort"
+msgstr "Ort:"
 
 #: django_tinyuser/templates/django_tinyuser/bootstrap/profile/hx/profile.html:31
 msgid "Birth date:"

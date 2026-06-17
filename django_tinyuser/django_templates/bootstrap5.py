@@ -1,0 +1,15 @@
+BOOTSTRAP5_TEMPLATES = {
+    "tinyuser/base": "django_tinyuser/bootstrap5/base.html",
+    "tinyuser/hx/invite": "django_tinyuser/bootstrap5/invite/hx/invite.html",
+    "tinyuser/hx/invite/failed": "django_tinyuser/bootstrap5/invite/hx/failed.html",
+    "tinyuser/hx/invite/success": "django_tinyuser/bootstrap5/invite/hx/success.html",
+    "tinyuser/hx/profile": "django_tinyuser/bootstrap5/profile/hx/profile.html",
+    "tinyuser/hx/profile/edit": "django_tinyuser/bootstrap5/profile/hx/edit.html",
+    "tinyuser/index": "django_tinyuser/bootstrap5/index/index.html",
+    "tinyuser/invite": "django_tinyuser/bootstrap5/invite/invite.html",
+    "tinyuser/invite/success": "django_tinyuser/bootstrap5/invite/success.html",
+    "tinyuser/invite/failed": "django_tinyuser/bootstrap5/invite/failed.html",
+    "tinyuser/profile": "django_tinyuser/bootstrap5/profile/profile.html",
+    "tinyuser/profile/edit": "django_tinyuser/bootstrap5/profile/edit.html",
+    "tinyuser/profile/settings": "django_tinyuser/bootstrap5/profile/settings.html",
+}

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from . import views
 
-app_name = "tinyuser.webapi"
+app_name = "tinyuser-webapi"
 
 router = DefaultRouter()
 # You can register your viewsets here, e.g.:

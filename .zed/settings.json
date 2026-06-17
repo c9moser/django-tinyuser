@@ -3,5 +3,12 @@
     "allowed": false
   },
   "soft_wrap": "prefer_line",
-  "preferred_line_length": 120
+  "preferred_line_length": 120,
+  "file_types": {
+    "Django": [
+      "**/templates/**/*.html",
+      "**/templates/**/*.txt",
+      "**/templates/**/*.md",
+    ]
+  }
 }

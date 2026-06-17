@@ -6,5 +6,4 @@ django-tinyuser Models
    :caption: Table of Contents
 
    tinyuser.rst
-   friendship.rst
    profile.rst

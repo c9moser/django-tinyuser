@@ -11,112 +11,115 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+
 from .env import ENV
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ENV('SECRET_KEY')
+SECRET_KEY = ENV("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = ENV('DEBUG')
+DEBUG = ENV("DEBUG")
 
 LOCAL_SETTINGS_DIR = BASE_DIR / "django_project" / "local_settings"
 _local_settings_file = LOCAL_SETTINGS_DIR / "settings.py"
 if _local_settings_file.exists():
     from .local_settings import settings as local_settings
+
     DEBUG = getattr(local_settings, "DEBUG", ENV("DEBUG"))
 
-ALLOWED_HOSTS = ENV('ALLOWED_HOSTS')
+ALLOWED_HOSTS = ENV("ALLOWED_HOSTS")
 
 # Application definition
 
 django_apps = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 )
 
 allauth_apps = (
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.openid',  # required for steam provider
-    'allauth.socialaccount.providers.steam',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.openid",  # required for steam provider
+    "allauth.socialaccount.providers.steam",
 )
 
 api_apps = (
-    'rest_framework',
-    'rest_framework.authtoken',
-    'drf_spectacular',
-    'drf_spectacular_sidecar',  # required for Django collectstatic discovery
+    "rest_framework",
+    "rest_framework.authtoken",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",  # required for Django collectstatic discovery
 )
 
 third_party_apps = [
-    'django_extensions',
-    'widget_tweaks',
-    'invitations',
+    "django_extensions",
+    "widget_tweaks",
+    "invitations",
+    "django_templates",
 ]
 
 project_apps = [
-    'django_tinyuser',
-    'django_tinyuser.webapi',
+    "django_tinyuser",
+    "django_tinyuser.webapi",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
-ROOT_URLCONF = 'django_project.urls'
+ROOT_URLCONF = "django_project.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django_tinyuser.context_processors.tinyuser',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "django.contrib.sites.context_processors.site",
+                "django_templates.context_processors.templates",
+                "django_tinyuser.context_processors.tinyuser",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'django_project.wsgi.application'
-CSS_FRAMEWORK = ENV('CSS_FRAMEWORK').lower()
+WSGI_APPLICATION = "django_project.wsgi.application"
+CSS_FRAMEWORK = ENV("CSS_FRAMEWORK").lower()
 
-USE_POSTGRES_SCHEMAS = ENV('USE_POSTGRES_SCHEMAS')
-DJANGO_POSTGRES_SCHEMA = ENV('DJANGO_POSTGRES_SCHEMA')
-POSTGRES_SCHEMA = ENV('POSTGRES_SCHEMA')
-TINYUSER_SHOW_INDEX_PAGE = ENV('TINYUSER_SHOW_INDEX_PAGE')
-
+USE_POSTGRES_SCHEMAS = ENV("USE_POSTGRES_SCHEMAS")
+DJANGO_POSTGRES_SCHEMA = ENV("DJANGO_POSTGRES_SCHEMA")
+POSTGRES_SCHEMA = ENV("POSTGRES_SCHEMA")
+TINYUSER_SHOW_INDEX_PAGE = ENV("TINYUSER_SHOW_INDEX_PAGE")
 
 
 SPECTACULAR_SETTINGS = {
-    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
+    "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
     # OTHER SETTINGS
 }
 
@@ -124,44 +127,44 @@ SPECTACULAR_SETTINGS = {
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if ENV('DATABASE_CONFIG_METHOD') == 'url':
+if ENV("DATABASE_CONFIG_METHOD") == "url":
     DATABASES = {
-        'default': ENV.db_url('DATABASE_URL'),
+        "default": ENV.db_url("DATABASE_URL"),
     }
-elif ENV('DATABASE_CONFIG_METHOD') in ('postgresql','pgsql', 'postgres', 'psql'):
+elif ENV("DATABASE_CONFIG_METHOD") in ("postgresql", "pgsql", "postgres", "psql"):
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': ENV('POSTGRES_DB'),
-            'USER': ENV('POSTGRES_USER'),
-            'PASSWORD': ENV('POSTGRES_PASSWORD'),
-            'HOST': ENV('POSTGRES_HOST'),
-            'PORT': ENV('POSTGRES_PORT'),
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": ENV("POSTGRES_DB"),
+            "USER": ENV("POSTGRES_USER"),
+            "PASSWORD": ENV("POSTGRES_PASSWORD"),
+            "HOST": ENV("POSTGRES_HOST"),
+            "PORT": ENV("POSTGRES_PORT"),
         }
     }
-elif ENV('DATABASE_CONFIG_METHOD') in ('mysql', 'mariadb'):
+elif ENV("DATABASE_CONFIG_METHOD") in ("mysql", "mariadb"):
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': ENV('MYSQL_DB'),
-            'USER': ENV('MYSQL_USER'),
-            'PASSWORD': ENV('MYSQL_PASSWORD'),
-            'HOST': ENV('MYSQL_HOST'),
-            'PORT': ENV('MYSQL_PORT'),
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": ENV("MYSQL_DB"),
+            "USER": ENV("MYSQL_USER"),
+            "PASSWORD": ENV("MYSQL_PASSWORD"),
+            "HOST": ENV("MYSQL_HOST"),
+            "PORT": ENV("MYSQL_PORT"),
         }
     }
-elif ENV('DATABASE_CONFIG_METHOD') in ('sqlite','sqlite3'):
+elif ENV("DATABASE_CONFIG_METHOD") in ("sqlite", "sqlite3"):
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': ENV('SQLITE_DB_NAME'),
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ENV("SQLITE_DB_NAME"),
         }
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / '.data' / 'db.sqlite3',
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / ".data" / "db.sqlite3",
         }
     }
 
@@ -171,16 +174,16 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -188,82 +191,84 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = ENV('LANGUAGE_CODE', default='en-us')
-USE_I18N = ENV('USE_I18N', default=True)
+LANGUAGE_CODE = ENV("LANGUAGE_CODE", default="en-us")
+USE_I18N = ENV("USE_I18N", default=True)
 
-USE_TZ = ENV('USE_TZ', default=True)
-TIME_ZONE = ENV('TIME_ZONE', default='UTC')
+USE_TZ = ENV("USE_TZ", default=True)
+TIME_ZONE = ENV("TIME_ZONE", default="UTC")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = ENV('STATIC_URL')
-STATIC_ROOT = ENV('STATIC_ROOT')
-MEDIA_URL = ENV('MEDIA_URL')
-MEDIA_ROOT = ENV('MEDIA_ROOT')
+STATIC_URL = ENV("STATIC_URL")
+STATIC_ROOT = ENV("STATIC_ROOT")
+MEDIA_URL = ENV("MEDIA_URL")
+MEDIA_ROOT = ENV("MEDIA_ROOT")
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ACCOUNT_ADAPTER = 'django_tinyuser.account_adapter.TinyUserAccountAdapter'
+ACCOUNT_ADAPTER = "django_tinyuser.account_adapter.TinyUserDRFAccountAdapter"
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
 
 
 SETTINGS_DIR = Path(__file__).resolve().parent
 LOCAL_SETTINGS_DIR = SETTINGS_DIR / "local_settings"
-if ENV('CONTAINERIZED'):
-    if Path('/etc/django-env').exists():
-        ENV.read_env('/etc/django-env')
+if ENV("CONTAINERIZED"):
+    if Path("/etc/django-env").exists():
+        ENV.read_env("/etc/django-env")
 
 
-AUTH_USER_MODEL = 'django_tinyuser.TinyUser'
+AUTH_USER_MODEL = "django_tinyuser.TinyUser"
 
-BASE_TEMPLATE= ENV('BASE_TEMPLATE')
+BASE_TEMPLATE = ENV("BASE_TEMPLATE")
 
-EMAIL_BACKEND = ENV('EMAIL_BACKEND')
-EMAIL_HOST = ENV('EMAIL_HOST')
-EMAIL_PORT = ENV('EMAIL_PORT')
-EMAIL_USE_TLS = ENV('EMAIL_USE_TLS')
-EMAIL_USE_SSL = ENV('EMAIL_USE_SSL')
-EMAIL_HOST_USER = ENV('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = ENV('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = ENV('DEFAULT_FROM_EMAIL')
-EMAIL_SUBJECT_PREFIX = ENV('EMAIL_SUBJECT_PREFIX')
+EMAIL_BACKEND = ENV("EMAIL_BACKEND")
+EMAIL_HOST = ENV("EMAIL_HOST")
+EMAIL_PORT = ENV("EMAIL_PORT")
+EMAIL_USE_TLS = ENV("EMAIL_USE_TLS")
+EMAIL_USE_SSL = ENV("EMAIL_USE_SSL")
+EMAIL_HOST_USER = ENV("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = ENV("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = ENV("DEFAULT_FROM_EMAIL")
+EMAIL_SUBJECT_PREFIX = ENV("EMAIL_SUBJECT_PREFIX")
 
-ADMINS = ENV('ADMINS')
-ADMIN_EMAIL_BACKEND = ENV('ADMIN_EMAIL_BACKEND')
-ADMIN_EMAIL_HOST = ENV('ADMIN_EMAIL_HOST')
-ADMIN_EMAIL_PORT = ENV('ADMIN_EMAIL_PORT')
-ADMIN_EMAIL_USE_TLS = ENV('ADMIN_EMAIL_USE_TLS')
-ADMIN_EMAIL_USE_SSL = ENV('ADMIN_EMAIL_USE_SSL')
-ADMIN_EMAIL_HOST_USER = ENV('ADMIN_EMAIL_HOST_USER')
-ADMIN_EMAIL_HOST_PASSWORD = ENV('ADMIN_EMAIL_HOST_PASSWORD')
-ADMIN_DEFAULT_FROM_EMAIL = ENV('ADMIN_DEFAULT_FROM_EMAIL')
-ADMIN_EMAIL_SUBJECT_PREFIX = ENV('ADMIN_EMAIL_SUBJECT_PREFIX')
+ADMINS = ENV("ADMINS")
+ADMIN_EMAIL_BACKEND = ENV("ADMIN_EMAIL_BACKEND")
+ADMIN_EMAIL_HOST = ENV("ADMIN_EMAIL_HOST")
+ADMIN_EMAIL_PORT = ENV("ADMIN_EMAIL_PORT")
+ADMIN_EMAIL_USE_TLS = ENV("ADMIN_EMAIL_USE_TLS")
+ADMIN_EMAIL_USE_SSL = ENV("ADMIN_EMAIL_USE_SSL")
+ADMIN_EMAIL_HOST_USER = ENV("ADMIN_EMAIL_HOST_USER")
+ADMIN_EMAIL_HOST_PASSWORD = ENV("ADMIN_EMAIL_HOST_PASSWORD")
+ADMIN_DEFAULT_FROM_EMAIL = ENV("ADMIN_DEFAULT_FROM_EMAIL")
+ADMIN_EMAIL_SUBJECT_PREFIX = ENV("ADMIN_EMAIL_SUBJECT_PREFIX")
 
-MANAGERS = ENV('MANAGERS')
-MANAGER_EMAIL_BACKEND = ENV('MANAGER_EMAIL_BACKEND')
-MANAGER_EMAIL_HOST = ENV('MANAGER_EMAIL_HOST')
-MANAGER_EMAIL_PORT = ENV('MANAGER_EMAIL_PORT')
-MANAGER_EMAIL_USE_TLS = ENV('MANAGER_EMAIL_USE_TLS')
-MANAGER_EMAIL_USE_SSL = ENV('MANAGER_EMAIL_USE_SSL')
-MANAGER_EMAIL_HOST_USER = ENV('MANAGER_EMAIL_HOST_USER')
-MANAGER_EMAIL_HOST_PASSWORD = ENV('MANAGER_EMAIL_HOST_PASSWORD')
-MANAGER_DEFAULT_FROM_EMAIL = ENV('MANAGER_DEFAULT_FROM_EMAIL')
-MANAGER_EMAIL_SUBJECT_PREFIX = ENV('MANAGER_EMAIL_SUBJECT_PREFIX')
+MANAGERS = ENV("MANAGERS")
+MANAGER_EMAIL_BACKEND = ENV("MANAGER_EMAIL_BACKEND")
+MANAGER_EMAIL_HOST = ENV("MANAGER_EMAIL_HOST")
+MANAGER_EMAIL_PORT = ENV("MANAGER_EMAIL_PORT")
+MANAGER_EMAIL_USE_TLS = ENV("MANAGER_EMAIL_USE_TLS")
+MANAGER_EMAIL_USE_SSL = ENV("MANAGER_EMAIL_USE_SSL")
+MANAGER_EMAIL_HOST_USER = ENV("MANAGER_EMAIL_HOST_USER")
+MANAGER_EMAIL_HOST_PASSWORD = ENV("MANAGER_EMAIL_HOST_PASSWORD")
+MANAGER_DEFAULT_FROM_EMAIL = ENV("MANAGER_DEFAULT_FROM_EMAIL")
+MANAGER_EMAIL_SUBJECT_PREFIX = ENV("MANAGER_EMAIL_SUBJECT_PREFIX")
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 LANGUAGES = [
-    ('en', 'English'),
-    ('de', 'German'),
+    ("en", "English"),
+    ("de", "German"),
 ]
 
-TEMP_DIR = Path(ENV('TEMP_DIR')).resolve()
+TEMP_DIR = Path(ENV("TEMP_DIR")).resolve()
+
+BRAND = ENV("BRAND")
 
 if DEBUG:
     _debug_settings_file = SETTINGS_DIR / "debug_settings.py"
@@ -274,11 +279,11 @@ if DEBUG:
 
     print("Running in DEBUG mode. Debug settings have been applied.")
     third_party_apps += [
-        'debug_toolbar',
-        'django_browser_reload',
+        "debug_toolbar",
+        "django_browser_reload",
     ]
-    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
-    MIDDLEWARE.insert(0, 'django_browser_reload.middleware.BrowserReloadMiddleware')
+    MIDDLEWARE.insert(0, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(0, "django_browser_reload.middleware.BrowserReloadMiddleware")
 else:
     _production_settings_file = SETTINGS_DIR / "production_settings.py"
     if _production_settings_file.exists():
@@ -286,10 +291,9 @@ else:
     del _production_settings_file
 
 
-
 # Load local settings if available, these can override all other settings and are not tracked in version control
 if _local_settings_file.exists():
-    from .local_settings.settings import * # noqa: F401, F403
+    from .local_settings.settings import *  # noqa: F401, F403
 del _local_settings_file
 
 if DEBUG:
@@ -303,27 +307,34 @@ else:
         from .local_settings.production_settings import *
     del _production_settings_file
 
-if CSS_FRAMEWORK == 'bootstrap':
-    from django_tinyuser.global_templates.bootstrap import PATH as BOOTSTRAP_TEMPLATES_PATH
-    if 'DIRS' not in TEMPLATES[0]:
-        TEMPLATES[0]['DIRS'] = [BOOTSTRAP_TEMPLATES_PATH]
+if CSS_FRAMEWORK == "bootstrap5":
+    from django_tinyuser.global_templates.bootstrap5 import (
+        PATH as BOOTSTRAP_TEMPLATES_PATH,
+    )
+
+    if "DIRS" not in TEMPLATES[0]:
+        TEMPLATES[0]["DIRS"] = [str(BOOTSTRAP_TEMPLATES_PATH)]
     else:
-        TEMPLATES[0]['DIRS'].insert(0, str(BOOTSTRAP_TEMPLATES_PATH))
-elif CSS_FRAMEWORK == 'tailwindcss':
-    from django_tinyuser.global_templates.trailwindcss import PATH as TAILWIND_TEMPLATES_PATH
-    if 'DIRS' not in TEMPLATES[0]:
-        TEMPLATES[0]['DIRS'] = []
-    TEMPLATES[0]['DIRS'].insert(0, str(TAILWIND_TEMPLATES_PATH))
+        TEMPLATES[0]["DIRS"].insert(0, str(BOOTSTRAP_TEMPLATES_PATH))
+    BASE_TEMPLATE = "django_tinyuser/bootstrap5/base.html"
+elif CSS_FRAMEWORK == "tailwindcss":
+    from django_tinyuser.global_templates.trailwindcss import (
+        PATH as TAILWIND_TEMPLATES_PATH,
+    )
 
-TEMPLATES[0]['DIRS'] = list(set(TEMPLATES[0]['DIRS']))
+    if "DIRS" not in TEMPLATES[0]:
+        TEMPLATES[0]["DIRS"] = [str(TAILWIND_TEMPLATES_PATH)]
+    else:
+        TEMPLATES[0]["DIRS"].insert(0, str(TAILWIND_TEMPLATES_PATH))
+    BASE_TEMPLATE = "django_tinyuser/tailwindcss/base.html"
+else:
+    BASE_TEMPLATE = "default.html"
 
-SETTINGS_MODULE = 'django_project.settings'
-INSTALLED_APPS = tuple({
-    *django_apps,
-    *allauth_apps,
-    *api_apps,
-    *third_party_apps,
-    *project_apps
-})
+TEMPLATES[0]["DIRS"] = list(set(TEMPLATES[0]["DIRS"]))
+
+SETTINGS_MODULE = "django_project.settings"
+INSTALLED_APPS = tuple(
+    {*django_apps, *allauth_apps, *api_apps, *third_party_apps, *project_apps}
+)
 
 del django_apps, allauth_apps, third_party_apps, project_apps

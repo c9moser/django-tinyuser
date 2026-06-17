@@ -1,13 +1,16 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render
 from django.views.generic import FormView
+from django_templates import get_template
 
 from django_tinyuser.forms import InviteForm
+from django_tinyuser.logging import get_tinyuser_logger as get_logger
 from django_tinyuser.settings import (
     INVITE_ALLOW_ALL_AUTHENTICATED_USERS,
     INVITE_GROUPS,
-    TEMPLATE_MAPPING,
 )
+
+logger = get_logger(__name__)
 
 
 class InviteView(UserPassesTestMixin, FormView):
@@ -16,22 +19,22 @@ class InviteView(UserPassesTestMixin, FormView):
     """
 
     #: Defines the template names for the invite page using the TEMPLATE_MAPPING from settings
-    template_name = TEMPLATE_MAPPING["tinyuser/invite"]
+    template_name = get_template("tinyuser/invite")
 
     #: Defines the template names for the success and failed states of the invite process
-    success_template_name = TEMPLATE_MAPPING["tinyuser/invite/success"]
+    success_template_name = get_template("tinyuser/invite/success")
 
     #: Defines the template name for the failed state of the invite process
-    failed_template_name = TEMPLATE_MAPPING["tinyuser/invite/failed"]
+    failed_template_name = get_template("tinyuser/invite/failed")
 
     #: Defines the template names for HTMX requests
-    hx_template_name = TEMPLATE_MAPPING["tinyuser/hx/invite"]
+    hx_template_name = get_template("tinyuser/hx/invite")
 
     #: Defines the template name for the success state of the invite process for HTMX requests
-    hx_success_template_name = TEMPLATE_MAPPING["tinyuser/hx/invite/success"]
+    hx_success_template_name = get_template("tinyuser/hx/invite/success")
 
     #: Defines the template name for the failed state of the invite process for HTMX requests
-    hx_failed_template_name = TEMPLATE_MAPPING["tinyuser/hx/invite/failed"]
+    hx_failed_template_name = get_template("tinyuser/hx/invite/failed")
 
     #: Defines the form class for the invite view
     form_class = InviteForm
@@ -135,6 +138,7 @@ class InviteView(UserPassesTestMixin, FormView):
                     invitation.send_invitation(request)
                     context = self.get_context_data()
                     context["success"] = True
+                    logger.info(f"Invitation sent to {email}")
                     return render(
                         request,
                         (
@@ -144,10 +148,14 @@ class InviteView(UserPassesTestMixin, FormView):
                         ),
                         context,
                     )
+
                 except Exception as e:
                     error_message = str(e)
                     context = self.get_context_data()
                     context["error"] = error_message
+                    logger.error(
+                        f"Failed to send invitation to {email}: {error_message}"
+                    )
 
         context = self.get_context_data()
         context["form"] = form

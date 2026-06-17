@@ -10,11 +10,11 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
-from django_tinyuser.models import TinyUserProfile as UserProfile
+from django_tinyuser.models import UserProfile as UserProfile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    """Serializer for the TinyUserProfile model."""
+    """Serializer for the UserProfile model."""
 
     class Meta:
         model = UserProfile

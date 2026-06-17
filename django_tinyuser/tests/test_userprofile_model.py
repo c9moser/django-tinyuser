@@ -3,7 +3,7 @@ from datetime import date
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from django_tinyuser.models import TinyUserProfile
+from django_tinyuser.models import UserProfile
 
 
 class TestUserProfileModel(TestCase):
@@ -24,7 +24,7 @@ class TestUserProfileModel(TestCase):
     def test_user_profile_creation(self):
         self.assertIsNotNone(self.user)
 
-        profile = TinyUserProfile.objects.create(user=self.user, **self.PROFILE_DATA)
+        profile = UserProfile.objects.create(user=self.user, **self.PROFILE_DATA)
         profile.refresh_from_db()
         self.assertIsNotNone(profile)
         self.assertEqual(profile.bio, "Test bio")
@@ -36,7 +36,7 @@ class TestUserProfileModel(TestCase):
         self.assertEqual(str(profile), f"{self.user.username}'s profile")
 
     def test_user_profile_update(self):
-        TinyUserProfile.objects.create(user=self.user, **self.PROFILE_DATA)
+        UserProfile.objects.create(user=self.user, **self.PROFILE_DATA)
 
         self.user.profile.bio = "Test updated bio"
         self.user.profile.first_name = "UpdatedFirstName"

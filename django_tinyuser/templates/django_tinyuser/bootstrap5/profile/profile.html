@@ -1,0 +1,46 @@
+{% extends "django_tinyuser/bootstrap/base.html" %}
+{% load i18n templates %}
+{% block title %}{% translate "Profile" %}{% endblock %}
+
+{% block content %}
+<h1>
+{% if is_user_profile %}
+    {% if profile_name %}
+        {% blocktranslate %}Your {{ profile_name }} Profile{% endblocktranslate %}
+    {% else %}
+        {% translate "Your Profile" %}
+    {% endif %}
+{% else %}
+    {{ profile.user.username }}
+{% endif %}
+</h1>
+
+{% if is_user_profile %}
+<ul class="list-unstyled">
+    {% if 'profile' in request.GET %}
+    <li><a href="{% url 'tinyuser:profile' %}" class="link link-primary">
+        <i class="bi bi-person-circle"></i>
+        {% translate "View your Private profile" %}
+    </a></li>
+    {% endif %}
+    {% for ptype, pname in profiles %}
+        {% if request.GET.profile != ptype%}
+        <li><a class="link link-primary" href="{% url 'tinyuser:profile' %}?profile={{ ptype }}">
+            <i class="bi bi-person"></i>
+            {% blocktranslate with profile_name=pname|capfirst %}View your {{ profile_name }} profile{% endblocktranslate %}
+        </a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if is_user_profile %}
+<div class="mb-3">
+    <a class="btn btn-primary me-2" href="{% url 'tinyuser:profile-edit' %}">{% translate "Edit your profile" %}</a>
+    <a class="btn btn-primary" href="{#{% url 'tinyuser:profile-settings' %}#}">{% translate "Edit profile settings" %}</a>
+</div>
+{% endif %}
+
+<p>{% translate "This is your profile page." %}</p>
+{% include "tinyuser/hx/profile"|template %}
+{% endblock %}

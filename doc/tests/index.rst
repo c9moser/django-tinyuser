@@ -9,4 +9,4 @@ ensure the correct functionality of the models and their associated features.
    :maxdepth: 2
 
    test_tinyuser.rst
-   test_friendship.rst
+   test_profile.rst

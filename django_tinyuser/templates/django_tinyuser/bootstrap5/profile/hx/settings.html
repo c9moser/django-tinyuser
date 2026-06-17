@@ -1,0 +1,27 @@
+{% load i18n widget_tweaks %}
+<form method="post">
+    {% csrf_token %}
+    <div class="input-group">
+        <label for="{{ form.show_email.id_for_label }}" class="visually-hidden">
+            {{ form.show_email.label }}
+        </label>
+        <span class="input-group-text">
+            {% translate "Show my email address" %}
+            {% render_field form.show_email class="check-input" %}
+        </span>
+        <label for="{{ form.full_name.id_for_label }}" class="visually-hidden">
+            {{ form.show_full_name.label }}
+        </label>
+        <span class="input-group-text">
+            {% translate "Show my real name" %}
+            {% render_field form.show_full_name class="check-input" %}
+        </span>
+    </div>
+    <div class="text-end">
+        <button class="btn btn-primary"
+            hx-post="{% url 'tinyuser:hx-profile-settings' type=profile_type %}"
+            hx-swap="innerHTML"
+            hx-target="#{{ profile_container_id }}"
+        >{% blocktranslate %}Save {{ profile_name|capfirst }} profile settings{% endblocktranslate %}</button>
+    </div>
+</form>

@@ -1,0 +1,120 @@
+{% load i18n tinyuser %}
+
+<div class="d-flex mb-3">
+    <div style="width=255">
+    {% if profile_settings.show_avatar %}
+        {% if request.user.profile.avatar_medium %}
+        <img src="{{ profile.avatar_medium.url }}" alt="{% translate " Avatar" %}" class="me-3"
+            width="256px" height="256px">
+        {% elif profile.avatar_large %}
+        <img src="{{ profile.avatar_large.url }}" alt="{% translate " Avatar" %}" class="me-3"
+            width="256px" height="256px">
+        {% elif profile.avatar_full %}
+        <img src="{{ profile.avatar_full.url }}" alt="{% translate " Avatar" %}" class="me-3" width="256px"
+            height="256px">
+        {% elif profile.avatar_small %}
+        <img src="{{ profile.avatar_small.url }}" alt="{% translate " Avatar" %}" class="me-3"
+            width="256px" height="256px">
+        {% else %}
+        <div style="font-size:256px;line-height:256px;" class="me-2"><i class="bi bi-person-circle"></i></div>
+        {% endif %}
+    {% else %}
+        <div style="font-size:256px;line-height:256px;" class="me-2"><i class="bi bi-person-circle"></i></div>
+    {% endif %}
+    </div>
+    <div>
+        <div class=" d-grid column-gap-2 row-gap-1" style="grid-template-columns: auto auto;">
+            <div><b>{% translate "Username:" %}</b></div>
+            <div>{{ profile.user.username }}</div>
+            {% if profile_settings.show_email %}
+            <div><b>{% translate "Email address:" %}</b></div>
+            <div>{{ profile.user.email }}</div>
+            {% endif %}
+            {% if profile_settings.show_full_name %}
+            <div><b>{% translate "First name:" %}</b></div>
+            <div>
+                {% if profile.first_name %}
+                    {{ profile.first_name }}
+                {% else %}
+                    {% translate "Not specified" %}
+                {% endif %}
+            </div>
+            <div><b>{% translate "Last name:" %}</b></div>
+            <div>
+                {% if profile.last_name %}
+                    {{ profile.last_name }}
+                {% else %}
+                    {% translate "Not specified" %}
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if profile_settings.show_location %}
+            <div><b>{% translate "Location:" %}</b></div>
+            <div>
+                {% if profile.location %}
+                    {{ profile.location }}
+                {% else %}
+                    {% translate "Not specified" %}
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if profile_settings.show_birth_date and profile_settings.show_birth_date != "no" %}
+            <div><b>
+                {% if profile_settings.show_birth_date == "date" %}
+                {% translate "Birth date:" %}
+                {% elif profile_settings.show_birth_date == "birthday" %}
+                {% translate "Birthday:" %}
+                {% endif %}
+            </b></div>
+            <div>
+                {% if profile.birth_date %}
+                    {% if profile_settings.show_birth_date == "date" %}
+                    {{ profile.birth_date }}
+                    {% elif profile_settings.show_birth_date == "birthday" %}
+                    {{ profile.birth_date|birthday }}
+                    {% endif %}
+
+                {% else %}
+                    {% translate "Not specified" %}
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if profile_settings.show_website %}
+            <div><b>{% translate "Website:" %}</b></div>
+            <div>
+                {% if profile.website %}
+                <a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer">
+                    {{ profile.website }}
+                </a>
+                {% else %}
+                    {% translate "Not specified" %}
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if profile_settings.show_mastodon_url %}
+            <div><b>{% translate "Mastodon URL:" %}</b></div>
+            <div>
+                {% if profile.mastodon_url %}
+                <a href="{{ profile.mastodon_url }}" rel="me" target="_blank">
+                    {{ profile.mastodon_url }}
+                </a>
+                {% else %}
+                    {% translate "Not specified" %}
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if profile_settings.show_bio %}
+<h2>{% translate "Biography" %}</h2>
+{% if profile.bio %}
+    {{ profile.bio_html }}
+{% elif request.user == profile.user %}
+    {% url 'tinyuser:profile-edit' as profile_edit_url %}
+    {% blocktranslate %}You haven't set a biography yet. You can <a class="link link-primary" href="{{ profile_edit_url }}">edit your profile</a> to add one.{% endblocktranslate %}
+{% else %}
+{% translate "This user hasn't set a biography yet." %}
+{% endif %}
+{% endif %}

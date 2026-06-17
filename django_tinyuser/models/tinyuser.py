@@ -3,9 +3,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from django_tinyuser import settings
 from django_tinyuser.managers import TinyUserManager
-from django_tinyuser.models.tinyuserprofile import TinyUserProfile
+from django_tinyuser.models.userprofile import UserProfile
 
 
 class TinyUser(AbstractBaseUser, PermissionsMixin):
@@ -24,15 +23,7 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
-        if settings.TINYUSER_EXTERNAL_MANAGED or settings.AUTH_EXTERNAL_MANAGED:
-            managed = False
-        else:
-            managed = True
-
-        if settings.USE_POSTGRESQL_SCHEMAS:
-            db_table = f"{settings.POSTGRESQL_AUTH_SCHEMA}.tinyuser_user"
-        else:
-            db_table = "tinyuser_user"
+        db_table = "tinyuser_user"
 
         indexes = [
             models.Index(fields=["email"], name="email_idx"),
@@ -133,9 +124,9 @@ class TinyUser(AbstractBaseUser, PermissionsMixin):
         self.profile = getattr(self, "profile", None)
         if not self.profile and self.id:
             try:
-                self.profile = TinyUserProfile.objects.filter(user_id=self.id).first()
-            except TinyUserProfile.DoesNotExist:
-                self.profile = TinyUserProfile.objects.create(
+                self.profile = UserProfile.objects.filter(user_id=self.id).first()
+            except UserProfile.DoesNotExist:
+                self.profile = UserProfile.objects.create(
                     user=self, first_name="", last_name="", bio=""
                 )
 

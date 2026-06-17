@@ -8,9 +8,9 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-CREATE_USER_URL = reverse("tinyuser.webapi:user-create")
-TOKEN_URL = reverse("tinyuser.webapi:token")
-ME_URL = reverse("tinyuser.webapi:me")
+CREATE_USER_URL = reverse("tinyuser-webapi:user-create")
+TOKEN_URL = reverse("tinyuser-webapi:token")
+ME_URL = reverse("tinyuser-webapi:me")
 
 
 def create_user(**params):

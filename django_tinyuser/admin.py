@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import (
     TinyUser,
-    TinyUserProfile,
+    UserProfile,
 )
 
 
@@ -28,4 +28,4 @@ class TinyUserAdmin(BaseUserAdmin):
 
 
 admin.site.register(TinyUser, TinyUserAdmin)
-admin.site.register(TinyUserProfile)
+admin.site.register(UserProfile)

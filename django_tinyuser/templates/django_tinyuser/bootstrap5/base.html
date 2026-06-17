@@ -1,0 +1,111 @@
+
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}{{ BRAND }}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- <link href="{% static 'tinyuser/css/style.css' %}" rel="stylesheet"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
+    {% block links %}{% endblock %}
+    {% block scripts %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container-fluid min-vh-100 d-flex flex-column">
+        <header class="row mb-4">
+            <div class="px-3">
+                <div class="display-6">
+                    <a href="/" class="text-decoration-none link-body-emphasis">
+                        {% block logo %}<i class="bi bi-person-circle me-2"></i>{% endblock %}
+                        <span class="fw-bold">{{ BRAND }}</span>
+                        {% block subtitle %}{% endblock %}
+                    </a>
+                </div>
+            </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light {% if request.user.tinyuser_profile.avatar_small %}py-0{% endif %}">
+                <ul class="navbar-nav ms-3">
+                    <li class="nav-item"><a class="nav-link" href="/">{% translate "Home" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'tinyuser:profile' %}">{% translate "Profile" %}</a></li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto mx-3 my-0">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <button class="btn btn-nav dropdown-toggle py-0" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if request.user.tinyuser_profile.avatar_small %}
+                                <img src="{{ request.user.tinyuser_profile.avatar_small.url }}"
+                                    alt="{% blocktranslate with username=request.user.username %}{{ username }}'s avatar{% endblocktranslate %}"
+                                    class="rounded-circle me-2 my-0"
+                                    width="24" height="24">
+                                {% else %}
+                                <i class="bi bi-person-fill"></i>
+                                {% endif %}
+                                {{ user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}"><i class="bi bi-key"></i> {% translate "Change Password" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_email' %}"><i class="bi bi-envelope"></i> {% translate "Email Addresses" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'tinyuser:invite' %}"><i class="bi bi-person-plus"></i> {% translate "Invite" %}</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'account_logout' %}" class="form-inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i> {% translate "Logout" %}</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_login' %}">{% translate "Login" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% block extra_header %}{% endblock %}
+        </header>
+
+        <div class="row" style="min-height: calc(100vh - 190px);">
+            <div class="d-none d-lg-block col-lg-3">
+                {% block sidebar %}
+                <div class="card w-75 mx-auto">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="bi bi-person me-2"></i>{% translate "User Menu" %}</h5>
+                    </div>
+
+                    <div class="list-group">
+                        <a href="{% url 'tinyuser:profile' %}" class="list-group-item list-group-item-action">{% translate "My Profile" %}</a>
+                        <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action">{% translate "Change Password" %}</a>
+                        <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">{% translate "Email Addresses" %}</a>
+                        <a href="{% url 'tinyuser:invite' %}" class="list-group-item list-group-item-action">{% translate "Invite" %}</a>
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+
+            <div class="col-12 col-lg-6">
+                {% block content %}
+                <h1>{% translate "Welcome to TinyUser!" %}</h1>
+                <p>{% translate "This is the base template. Extend this template for your views." %}</p>
+                {% endblock %}
+            </div>
+        </div>
+        <footer class="row bg-secondary text-white text-center py-2 px-3 mt-4">
+            &copy; 2026 {% translate "TinyUser" %}. {% translate "All rights reserved." %}
+        </footer>
+    </div>
+
+    <div id="modals-here" class="modal modal-blur fade" style="display: none;" aria-hidden="false" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

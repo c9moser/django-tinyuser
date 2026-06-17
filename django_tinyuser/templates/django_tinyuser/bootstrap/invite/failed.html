@@ -1,9 +1,0 @@
-{% extends tinyuser_base_template %}
-{% load i18n %}
-{% block title %}{% translate "Invitation Not Sent" %}{% endblock %}
-
-{% block content %}
-<h1>{% translate "Invitation Not Sent!" %}</h1>
-<p>{% translate "There was an error sending your invitation. Please try again." %}</p>
-<a href="{% url 'tinyuser:invite' %}" class="btn btn-primary mt-3">{% translate "Try Again" %}</a>
-{% endblock %}

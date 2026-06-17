@@ -5,12 +5,13 @@ Django settings for the TinyUser project.
 from pathlib import Path
 
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
-from django_tinyuser.default_templates import CUSTOM_TEMPLATES
-from django_tinyuser.default_templates import clean as clean_default_templates
-from django_tinyuser.global_templates.bootstrap import PATH as BOOTSTRAP_TEMPLATES_PATH
+from django_tinyuser.global_templates.bootstrap5 import (
+    PATH as BOOTSTRAP_TEMPLATES_PATH,  # noqa: F401
+)
 from django_tinyuser.global_templates.trailwindcss import (
-    PATH as TAILWIND_TEMPLATES_PATH,
+    PATH as TAILWIND_TEMPLATES_PATH,  # noqa: F401
 )
 
 ALLOW_SIGNUP = getattr(settings, "ALLOW_SIGNUP", True)
@@ -19,15 +20,6 @@ INVITE_ALLOW_ALL_AUTHENTICATED_USERS = getattr(
     settings, "INVITE_ALLOW_ALL_AUTHENTICATED_USERS", False
 )
 INVITE_GROUPS = getattr(settings, "INVITE_GROUPS", [])
-
-
-LOGGER_PREFIX = getattr(
-    settings,
-    "TINYTOOLS_LOGGER_PREFIX",
-    getattr(
-        settings, "TINYUSER_LOGGER_PREFIX", getattr(settings, "LOGGER_PREFIX", "django")
-    ),
-)
 
 CSS_FRAMEWORK = getattr(
     settings, "TINYUSER_CSS_FRAMEWORK", getattr(settings, "CSS_FRAMEWORK", "bootstrap")
@@ -46,8 +38,6 @@ else:
 
 SOCIALACCOUNT_ENABLED = getattr(settings, "SOCIALACCOUNT_ENABLED", False)
 USE_POSTGRESQL_SCHEMAS = getattr(settings, "USE_POSTGRESQL_SCHEMAS", False)
-POSTGRESQL_AUTH_SCHEMA = getattr(settings, "POSTGRESQL_AUTH_SCHEMA", "public")
-TINYUSER_EXTERNAL_MANAGED = getattr(settings, "TINYUSER_EXTERNAL_MANAGED", False)
 AUTH_EXTERNAL_MANAGED = getattr(settings, "AUTH_EXTERNAL_MANAGED", False)
 
 TINYUSER_SHOW_INDEX_PAGE = getattr(settings, "TINYUSER_SHOW_INDEX_PAGE", False)
@@ -70,6 +60,7 @@ if not BASE_TEMPLATE:
     else:
         BASE_TEMPLATE = "django_tinyuser/html/base.html"
 
+
 TEMPLATE_MAPPING = getattr(
     settings, "TINYUSER_TEMPLATES", getattr(settings, "TEMPLATES_MAPPING", {})
 )
@@ -78,18 +69,44 @@ TEMP_DIR = Path(
     getattr(settings, "TEMP_DIR", settings.BASE_DIR / ".data" / "temp")
 ).resolve()
 
-if CSS_FRAMEWORK_BOOTSTRAP:
-    from django_tinyuser.default_templates import BOOTSTRAP_TEMPLATES
 
-    for key, value in BOOTSTRAP_TEMPLATES.items():
-        TEMPLATE_MAPPING.setdefault(key, value)
-elif CSS_FRAMEWORK_TAILWIND:
-    from django_tinyuser.default_templates import TAILWIND_TEMPLATES
+PROFILES = getattr(
+    settings,
+    "TINYUSER_PROFILES",
+    [
+        ("public", _("public")),
+    ],
+)
 
-    for key, value in TAILWIND_TEMPLATES.items():
-        TEMPLATE_MAPPING.setdefault(key, value)
-else:
-    for key, value in CUSTOM_TEMPLATES.items():
-        TEMPLATE_MAPPING.setdefault(key, value)
+PROFILE_DEFAULTS: dict = getattr(
+    settings,
+    "TINYUSER_PROFILE_DEFAULTS",
+    {
+        "enabled": True,
+        "show_email": False,
+        "show_full_name": False,
+        "show_location": True,
+        "show_bio": True,
+        "show_website": True,
+        "show_mastodon_url": True,
+        "show_birth_date": "birthday",
+    },
+)
 
-clean_default_templates()
+GET_PROFILE = getattr(settings, "TINYUSER_GET_PROFILE", None)
+BRAND = getattr(settings, "BRAND", _("TinyUser"))
+
+if not PROFILES:
+    PROFILES = ("public", _("public"))
+if len(PROFILES) > 1:
+    # ensure that we have a 'default' group if the len(PROFILE_TYPES) > 1
+    _found = False
+    for _id, _name in PROFILES:
+        if _id == "default":
+            _found = True
+            break
+
+    if not _found:
+        PROFILES.insert(0, ("default", _("default")))
+
+    del _found

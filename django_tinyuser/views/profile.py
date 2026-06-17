@@ -1,32 +1,52 @@
 import os
-from logging import getLogger
 from pathlib import Path
+from typing import Any
 
 from django.conf import settings as django_settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.images import ImageFile
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.http import Http404, HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.module_loading import import_string
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import FormView
+from django_templates import get_template
 from PIL import Image
 
-from django_tinyuser.forms import ProfileForm
+from django_tinyuser.forms import ProfileForm, ProfileSettingsForm
+from django_tinyuser.logging import get_tinyuser_logger as get_logger
 from django_tinyuser.mixins.htmx import HtmxMixin
-from django_tinyuser.models import TinyUserProfile
-from django_tinyuser.settings import TEMP_DIR, TEMPLATE_MAPPING
+from django_tinyuser.models import UserProfile, UserProfileSettings
+from django_tinyuser.settings import (
+    GET_PROFILE,
+    PROFILE_DEFAULTS,
+    PROFILES,
+    TEMP_DIR,
+)
 
-logger = getLogger(__name__)
+logger = get_logger(__name__)
 
 
-class ProfileView(LoginRequiredMixin, HtmxMixin, View):
+class MyProfileView(LoginRequiredMixin, HtmxMixin, View):
     """
     View for the user profile page.
     """
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
-    template_name = TEMPLATE_MAPPING["tinyuser/profile"]
-    htmx_template_name = TEMPLATE_MAPPING["tinyuser/hx/profile"]
+    template_name = get_template("tinyuser/profile")
+    htmx_template_name = get_template("tinyuser/hx/profile")
+    profile_settings = {
+        "show_avatar": True,
+        "show_bio": True,
+        "show_birth_date": "date",
+        "show_email": True,
+        "show_full_name": True,
+        "show_location": True,
+        "show_mastodon_url": True,
+        "show_website": True,
+    }
 
     def get(self, request: HttpRequest) -> HttpResponse:
         """
@@ -37,8 +57,111 @@ class ProfileView(LoginRequiredMixin, HtmxMixin, View):
         :return: The HTTP response with the rendered template
         :rtype: HttpResponse
         """
-        instance = TinyUserProfile.objects.get_or_create(user=request.user)[0]
-        context = {"profile": instance}
+        profile = UserProfile.objects.get_or_create(user=request.user)[0]
+        context = {
+            "is_user_profile": True,
+            "profile": profile,
+            "profile_settings": self.profile_settings,
+            "profiles": PROFILES,
+        }
+
+        if "profile" in request.GET:
+            requested_profile = request.GET["profile"]
+
+            available = False
+            for _type, _name in PROFILES:
+                if requested_profile == _type:
+                    available = True
+                    break
+
+            if not available:
+                context["profile_warning"] = _(
+                    "Profile {profile} is not available."
+                ).format(requested_profile)
+                try:
+                    context["profile_settings"] = UserProfileSettings.objects.get(
+                        profile=profile, type="default"
+                    )
+                except UserProfileSettings.DoesNotExist:
+                    profile_settings = dict(self.profile_settings)
+                    if PROFILE_DEFAULTS:
+                        profile_settings.update(PROFILE_DEFAULTS)
+                    context["profile_settings"] = profile_settings
+            else:
+                try:
+                    context["profile_settings"] = UserProfileSettings.objects.get(
+                        profile=profile, type=request.GET["profile"]
+                    )
+                except UserProfileSettings.DoesNotExist:
+                    try:
+                        context["profile_settings"] = UserProfileSettings.objects.get(
+                            profile=profile, type="default"
+                        )
+                    except UserProfileSettings.DoesNotExist:
+                        context["profile_settings"] = PROFILE_DEFAULTS
+
+        return render(
+            request,
+            self.htmx_template_name if self.is_htmx_request else self.template_name,
+            context,
+        )
+
+
+class ProfileView(HtmxMixin, View):
+    """
+    View for the user profile page.
+    """
+
+    #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
+    template_name = get_template("tinyuser/profile")
+    htmx_template_name = get_template("tinyuser/hx/profile")
+
+    def get_profile_settings(self, profile, profile_type):
+        profile_settings, created = UserProfileSettings.get_or_create(
+            profile=profile, type=profile_type
+        )
+        if created:
+            try:
+                default_settings: UserProfileSettings = UserProfileSettings.objects.get(
+                    profile=profile, type="default"
+                )
+                profile_settings.show_avatar = default_settings.show_avatar
+                profile_settings.show_bio = default_settings.show_bio
+                profile_settings.show_birth_date = default_settings.show_birth_date
+                profile_settings.show_email = default_settings.show_email
+                profile_settings.show_full_name = default_settings.show_full_name
+                profile_settings.show_mastodon_url = default_settings.show_mastodon_url
+                profile_settings.show_website = default_settings.show_website
+            except UserProfileSettings.DoesNotExist:
+                profile_settings.update(**PROFILE_DEFAULTS)
+        return profile_settings
+
+    def get(self, request: HttpRequest, user_id: int) -> HttpResponse:
+        """
+        Handles GET requests for the profile view.
+
+        :param request: The HTTP request object
+        :type request: HttpRequest
+        :return: The HTTP response with the rendered template
+        :rtype: HttpResponse
+        """
+
+        user = get_object_or_404(get_user_model(), id=user_id)
+        profile = UserProfile.objects.get_or_create(user=request.user)[0]
+
+        if user == request.user:
+            profile_settings = MyProfileView.profile_settings
+        else:
+            if GET_PROFILE:
+                get_profile = import_string(GET_PROFILE)
+                profile_type = get_profile(request)
+            else:
+                profile_type = "public"
+
+            profile_settings = self.get_profile_settings(profile, profile_type)
+
+        context = {"profile": profile, "profile_settings": profile_settings}
+
         return render(
             request,
             self.htmx_template_name if self.is_htmx_request else self.template_name,
@@ -52,8 +175,8 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
     """
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
-    template_name = TEMPLATE_MAPPING["tinyuser/profile/edit"]
-    htmx_template_name = TEMPLATE_MAPPING["tinyuser/hx/profile/edit"]
+    template_name = get_template("tinyuser/profile/edit")
+    htmx_template_name = get_template("tinyuser/hx/profile/edit")
 
     #: Defines the form class for the profile view
     form_class = ProfileForm
@@ -73,29 +196,12 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
             context["form"] = self.form_class(instance=self.instance)
         return context
 
-    def get(self, request: HttpRequest) -> HttpResponse:
-        """
-        Handles GET requests for the profile view.
-
-        :param request: The HTTP request object
-        :type request: HttpRequest
-        :return: The HTTP response with the rendered template
-        :rtype: HttpResponse
-        """
-        self.instance = TinyUserProfile.objects.get_or_create(user=request.user)[0]
-
-        return render(
-            request,
-            self.htmx_template_name if self.is_htmx_request else self.template_name,
-            self.get_context_data(),
-        )
-
-    def save_avatars(self, instance: TinyUserProfile, files: dict):
+    def save_avatars(self, instance: UserProfile, files: dict):
         """
         Resizes the avatar image to the specified size.
 
-        :param instance: The TinyUserProfile instance containing the avatar
-        :type instance: TinyUserProfile
+        :param instance: The UserProfile instance containing the avatar
+        :type instance: UserProfile
         :param size: The target size for the avatar
         :type size: int
         """
@@ -222,6 +328,25 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
             if temp_file.exists():
                 temp_file.unlink()
 
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """
+        Handles GET requests for the profile view.
+
+        :param request: The HTTP request object
+        :type request: HttpRequest
+        :param type: The type of profile edit (e.g., "avatar"), defaults to None
+        :type type: str, optional
+        :return: The HTTP response with the rendered template
+        :rtype: HttpResponse
+        """
+        self.instance = UserProfile.objects.get_or_create(user=request.user)[0]
+
+        return render(
+            request,
+            self.htmx_template_name if self.is_htmx_request else self.template_name,
+            self.get_context_data(),
+        )
+
     def post(self, request: HttpRequest) -> HttpResponse:
         """
         Handles POST requests for the profile view.
@@ -231,7 +356,7 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
         :return: The HTTP response with the rendered template
         :rtype: HttpResponse
         """
-        self.instance = TinyUserProfile.objects.get_or_create(user=request.user)[0]
+        self.instance = UserProfile.objects.get_or_create(user=request.user)[0]
         form = self.form_class(request.POST, request.FILES, instance=self.instance)
         if form.is_valid():
             try:
@@ -244,17 +369,31 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
                 logger.info(
                     "Profile updated successfully for user %s", request.user.email
                 )
+                request.user.refresh_from_db()
             except Exception as e:
                 logger.error("Error saving profile: %s", e)
                 context = self.get_context_data()
                 context["failed"] = True
                 context["exception"] = str(e)
+                return render(
+                    request,
+                    (
+                        self.htmx_template_name
+                        if self.is_htmx_request
+                        else self.template_name
+                    ),
+                    context,
+                )
 
-            return render(
-                request,
-                self.htmx_template_name if self.is_htmx_request else self.template_name,
-                context,
-            )
+            if self.is_htmx_request:
+                return render(
+                    request,
+                    self.htmx_template_name,
+                    context,
+                )
+            else:
+                return redirect("tinyuser:profile")
+
         context = self.get_context_data()
         context["form"] = form
         context["failed"] = True
@@ -263,3 +402,91 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
             self.htmx_template_name if self.is_htmx_request else self.template_name,
             context,
         )
+
+
+class UserProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
+    """
+    View for managing user profile settings.
+    """
+
+    def get_context_data(
+        self, form: ProfileSettingsForm | None = None, **kwargs
+    ) -> dict[str, Any]:
+        if form is None:
+            form = ProfileSettingsForm(instance=self.instance)
+
+        context = kwargs
+        context["form"] = form
+
+        return context
+
+    def init_variables(self, profile_type):
+        if not profile_type:
+            if len(PROFILES) == 1:
+                self.profile_type, self.profile_name = PROFILES[0]
+            else:
+                self.profile_type, self.profile_name = "default", _("default")
+        else:
+            profile_exists = False
+            for _profile_type, _profile_name in PROFILES:
+                if _profile_type == profile_type:
+                    self.profile_type = profile_type
+                    self.profile_name = _profile_name
+                    profile_exists = True
+
+            if not profile_exists:
+                raise Http404(
+                    _('No such profile "{profile}"').format(profile=profile_type)
+                )
+
+            self.db_profile = UserProfile.objects.get_or_create(user=self.request.user)[
+                0
+            ]
+            self.instance = UserProfileSettings.objects.get_or_create(
+                profile=self.db_profile, type=profile_type
+            )[0]
+
+    def get(self, request: HttpRequest, profile: str) -> HttpResponse:
+        self.init_variables(profile)
+
+        return render(
+            request,
+            self.htmx_template_name if self.is_htmx_request else self.template_name,
+            self.get_context_data(),
+        )
+
+    def post(self, request: HttpRequest, profile: str) -> HttpResponse:
+        self.init_variables(profile)
+        form = ProfileSettingsForm(request.POST, instance=self.instance)
+        if form.is_valid():
+            form.save()
+            context = self.get_context_data(form=form, success=True)
+        else:
+            context = self.get_context_data(form=form, failed=True)
+
+        return render(
+            request,
+            (self.htmx_template_name if self.is_htmx_request else self.template_name),
+            context,
+        )
+
+
+class AllProfilesSettingsView(LoginRequiredMixin, View):
+    def create_form(self, profile_type: str) -> ProfileSettingsForm:
+        # return UserProfileSettings.create_settings(profile_type)
+        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+        if created:
+            logger.info(f"Created profile for user {self.request.user.username}")
+
+        form = ProfileSettingsForm(instance=profile)
+        return form
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        profiles = []
+        if len(PROFILES) > 0:
+            for profile_type, profile_name in PROFILES:
+                profiles.append(
+                    (profile_type, profile_name, self.create_form(profile_type))
+                )
+
+        return render(request, self.template_name, context={"profiles": profiles})

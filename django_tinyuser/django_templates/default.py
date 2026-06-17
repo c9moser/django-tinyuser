@@ -1,0 +1,16 @@
+DEFAULT_TEMPLATES = {
+    "tinyuser/base": "django_tinyuser/default/base.html",
+    "tinyuser/hx/invite": "django_tinyuser/default/invite/hx/invite.html",
+    "tinyuser/hx/invite/failed": "django_tinyuser/default/invite/hx/failed.html",
+    "tinyuser/hx/invite/success": "django_tinyuser/default/invite/hx/success.html",
+    "tinyuser/hx/profile": "django_tinyuser/default/profile/hx/profile.html",
+    "tinyuser/hx/profile/edit": "django_tinyuser/default/profile/hx/edit.html",
+    "tinyuser/hx/profile/settings": "django_tinyuser/default/profile/hx/settings.html",
+    "tinyuser/index": "django_tinyuser/default/index/index.html",
+    "tinyuser/invite": "django_tinyuser/default/invite/invite.html",
+    "tinyuser/invite/success": "django_tinyuser/default/invite/success.html",
+    "tinyuser/invite/failed": "django_tinyuser/default/invite/failed.html",
+    "tinyuser/profile": "django_tinyuser/default/profile/profile.html",
+    "tinyuser/profile/edit": "django_tinyuser/default/profile/edit.html",
+    "tinyuser/profile/settings": "django_tinyuser/default/profile/settings.html",
+}

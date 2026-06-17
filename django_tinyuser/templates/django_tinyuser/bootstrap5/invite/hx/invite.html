@@ -1,0 +1,26 @@
+{% load i18n widget_tweaks %}
+
+<div class="modal-dialog">
+    <div class="modal-content modal-dialog-lg fade">
+        <div class="modal-header">
+            <h5 class="modal-title">{% translate "Invite" %}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="{% url 'tinyuser:invite' %}">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+
+                    <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                    {% render_field form.email class="form-control" placeholder=form.email.label %}
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">{% translate "Invite" %}</button>
+                </div>
+                <div class="text-end mb-3">
+                    <button type="button" class="btn btn-secondary" hx-target="#modals-here" hx-swap="innerHTML" hx-trigger="submit">{% translate "Cancel" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,18 +1,17 @@
-from invitations.adapters import BaseInvitationsAdapter
 from allauth.account.adapter import DefaultAccountAdapter
+from django.forms import Form
 from django.http import HttpRequest
+from invitations.adapters import BaseInvitationsAdapter
+from PIL.ExifTags import Base
+
 from django_tinyuser import settings
 from django_tinyuser.models import TinyUser
-from django.forms import Form
 
 
-class TinyUserAccountAdapter(DefaultAccountAdapter, BaseInvitationsAdapter):
-
-    def save_user(self,
-                  request: HttpRequest,
-                  user: TinyUser,
-                  form: Form,
-                  commit: bool = True):
+class TinyUserAccountAdapterBase:
+    def save_user(
+        self, request: HttpRequest, user: TinyUser, form: Form, commit: bool = True
+    ):
         """
         Saves a new `User` instance using information provided in the signup form.
 
@@ -64,8 +63,33 @@ class TinyUserAccountAdapter(DefaultAccountAdapter, BaseInvitationsAdapter):
         :rtype: bool
         """
 
-        if hasattr(request, 'user') and request.user.is_authenticated:
+        if hasattr(request, "user") and request.user.is_authenticated:
             return False  # Disable signups for authenticated users
 
         # Check the ALLOW_SIGNUP setting for unauthenticated users
         return settings.ALLOW_SIGNUP
+
+
+class TinyUserAccountAdapter(DefaultAccountAdapter, TinyUserAccountAdapterBase):
+    pass
+
+
+class TinyUserDRFAccountAdapter(
+    DefaultAccountAdapter, BaseInvitationsAdapter, TinyUserAccountAdapterBase
+):
+    def format_email_subject(self, subject, context=None):
+        """
+        Formats the email subject for invitation emails.
+
+        This method is used by the django-invitations package to format the subject of invitation emails.
+        It can be overridden to customize the email subject based on the application's needs.
+
+        :param subject: The original email subject template.
+        :type subject: str
+        :return: The formatted email subject.
+        :rtype: str
+        """
+        if context is None:
+            return DefaultAccountAdapter.format_email_subject(self, subject)
+        else:
+            return BaseInvitationsAdapter.format_email_subject(self, subject, context)

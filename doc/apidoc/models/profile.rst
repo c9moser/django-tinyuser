@@ -1,7 +1,7 @@
 User Profile Models
 ===================
 
-.. autoclass:: django_tinyuser.models.tinyuser.TinyUserProfile
+.. autoclass:: django_tinyuser.models.UserProfile
    :members:
    :undoc-members:
    :show-inheritance:

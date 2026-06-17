@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 from django_tinyuser import settings
 from django_tinyuser.models import TinyUser
 
-URL_INVITE = reverse("tinyuser.webapi:invite")
+URL_INVITE = reverse("tinyuser-webapi:invite")
 
 
 class TestInvitationPrivateAPI(TestCase):

@@ -1,9 +1,7 @@
-
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views import View
-
-from django_tinyuser.settings import TEMPLATE_MAPPING
+from django_templates import get_template
 
 
 class IndexView(View):
@@ -12,7 +10,7 @@ class IndexView(View):
     """
 
     # Define the template name for the index page using the TEMPLATE_MAPPING from settings
-    template_name = TEMPLATE_MAPPING['tinyuser/index']
+    template_name = get_template("tinyuser/index")
 
     def get(self, request: HttpRequest) -> HttpResponse:
         """

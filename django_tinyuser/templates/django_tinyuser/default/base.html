@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block head_title %}TinyUser{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'tinyuser/css/base.css' %}">
+    {% block extra_css %}{% endblock %}
+    {% block extra_js %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div>
+    <h1 style="display: inline-block;">{% block title %}TinyUser{% endblock %}</h1>
+    <h3 style="display: inline-block; float: right;">{% block subtitle %}{% endblock %}</h3>
+</div>
+<nav>
+    <ul>
+    {% if request.user.is_authenticated %}
+        <li><a href="{% url 'tinyuser:profile' %}">Profile</a></li>
+        <li><a href="{% url 'tinyuser:invite' %}">Invite</a></li>
+        <li><a href="{% url 'tinyuser:logout' %}">Logout</a></li>
+    {% else %}
+        <li><a href="{% url 'tinyuser:login' %}">Login</a></li>
+        <li><a href="{% url 'tinyuser:logout' %}">Logout</a></li>
+    {% endif %}
+    </ul>
+</nav>
+<main>
+    {% block content %}{% endblock %}
+</main>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

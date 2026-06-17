@@ -1,10 +1,11 @@
 from .fields import RestrictedImageField, RestrictedSvgImageFileField
 from .tinyuser import TinyUser
-from .tinyuserprofile import TinyUserProfile
+from .userprofile import UserProfile, UserProfileSettings
 
 __all__ = [
     "TinyUser",
-    "TinyUserProfile",
+    "UserProfile",
+    "UserProfileSettings",
     "RestrictedImageField",
     "RestrictedSvgImageFileField",
 ]

@@ -1,0 +1,18 @@
+{% load i18n templates %}
+{% block content %}
+<main>
+<h1>{% translate "Profile Settings" %}</h1>
+
+{% for profile_type,profile_name,form in profile_settings %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h2 class="h4">{{ profile_name|capfirst }} profile settings</h2>
+    </div>
+    {% with "profile-settings-"|add:forloop.counter as settings_id %}
+    <div class="card-body" id="{{ settings_id }}">
+        {% include "tinyuser/hx/profile/settings"|template with profile_container_id=settings_id %}
+    </div>
+    {% endwith %}
+{% endfor %}
+</main>
+{% endblock content %}

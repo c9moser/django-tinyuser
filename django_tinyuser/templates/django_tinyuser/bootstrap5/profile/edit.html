@@ -1,0 +1,10 @@
+{% extends "django_tinyuser/bootstrap/base.html" %}
+{% load i18n widget_tweaks templates %}
+
+{% block subtitle %}{% translate "Edit your Profile" %}{% endblock %}
+
+{% block content %}
+<h1>{% translate "Edit your Profile" %}</h1>
+<p>{% translate "This is your profile page." %}</p>
+{% include "tinyuser/hx/profile/edit"|template %}
+{% endblock %}

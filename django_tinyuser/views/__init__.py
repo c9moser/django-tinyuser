@@ -1,6 +1,7 @@
 from .index import IndexView
 from .invite import InviteView
 from .profile import (
+    MyProfileView,
     ProfileEditView,
     ProfileView,
 )
@@ -8,6 +9,7 @@ from .profile import (
 __all__ = [
     "IndexView",
     "InviteView",
+    "MyProfileView",
     "ProfileEditView",
     "ProfileView",
 ]
