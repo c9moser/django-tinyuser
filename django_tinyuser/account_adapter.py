@@ -2,7 +2,6 @@ from allauth.account.adapter import DefaultAccountAdapter
 from django.forms import Form
 from django.http import HttpRequest
 from invitations.adapters import BaseInvitationsAdapter
-from PIL.ExifTags import Base
 
 from django_tinyuser import settings
 from django_tinyuser.models import TinyUser

@@ -99,7 +99,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.contrib.sites.context_processors.site",
                 "django_templates.context_processors.templates",
                 "django_tinyuser.context_processors.tinyuser",
             ],

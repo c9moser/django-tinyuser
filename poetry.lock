@@ -727,7 +727,7 @@ files = [
 djangorestframework = "*"
 
 [[package]]
-name = "django-temaplates"
+name = "django-templates"
 version = "0.1.0"
 description = "Minimal django project"
 optional = false
@@ -741,9 +741,9 @@ django = ">=6.0.6,<7.0.0"
 
 [package.source]
 type = "git"
-url = "https://codeberg.org/c9moser/django-templates.git"
+url = "https://codeberg.org/c9moser/django-templates"
 reference = "HEAD"
-resolved_reference = "1b5dede39e4632fc9a2a1d9dc613a4362c7316e7"
+resolved_reference = "07834a7be6232095eb75e0964b8437872d5dfaac"
 
 [[package]]
 name = "django-widget-tweaks"
@@ -2550,4 +2550,4 @@ testing = ["coverage[toml]", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.15"
-content-hash = "a997050790fa5e72a99efc3fc8e3903eac5b3147b3907f5e588712005c214dfa"
+content-hash = "d96234794fd6ebaeddb591ea703700f230410bd73e64899c2b83678d28642782"

@@ -28,8 +28,8 @@ dependencies = [
     "django-invitations (>=2.1.0,<3.0.0)",
     "django-oauth-toolkit (>=3.2.0,<4.0.0)",
     "markdown (>=3.10.2,<4.0.0)",
-    "django-temaplates @ git+https://codeberg.org/c9moser/django-templates.git",
     "pyyaml (>=6.0.3,<7.0.0)",
+    "django-templates @ git+https://codeberg.org/c9moser/django-templates",
 ]
 
 

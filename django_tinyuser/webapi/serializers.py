@@ -87,8 +87,8 @@ class UserSerializer(serializers.ModelSerializer):
 class SafeUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        profile = ProfileSerializer(required=False)
-        fields = ("email", "username", "password", "profile")
+        tinyuser_profile = ProfileSerializer(required=False)
+        fields = ("email", "username", "password", "tinyuser_profile")
         extra_kwargs = {
             "password": {"write_only": True, "min_length": 8},
             "email": {"read_only": True},
@@ -190,5 +190,6 @@ class InvitationSerializer(serializers.Serializer):
             )
         except IntegrityError:
             raise ValidationError("email already exists")
-        invitation.send_invitation(self.context.get("request"))
+        globals()["context"] = self.context
+        invitation.send_invitation(self.context.pop("request"), **self.context)
         return invitation

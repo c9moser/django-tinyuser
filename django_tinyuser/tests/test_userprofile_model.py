@@ -38,19 +38,21 @@ class TestUserProfileModel(TestCase):
     def test_user_profile_update(self):
         UserProfile.objects.create(user=self.user, **self.PROFILE_DATA)
 
-        self.user.profile.bio = "Test updated bio"
-        self.user.profile.first_name = "UpdatedFirstName"
-        self.user.profile.last_name = "UpdatedLastName"
-        self.user.profile.website = "https://updated.example.com"
-        self.user.profile.birth_date = date(1971, 1, 1)
-        self.user.profile.location = "Berlin"
-        self.user.profile.save()
-        self.user.profile.refresh_from_db()
-        self.assertEqual(self.user.profile.bio, "Test updated bio")
-        self.assertEqual(self.user.profile.first_name, "UpdatedFirstName")
-        self.assertEqual(self.user.profile.last_name, "UpdatedLastName")
-        self.assertEqual(self.user.profile.website, "https://updated.example.com")
-        self.assertEqual(self.user.profile.birth_date.year, 1971)
-        self.assertEqual(self.user.profile.birth_date.month, 1)
-        self.assertEqual(self.user.profile.birth_date.day, 1)
-        self.assertEqual(self.user.profile.location, "Berlin")
+        self.user.tinyuser_profile.bio = "Test updated bio"
+        self.user.tinyuser_profile.first_name = "UpdatedFirstName"
+        self.user.tinyuser_profile.last_name = "UpdatedLastName"
+        self.user.tinyuser_profile.website = "https://updated.example.com"
+        self.user.tinyuser_profile.birth_date = date(1971, 1, 1)
+        self.user.tinyuser_profile.location = "Berlin"
+        self.user.tinyuser_profile.save()
+        self.user.tinyuser_profile.refresh_from_db()
+        self.assertEqual(self.user.tinyuser_profile.bio, "Test updated bio")
+        self.assertEqual(self.user.tinyuser_profile.first_name, "UpdatedFirstName")
+        self.assertEqual(self.user.tinyuser_profile.last_name, "UpdatedLastName")
+        self.assertEqual(
+            self.user.tinyuser_profile.website, "https://updated.example.com"
+        )
+        self.assertEqual(self.user.tinyuser_profile.birth_date.year, 1971)
+        self.assertEqual(self.user.tinyuser_profile.birth_date.month, 1)
+        self.assertEqual(self.user.tinyuser_profile.birth_date.day, 1)
+        self.assertEqual(self.user.tinyuser_profile.location, "Berlin")
