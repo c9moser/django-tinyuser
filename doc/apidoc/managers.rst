@@ -7,8 +7,3 @@ Managers for the `django_tinyuser` app.
    :members:
    :undoc-members:
    :show-inheritance:
-
-.. autoclass:: django_tinyuser.managers.FriendshipManager
-   :members:
-   :undoc-members:
-   :show-inheritance:
