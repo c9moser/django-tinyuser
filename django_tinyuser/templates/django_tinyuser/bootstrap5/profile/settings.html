@@ -1,6 +1,7 @@
+
+{% extends BASE_TEMPLATE %}
 {% load i18n templates %}
 {% block content %}
-<main>
 <h1>{% translate "Profile Settings" %}</h1>
 
 {% for profile_type,profile_name,form in profile_settings %}
@@ -14,5 +15,4 @@
     </div>
     {% endwith %}
 {% endfor %}
-</main>
 {% endblock content %}

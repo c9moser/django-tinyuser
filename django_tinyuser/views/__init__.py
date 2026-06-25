@@ -3,6 +3,7 @@ from .invite import InviteView
 from .profile import (
     MyProfileView,
     ProfileEditView,
+    ProfileSettingsView,
     ProfileView,
 )
 
@@ -12,4 +13,5 @@ __all__ = [
     "MyProfileView",
     "ProfileEditView",
     "ProfileView",
+    "ProfileSettingsView",
 ]

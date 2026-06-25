@@ -1,0 +1,25 @@
+name: doc-latest
+on:
+  push:
+    branches:
+      - main
+      - version/**
+    tags: [release/**]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install System Dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-dev python3-pip python3-venv python3-wheel python3-setuptools
+      - name: Install Poetry
+        run: pip install --break-system-packages --root-user-action=ignore poetry
+      - name: Install Python Dependencies
+        run: poetry install --no-root --without=postgresql --without=mysql --without=dev
+      - name: build docs
+        run: poetry run make -C doc html
+      - name: Compress docs
+        run: tar -cjvf doc-latest.tbz -C docs/build html
+      - name: Upload docs to documentation server
+        run: 'curl -X POST -H "Authorization: Basic ${{ secrets.DOCS_TOKEN }}" -H "Content-Type: application/json" -F "file=@doc-latest.tbz" "${{ secrets.DOCS_URL }}/upload/" -d ''{"repository": "${{ forgejo.repository }}", "branch": "${{ forgejo.ref_name }}", "file": "doc-latest.tbz"}'' || true'

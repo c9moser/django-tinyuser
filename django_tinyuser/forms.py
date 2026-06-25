@@ -73,6 +73,7 @@ class ProfileSettingsForm(forms.ModelForm):
         model = UserProfileSettings
         fields = [
             "is_enabled",
+            "key",
             "show_avatar",
             "show_email",
             "show_full_name",

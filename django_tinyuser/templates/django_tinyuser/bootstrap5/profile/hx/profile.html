@@ -3,7 +3,7 @@
 <div class="d-flex mb-3">
     <div style="width=255">
     {% if profile_settings.show_avatar %}
-        {% if request.user.profile.avatar_medium %}
+        {% if profile.avatar_medium %}
         <img src="{{ profile.avatar_medium.url }}" alt="{% translate " Avatar" %}" class="me-3"
             width="256px" height="256px">
         {% elif profile.avatar_large %}

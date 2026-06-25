@@ -139,7 +139,8 @@ class UserProfileSettings(models.Model):
     #: The type of settings (e.g. public, members, etc.)
     #:
     #: :value: True
-    type = models.SlugField(_("settings type"), max_length=255, default="public")
+    name = models.CharField(_("Profile name"), max_length=255, default="public")
+    key = models.SlugField(_("settings type"), max_length=255, default="public")
 
     #: Whether the profile is forbidden to view
     #:
@@ -202,10 +203,10 @@ class UserProfileSettings(models.Model):
         verbose_name_plural = _("profile settings")
 
         unique_together = [
-            ("profile", "type"),
+            ("profile", "key"),
         ]
         indexes = [
             models.Index(fields=["profile"]),
-            models.Index(fields=["type"]),
-            models.Index(fields=["profile", "type"]),
+            models.Index(fields=["key"]),
+            models.Index(fields=["profile", "key"]),
         ]

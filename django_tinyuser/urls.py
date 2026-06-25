@@ -8,6 +8,11 @@ urlpatterns = [
     path("user/", views.IndexView.as_view(), name="user"),
     path("user/profile", views.MyProfileView.as_view(), name="profile"),
     path("accounts/profile/", views.ProfileEditView.as_view(), name="profile-edit"),
+    path(
+        "accounts/profile/settings/",
+        views.ProfileSettingsView.as_view(),
+        name="profile-settings",
+    ),
     path("accounts/invite/", views.InviteView.as_view(), name="invite"),
 ]
 

@@ -90,12 +90,12 @@ class MyProfileView(LoginRequiredMixin, HtmxMixin, View):
             else:
                 try:
                     context["profile_settings"] = UserProfileSettings.objects.get(
-                        profile=profile, type=request.GET["profile"]
+                        profile=profile, key=request.GET["profile"]
                     )
                 except UserProfileSettings.DoesNotExist:
                     try:
                         context["profile_settings"] = UserProfileSettings.objects.get(
-                            profile=profile, type="default"
+                            profile=profile, key="default"
                         )
                     except UserProfileSettings.DoesNotExist:
                         context["profile_settings"] = PROFILE_DEFAULTS
@@ -404,7 +404,7 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
         )
 
 
-class UserProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
+class ProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
     """
     View for managing user profile settings.
     """
@@ -420,30 +420,30 @@ class UserProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
 
         return context
 
-    def init_variables(self, profile_type):
-        if not profile_type:
+    def init_variables(self, profile_key: str):
+        if not profile_key:
             if len(PROFILES) == 1:
                 self.profile_type, self.profile_name = PROFILES[0]
             else:
                 self.profile_type, self.profile_name = "default", _("default")
         else:
             profile_exists = False
-            for _profile_type, _profile_name in PROFILES:
-                if _profile_type == profile_type:
-                    self.profile_type = profile_type
+            for _profile_key, _profile_name in PROFILES:
+                if _profile_key == profile_key:
+                    self.profile_type = profile_key
                     self.profile_name = _profile_name
                     profile_exists = True
 
             if not profile_exists:
                 raise Http404(
-                    _('No such profile "{profile}"').format(profile=profile_type)
+                    _('No such profile "{profile}"').format(profile=profile_key)
                 )
 
             self.db_profile = UserProfile.objects.get_or_create(user=self.request.user)[
                 0
             ]
             self.instance = UserProfileSettings.objects.get_or_create(
-                profile=self.db_profile, type=profile_type
+                profile=self.db_profile, type=profile_key
             )[0]
 
     def get(self, request: HttpRequest, profile: str) -> HttpResponse:
@@ -471,22 +471,39 @@ class UserProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
         )
 
 
-class AllProfilesSettingsView(LoginRequiredMixin, View):
-    def create_form(self, profile_type: str) -> ProfileSettingsForm:
-        # return UserProfileSettings.create_settings(profile_type)
-        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
-        if created:
-            logger.info(f"Created profile for user {self.request.user.username}")
-
-        form = ProfileSettingsForm(instance=profile)
-        return form
-
-    def get(self, request: HttpRequest) -> HttpResponse:
-        profiles = []
-        if len(PROFILES) > 0:
-            for profile_type, profile_name in PROFILES:
-                profiles.append(
-                    (profile_type, profile_name, self.create_form(profile_type))
-                )
-
-        return render(request, self.template_name, context={"profiles": profiles})
+# class ProfileSettingsView(LoginRequiredMixin, View):
+#    def create_form(self, profile_type: str) -> ProfileSettingsForm:
+#        # return UserProfileSettings.create_settings(profile_type)
+#        profile, created = UserProfile.objects.get_or_create(user=self.request.user)
+#        if created:
+#            logger.info(f"Created profile for user {self.request.user.username}")
+#
+#        form = ProfileSettingsForm(instance=profile)
+#        return form
+#
+#    def get(self, request: HttpRequest, profile: str | None = None) -> HttpResponse:
+#        if not getattr(request.user, "tinyuser_profile", None):
+#            return HttpResponseRedirect(reverse("profile:settings"))
+#
+#        tu_profile = getattr(request.user, "tinyuser_profile", None)
+#        if not tu_profile:
+#            return HttpResponseRedirect(reverse("tinyuser:profile"))
+#
+#        if not profile:
+#            profile_settings = UserProfileSettings.objects.filter(profile=tu_profile)[0]
+##
+#            if not profile_settings:
+#                profile_settings = UserProfileSettings.objects.create(
+#                    profile=UserProfile.objects.get(user=request.user),
+#                    name=_("Default"),
+#                    key="default",
+#                )
+#        else:
+#            profile_settings = UserProfileSettings.objects.filter(
+#                profile=request.user.tinyuser_profile, key=profile
+#            )[0]
+#            self.instance = profile_settings
+#
+#        return render(
+#            request, self.template_name, context={"profile": profile_settings}
+#        )
