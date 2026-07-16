@@ -16,7 +16,7 @@ django-debug-toolbar==6.3.0 ; python_version >= "3.13" and python_version < "3.1
 django-environ==0.12.1 ; python_version >= "3.13" and python_version < "3.15"
 django-extensions==4.1 ; python_version >= "3.13" and python_version < "3.15"
 django-widget-tweaks==1.5.1 ; python_version >= "3.13" and python_version < "3.15"
-django==6.0.5 ; python_version >= "3.13" and python_version < "3.15"
+django==6.0.7 ; python_version >= "3.13" and python_version < "3.15"
 flake8==7.3.0 ; python_version >= "3.13" and python_version < "3.15"
 hyperlink==21.0.0 ; python_version >= "3.13" and python_version < "3.15"
 idna==3.13 ; python_version >= "3.13" and python_version < "3.15"
