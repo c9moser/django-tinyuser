@@ -30,7 +30,7 @@ dependencies = [
     "markdown (>=3.10.2,<4.0.0)",
     "pyyaml (>=6.0.3,<7.0.0)",
     "orjson (>=3.11.9,<4.0.0)",
-    "dj-templates (>=0.0.15,<0.1.0)",
+    "dj-templates (>=0.0.16,<0.1.0)",
 ]
 
 [tool.black]
@@ -42,7 +42,7 @@ target-version = ["py312","py313", "py314"]
 version = "0.0.1"
 package-mode = true
 packages = [
-    {include = "django_tinyuser"},
+    {include = "dj_tinyuser"},
 ]
 
 [tool.poetry.dependencies]
@@ -96,10 +96,10 @@ url = "https://pypi.org/simple"
 priority = "primary"
 
 
-[[tool.poetry.source]]
-name = "test.pypi-public"
-url = "https://test.pypi.org/simple"
-priority = "primary"
+# [[tool.poetry.source]]
+# name = "test.pypi-public"
+# url = "https://test.pypi.org/simple"
+# priority = "primary"
 
 [[tool.poetry.source]]
 name = "djtt_cmoser"
