@@ -6,8 +6,7 @@ from django.views.generic import FormView
 
 from dj_tinyuser.forms import InviteForm
 from dj_tinyuser.logging import get_tinyuser_logger as get_logger
-from dj_tinyuser.settings import (INVITE_ALLOW_ALL_AUTHENTICATED_USERS,
-                                  INVITE_GROUPS)
+from dj_tinyuser.settings import INVITE_ALLOW_ALL_AUTHENTICATED_USERS, INVITE_GROUPS
 
 logger = get_logger(__name__)
 

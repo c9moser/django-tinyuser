@@ -1,7 +1,7 @@
 from dj_templates.theme import ThemeManager
 from django.http import HttpRequest
-from django.utils.translation import gettext as _
 
+# from django.utils.translation import gettext as _
 from dj_tinyuser import settings
 
 
@@ -15,7 +15,7 @@ def tinyuser(request: HttpRequest):
         base_template = theme.get_template("theme/base")
 
     tinyuser_templates = {
-        "base_template": theme.get_template("theme/base"),
+        "base_template": base_template,
         "login_template": theme.get_template("tinyuser/account/login"),
         "password_reset_template": theme.get_template("tinyuser/account/password_reset"),
         "profile_template": theme.get_template("tinyuser/account/profile"),

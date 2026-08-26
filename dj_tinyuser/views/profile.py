@@ -18,13 +18,12 @@ from PIL import Image
 from dj_tinyuser.forms import ProfileForm, ProfileSettingsForm
 from dj_tinyuser.logging import get_tinyuser_logger as get_logger
 from dj_tinyuser.models import UserProfile, UserProfileSettings
-from dj_tinyuser.settings import (GET_PROFILE, PROFILE_DEFAULTS, PROFILES,
-                                  TEMP_DIR)
+from dj_tinyuser.settings import GET_PROFILE, PROFILE_DEFAULTS, PROFILES, TEMP_DIR
 
 logger = get_logger(__name__)
 
 
-class MyProfileView(LoginRequiredMixin, HtmxMixin, View):
+class MyProfileView(LoginRequiredMixin, HtmxMixin, ThemeMixin, View):
     """
     View for the user profile page.
     """

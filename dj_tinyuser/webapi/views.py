@@ -8,8 +8,11 @@ from rest_framework.settings import api_settings
 from dj_tinyuser import settings
 from dj_tinyuser.webapi.permissions import IsInvitor
 from dj_tinyuser.webapi.serializers import (  # UserProfileSerializer,
-    AuthTokenSerializer, InvitationSerializer, SafeUserSerializer,
-    UserSerializer)
+    AuthTokenSerializer,
+    InvitationSerializer,
+    SafeUserSerializer,
+    UserSerializer,
+)
 
 # from django.contrib.auth import get_user_model
 
