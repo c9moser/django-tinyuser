@@ -1,0 +1,16 @@
+name: cmoser-doc-latest
+on:
+  workflow-call:
+
+jobs:
+  callee:
+    runs-on: debian-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Install System Dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-dev python3-pip python3-venv python3-wheel python3-setuptools
+      - name: Install Poetry
+        run: pip install --break-system-packages --root-user-action=ignore poetry
+      - name: Install Python Dependencies
+        run: poetry install --no-root --without=postgresql --without=mysql --without=dev

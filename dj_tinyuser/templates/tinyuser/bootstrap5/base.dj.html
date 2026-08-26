@@ -1,0 +1,31 @@
+{% extends tinyuser_templates.base_template %}
+
+{% load i18n %}
+
+{% block _css %}
+{% endblock %}
+
+{% block navbar_end %}
+<ul class="navbar-nav ms-auto">
+    {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'tinyuser:profile' %}">{% translate "Profile" %}</a>
+        </li>
+        <li class="nav-item">
+            <form method="post" class="d-inline" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="navbar-link">{% translate "Logout" %}</button>
+            </form>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_login' %}">{% translate "Login" %}</a>
+        </li>
+        {% if can_sign_up %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+        </li>
+        {% endif %}
+    {% endif %}
+</ul>
+{% endblock navbar_end %}

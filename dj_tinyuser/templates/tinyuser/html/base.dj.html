@@ -1,0 +1,27 @@
+{% extends "themes/html/base.dj.html" %}
+{% load i18n %}
+
+{% block navbar_end %}
+<ul class="navbar-list navbar-end">
+    {% if user.is_authenticated %}
+        <li>
+            <a class="navbar-item"href="{% url 'tinyuser:profile' %}">{% translate "Profile" %}</a>
+        </li>
+        <li>
+            <form method="post" action="{% url 'account_logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="navbar-item" style="border-width:0;background:none;padding:0;margin:0;">{% translate "Logout" %}</button>
+            </form>
+        </li>
+    {% else %}
+        <li>
+            <a class="navbar-item" href="{% url 'account_login' %}">{% translate "Login" %}</a>
+        </li>
+        {% if can_sign_up %}
+        <li>
+            <a class="navbar-item" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
+        </li>
+        {% endif %}
+    {% endif %}
+    </ul>
+{% endblock navbar_end %}

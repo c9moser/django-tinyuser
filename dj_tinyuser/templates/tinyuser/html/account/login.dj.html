@@ -1,0 +1,58 @@
+{% extends tinyuser_templates.base_template %}
+{% load i18n widget_tweaks allauth account %}
+
+{% block content %}
+<h1>Please sign in</h1>
+{% if not SOCIALACCOUNT_ONLY %}
+<form method="post" action="{% url 'account_login' %}" class="form-signin">
+    {% csrf_token %}
+    {% if form.errors %}
+        <div role="alert">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <strong>{{ field.label }}:</strong> {{ error }}<br>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                {{ error }}<br>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="form-table">
+        <label class="form-label" for="{{ form.login.id_for_label }}">{{ form.login.label }}</label>
+        {% render_field form.login class="form-input" %}
+        <label class="form-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        {% render_field form.password class="form-input" %}
+    </div>
+
+    <p>
+        <label for="{{ form.remember.id_for_label }}">
+            {% render_field form.remember %} {{ form.remember.label }}
+        </label>
+    </p>
+    <p>
+        <a href="{% url 'account_reset_password' %}">{% translate "Forgot password?" %}</a>
+    </p>
+    <div style="display: flex; justify-content: center;">
+        <button type="submit">Sign in</button>
+    </div>
+</form>
+{% endif %}
+{% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+    {% element button_group vertical=True %}
+        {% if PASSKEY_LOGIN_ENABLED %}
+            {% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
+                {% trans "Sign in with a passkey" %}
+            {% endelement %}
+        {% endif %}
+        {% if LOGIN_BY_CODE_ENABLED %}
+            {% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
+                {% trans "Send me a sign-in code" %}
+            {% endelement %}
+        {% endif %}
+    {% endelement %}
+{% endif %}
+{% if SOCIALACCOUNT_ENABLED %}
+    {% include "socialaccount/snippets/login.html" %}
+{% endif %}
+{% endblock content %}

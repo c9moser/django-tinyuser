@@ -1,0 +1,5 @@
+{% load i18n %}
+<form method="post" action="{% url 'account/logout' %}" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="navbar-item" style="background: none;border: none;padding: 0;margin: 0;">{% translate "Logout" %}</button>
+</form>

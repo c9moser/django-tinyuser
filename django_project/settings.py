@@ -67,12 +67,12 @@ third_party_apps = [
     "django_extensions",
     "widget_tweaks",
     "invitations",
-    "django_templates",
+    "dj_templates",
 ]
 
 project_apps = [
-    "django_tinyuser",
-    "django_tinyuser.webapi",
+    "dj_tinyuser",
+    "dj_tinyuser.webapi",
 ]
 
 MIDDLEWARE = [
@@ -89,22 +89,26 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "django_project.urls"
 
+from dj_tinyuser.global_templates import TEMPLATES_PATH
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [TEMPLATES_PATH],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django_templates.context_processors.templates",
-                "django_tinyuser.context_processors.tinyuser",
+                "dj_templates.context_processors.templates",
+                "dj_tinyuser.context_processors.tinyuser",
             ],
         },
     },
 ]
+
+LOGIN_TEMPLATE = "dj_tinyuser/login"
 
 WSGI_APPLICATION = "django_project.wsgi.application"
 CSS_FRAMEWORK = ENV("CSS_FRAMEWORK").lower()
@@ -210,7 +214,7 @@ MEDIA_ROOT = ENV("MEDIA_ROOT")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-ACCOUNT_ADAPTER = "django_tinyuser.account_adapter.TinyUserDRFAccountAdapter"
+ACCOUNT_ADAPTER = "dj_tinyuser.account_adapter.TinyUserDRFAccountAdapter"
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
 
 
@@ -221,9 +225,10 @@ if ENV("CONTAINERIZED"):
         ENV.read_env("/etc/django-env")
 
 
-AUTH_USER_MODEL = "django_tinyuser.TinyUser"
+AUTH_USER_MODEL = "dj_tinyuser.TinyUser"
 
-BASE_TEMPLATE = ENV("BASE_TEMPLATE")
+BASE_TEMPLATE = "@tinyuser/base"
+THEME = ENV("THEME")
 
 EMAIL_BACKEND = ENV("EMAIL_BACKEND")
 EMAIL_HOST = ENV("EMAIL_HOST")
@@ -306,34 +311,11 @@ else:
         from .local_settings.production_settings import *
     del _production_settings_file
 
-if CSS_FRAMEWORK == "bootstrap5":
-    from django_tinyuser.global_templates.bootstrap5 import (
-        PATH as BOOTSTRAP_TEMPLATES_PATH,
-    )
-
-    if "DIRS" not in TEMPLATES[0]:
-        TEMPLATES[0]["DIRS"] = [str(BOOTSTRAP_TEMPLATES_PATH)]
-    else:
-        TEMPLATES[0]["DIRS"].insert(0, str(BOOTSTRAP_TEMPLATES_PATH))
-    BASE_TEMPLATE = "django_tinyuser/bootstrap5/base.html"
-elif CSS_FRAMEWORK == "tailwindcss":
-    from django_tinyuser.global_templates.trailwindcss import (
-        PATH as TAILWIND_TEMPLATES_PATH,
-    )
-
-    if "DIRS" not in TEMPLATES[0]:
-        TEMPLATES[0]["DIRS"] = [str(TAILWIND_TEMPLATES_PATH)]
-    else:
-        TEMPLATES[0]["DIRS"].insert(0, str(TAILWIND_TEMPLATES_PATH))
-    BASE_TEMPLATE = "django_tinyuser/tailwindcss/base.html"
-else:
-    BASE_TEMPLATE = "default.html"
-
-TEMPLATES[0]["DIRS"] = list(set(TEMPLATES[0]["DIRS"]))
-
 SETTINGS_MODULE = "django_project.settings"
-INSTALLED_APPS = tuple(
-    {*django_apps, *allauth_apps, *api_apps, *third_party_apps, *project_apps}
-)
+
+INSTALLED_APPS = tuple({*django_apps, *allauth_apps, *api_apps, *third_party_apps, *project_apps})
+
+SIDEBAR = "dj_tinyuser.sidebar.default_sidebar"
+DEFAULT_SIDEBAR = "dj_tinyuser.sidebar.default_sidebar"
 
 del django_apps, allauth_apps, third_party_apps, project_apps

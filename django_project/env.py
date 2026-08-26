@@ -82,6 +82,7 @@ ENV = Env(
     MANAGER_DEFAULT_FROM_EMAIL=(str, "Django Manager <manager@localhost>"),
     MANAGER_EMAIL_SUBJECT_PREFIX=(str, "[Django Manager] "),
     BRAND=(str, "DjangoTinyUser"),
+    THEME=(str, "html")
 )
 
 CONTAINERIZED = ENV("CONTAINERIZED")

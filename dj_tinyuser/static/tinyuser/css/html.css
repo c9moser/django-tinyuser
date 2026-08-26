@@ -1,0 +1,28 @@
+
+.from-table {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f9f9f9;
+    border-collapse: collapse;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(1%, 1fr);
+    column-gap: 10px;
+    row-gap: 5px;
+}
+
+.form-label {
+    font-weight: bold;
+    text-justify: right;
+    text-align: center;
+}
+
+.form-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}

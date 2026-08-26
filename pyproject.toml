@@ -1,6 +1,6 @@
 [project]
 name="django-tinyuser"
-version="0.0.1"
+dynamic=["version"]
 
 description = "A small minimal user for django using allauth-integration"
 authors = [
@@ -16,7 +16,7 @@ license_files = [
 ]
 
 readme = "README.md"
-requires-python = ">=3.13,<3.15"
+requires-python = ">=3.12,<3.15"
 dependencies = [
     "django (>=6.0.5,<7.0)",
     "django-allauth[openid,saml,socialaccount] (>=65.16.1,<66.0.0)",
@@ -29,18 +29,25 @@ dependencies = [
     "django-oauth-toolkit (>=3.2.0,<4.0.0)",
     "markdown (>=3.10.2,<4.0.0)",
     "pyyaml (>=6.0.3,<7.0.0)",
-    "django-templates @ git+https://codeberg.org/c9moser/django-templates",
+    "orjson (>=3.11.9,<4.0.0)",
+    "dj-templates (>=0.0.15,<0.1.0)",
 ]
 
+[tool.black]
+line-length = 120
+exclude = "(.data/|.git/|.venv/|venv/|.hg/|wiki/)"
+target-version = ["py312","py313", "py314"]
 
 [tool.poetry]
+version = "0.0.1"
 package-mode = true
 packages = [
     {include = "django_tinyuser"},
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.13,<3.15"
+python = ">=3.12,<3.15"
+dj-templates = {source = "djtt_c-moser"}
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -50,7 +57,9 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "django-browser-reload (>=1.21.0,<2.0.0)",
     "django-debug-toolbar (>=6.3.0,<7.0.0)",
-    "flake8 (>=7.3.0,<8.0.0)"
+    "flake8 (>=7.3.0,<8.0.0)",
+    "black (>=26.5.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)"
 ]
 uswgi = [
     "uwsgi[emperor] (>=2.0.31,<3.0.0)",
@@ -80,3 +89,25 @@ api = [
 sso = [
     "django-allauth[sso] (>=65.17.0,<66.0.0)"
 ]
+
+[[tool.poetry.source]]
+name = "pypi-public"
+url = "https://pypi.org/simple"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "test.pypi-public"
+url = "https://test.pypi.org/simple"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "djtt_cmoser"
+url = "https://git.cmoser.eu/api/packages/django/pypi/simple"
+priority = "primary"
+
+
+[[tool.poetry.source]]
+name = "djtt_c-moser"
+url = "https://git.c-moser.at/api/packages/django-tinytools/pypi/simple"
+priority = "primary"

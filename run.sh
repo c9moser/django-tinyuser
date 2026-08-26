@@ -37,7 +37,7 @@ done
 
 if [ $# -eq 0 ]; then
 	echo "[INFO] No command provided, defaulting to 'runserver'"
-	runserver
+	${HTTP_SERVER}_runserver "@"
 	exit $?
 fi
 

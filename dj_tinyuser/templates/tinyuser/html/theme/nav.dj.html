@@ -1,0 +1,20 @@
+{% extends "themes/html/nav.dj.html" %}
+{% block navbar_end %}
+<ul class="navbar-list navbar-end">
+    {% if request.user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'tinyuser:profile' %}">{% translate "Profile" %}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'tinyuser:logout' %}">{% translate "Logout" %}</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'tinyuser:login' %}">{% translate "Login" %}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'tinyuser:register' %}">{% translate "Sign up" %}</a>
+    </li>
+    {% endif %}
+</ul>
+{% endblock %}

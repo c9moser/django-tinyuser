@@ -1,0 +1,19 @@
+html:
+  templates:
+    tinyuser/account/login: "tinyuser/html/account/login.dj.html"
+    # tinyuser/account/logout: "tinyuser/html/account/logout.dj.html"
+    # tinyuser/account/register: "tinyuser/html/account/register.dj.html"
+    # tinyuser/account/verify: "tinyuser/html/account/verify.dj.html"
+    # tinyuser/account/profile: "tinyuser/html/account/profile.dj.html"
+    # tinyuser/account/settings: "tinyuser/html/account/settings.dj.html"
+    # tinyuser/hx/user/settings: "tinyuser/html/hx/user/settings.dj.html"
+    # tinyuser/hx/user/profile: "tinyuser/html/hx/user/profile.dj.html"
+bootstrap5:
+  templates:
+    tinyuser/account/login: "tinyuser/bootstrap5/login.dj.html"
+bs5docs:
+  templates:
+    tinyuser/account/login: "tinyuser/bs5docs/login.dj.html"
+    tinyuser/account/logout: "tinyuser/bs5docs/logout.dj.html"
+    tinyuser/user/profile: "tinyuser/bs5docs/profile.dj.html"
+    tinyuser/user/settings: "tinyuser/bs5docs/settings.dj.html"

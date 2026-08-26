@@ -14,16 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django_tinyuser.webapi import urls as tinyuser_api_urls
+from django.contrib import admin
+from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', include('django_tinyuser.urls')),
+    path('', include('dj_tinyuser.urls')),
     path("invitations/", include('invitations.urls', namespace='invitations'))
 ]
 
@@ -35,8 +34,8 @@ if 'rest_framework' in settings.INSTALLED_APPS:
 if 'drf_spectacular' in settings.INSTALLED_APPS:
     from drf_spectacular.views import (
         SpectacularAPIView,
+        SpectacularRedocView,
         SpectacularSwaggerView,
-        SpectacularRedocView
     )
     urlpatterns += [
         path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
@@ -53,14 +52,13 @@ if 'drf_spectacular' in settings.INSTALLED_APPS:
     ]
 
 
-if 'django_tinyuser.webapi' in settings.INSTALLED_APPS:
+if 'dj_tinyuser.webapi' in settings.INSTALLED_APPS:
     urlpatterns += [
-        path('api/', include('django_tinyuser.webapi.urls', namespace='tinyuser.webapi')),
+        path('api/', include('dj_tinyuser.webapi.urls', namespace='tinyuser.webapi')),
     ]
 
 if settings.DEBUG:
     urlpatterns += [
-        path("", include("django_tinyuser.urls")),
         path('__debug__/', include('debug_toolbar.urls')),
         path('__reload__/', include('django_browser_reload.urls')),
         *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
