@@ -9,6 +9,9 @@
       "**/templates/**/*.html",
       "**/templates/**/*.txt",
       "**/templates/**/*.md",
+      "*.dj.html",
+      "*.dj.txt",
+      "*.dj.md",
     ]
   }
 }

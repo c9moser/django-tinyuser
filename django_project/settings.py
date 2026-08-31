@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 from .env import ENV
@@ -36,6 +37,11 @@ if _local_settings_file.exists():
 
 ALLOWED_HOSTS = ENV("ALLOWED_HOSTS")
 
+MFA_PASSKEY_LOGIN_ENABLED = ENV("MFA_PASSKEY_LOGIN_ENABLED", default=True)
+MFA_TRUST_ENABLED = ENV("MFA_TRUST_ENABLED", default=True)
+MFA_TRUST_COOKIE_AGE = timedelta(days=ENV("MFA_TRUST_COOKIE_AGE_DAYS", default=30))
+
+
 # Application definition
 
 django_apps = (
@@ -50,6 +56,7 @@ django_apps = (
 allauth_apps = (
     "allauth",
     "allauth.account",
+    "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.openid",  # required for steam provider
@@ -273,6 +280,11 @@ LANGUAGES = [
 TEMP_DIR = Path(ENV("TEMP_DIR")).resolve()
 
 BRAND = ENV("BRAND")
+
+MFA_PASSKEY_LOGIN_ENABLED = True
+MFA_TRUST_ENABLED = True
+MFA_TRUST_COOKIE_AGE = timedelta(days=30)
+
 
 if DEBUG:
     _debug_settings_file = SETTINGS_DIR / "debug_settings.py"

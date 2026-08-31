@@ -20,6 +20,7 @@ def tinyuser(request: HttpRequest):
         "password_reset_template": theme.get_template("tinyuser/account/password_reset"),
         "profile_template": theme.get_template("tinyuser/account/profile"),
         "settings_template": theme.get_template("tinyuser/account/settings"),
+        "signup_template": theme.get_template("tinyuser/account/signup"),
     }
 
     return {

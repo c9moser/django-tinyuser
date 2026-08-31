@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-10 18:10+0000\n"
+"POT-Creation-Date: 2026-08-30 13:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: django_tinyuser/webapi/serializers.py:61
+
+#: dj_tinyuser/webapi/serializers.py:58
 msgid "Email is required."
 msgstr ""
 
-#: django_tinyuser/webapi/serializers.py:63
+#: dj_tinyuser/webapi/serializers.py:60
 msgid "Username is required."
 msgstr ""
 
-#: django_tinyuser/webapi/serializers.py:65
+#: dj_tinyuser/webapi/serializers.py:62
 msgid "Password is required."
 msgstr ""
 
-#: django_tinyuser/webapi/serializers.py:68
+#: dj_tinyuser/webapi/serializers.py:65
 msgid "Signups are not allowed."
 msgstr ""
 
-#: django_tinyuser/webapi/serializers.py:103
+#: dj_tinyuser/webapi/serializers.py:100
 msgid "Email cannot be updated."
 msgstr ""
 
-#: django_tinyuser/webapi/serializers.py:167
+#: dj_tinyuser/webapi/serializers.py:164
 msgid "Unable to authenticate with provided credentials."
 msgstr ""

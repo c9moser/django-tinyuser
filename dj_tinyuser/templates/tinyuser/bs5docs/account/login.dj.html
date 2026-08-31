@@ -1,0 +1,66 @@
+{% extends tinyuser_templates.base_template %}
+{% load i18n widget_tweaks allauth account templates %}
+
+{% block content %}
+<h1>Please sign in</h1>
+{% if not SOCIALACCOUNT_ONLY %}
+{% url "account_signup" as signup_url %}
+<p>{% blocktranslate %}Don't have an account yet? Then <a href="{{ signup_url }}">please sign up</a>!{% endblocktranslate %}</p>
+<form method="post" action="{% url 'account_login' %}" class="form-signin">
+    {% csrf_token %}
+    {% if form.errors %}
+        <div role="alert">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <strong>{{ field.label }}:</strong> {{ error }}<br>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                {{ error }}<br>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="form-group">
+        <div class="form-floating mb-3">
+            {% render_field form.login class="form-control" %}
+            <label class="form-label" for="{{ form.login.id_for_label }}">{{ form.login.label }}</label>
+        </div>
+        <div class="form-floating mb-3">
+            {% render_field form.password class="form-control" %}
+            <label class="form-label" for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        </div>
+        <p>
+            <label for="{{ form.remember.id_for_label }}">
+                {% render_field form.remember %} {{ form.remember.label }}
+            </label>
+        </p>
+        <div style="display: flex; justify-content: end;">
+            <button class="btn btn-primary" type="submit">Sign in</button>
+        </div>
+    </div>
+
+
+    <p>
+        <a href="{% url 'account_reset_password' %}">{% translate "Forgot password?" %}</a>
+    </p>
+
+</form>
+{% endif %}
+{% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+    {% element button_group vertical=True %}
+        {% if PASSKEY_LOGIN_ENABLED %}
+            {% element button type="submit" form="mfa_login" id="passkey_login" tags="prominent,login,outline,primary" %}
+                {% trans "Sign in with a passkey" %}
+            {% endelement %}
+        {% endif %}
+        {% if LOGIN_BY_CODE_ENABLED %}
+            {% element button href=request_login_code_url tags="prominent,login,outline,primary" %}
+                {% trans "Send me a sign-in code" %}
+            {% endelement %}
+        {% endif %}
+    {% endelement %}
+{% endif %}
+{% if SOCIALACCOUNT_ENABLED %}
+    {% include "socialaccount/snippets/login.html" %}
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% load widget_tweaks %}
+{% for field in form %}
+<div class="form-group" style="max-width: 460px;">
+    <div class="form-floating mb-3">
+        {% render_field field class="form-control" %}
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    </div>
+</div>
+{% endfor %}
