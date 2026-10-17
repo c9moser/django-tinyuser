@@ -6,8 +6,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.settings import api_settings
 
 from dj_tinyuser import settings
-from dj_tinyuser.webapi.permissions import IsInvitor
-from dj_tinyuser.webapi.serializers import (  # UserProfileSerializer,
+from dj_tinyuser.api.permissions import IsInvitor
+from dj_tinyuser.api.serializers import (  # UserProfileSerializer,
     AuthTokenSerializer,
     InvitationSerializer,
     SafeUserSerializer,

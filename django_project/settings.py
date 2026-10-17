@@ -79,7 +79,7 @@ third_party_apps = [
 
 project_apps = [
     "dj_tinyuser",
-    "dj_tinyuser.webapi",
+    "dj_tinyuser.api",
 ]
 
 MIDDLEWARE = [

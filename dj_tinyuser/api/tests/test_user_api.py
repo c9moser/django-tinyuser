@@ -1,6 +1,4 @@
-"""
-Tests for the tinyuser API.
-"""
+"""Tests for the tinyuser API."""
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -8,13 +6,13 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-CREATE_USER_URL = reverse("tinyuser-webapi:user-create")
-TOKEN_URL = reverse("tinyuser-webapi:token")
-ME_URL = reverse("tinyuser-webapi:me")
+CREATE_USER_URL = reverse("tinyuser.api:user-create")
+TOKEN_URL = reverse("tinyuser.api:token")
+ME_URL = reverse("tinyuser.api:me")
 
 
 def create_user(**params):
-    """Helper function to create a new user."""
+    """Create a new user with given parameters."""
     return get_user_model().objects.create_user(**params)
 
 
@@ -22,12 +20,12 @@ class PublicUserApiTests(TestCase):
     """Tests the public features of the tinyuser user API."""
 
     def setUp(self):
+        """Set up PublicUserApiTests."""
         self.client = APIClient()
         self.user_model = get_user_model()
 
     def test_create_user_success(self):
         """Test creating a user is successful."""
-
         payload = {
             "email": "test@example.com",
             "password": "testpass123",
@@ -44,7 +42,6 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_with_existing_email_error(self):
         """Test creating a user with an existing email fails."""
-
         payload1 = {
             "email": "test@example.com",
             "password": "testpass123",
@@ -63,7 +60,6 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_with_existing_username_error(self):
         """Test creating a user with an existing username fails."""
-
         payload1 = {
             "email": "test@example.com",
             "password": "testpass123",
@@ -82,7 +78,6 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_with_short_password_error(self):
         """Test creating a user with a short password fails."""
-
         payload = {
             "email": "test@example.com",
             "password": "pw",
@@ -97,7 +92,6 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_with_missing_fields_error(self):
         """Test creating a user with missing fields fails."""
-
         payload1 = {
             "email": "test@xeample.com",
             "password": "testpass123",
@@ -114,7 +108,6 @@ class PublicUserApiTests(TestCase):
 
     def test_create_user_with_invalid_email_error(self):
         """Test creating a user with an invalid email fails."""
-
         payload = {
             "email": "invalid-email",
             "password": "testpass123",
@@ -127,7 +120,6 @@ class PublicUserApiTests(TestCase):
 
     def test_authentication_required_for_me_endpoint(self):
         """Test that authentication is required for the me endpoint."""
-
         res = self.client.get(ME_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -137,6 +129,7 @@ class PrivateUserApiTests(TestCase):
     """Tests the private features of the tinyuser user API."""
 
     def setUp(self):
+        """Set up PrivateUserApiTests."""
         self.user = create_user(
             email="test@example.com",
             password="testpass123",
@@ -147,7 +140,6 @@ class PrivateUserApiTests(TestCase):
 
     def test_retrieve_user_profile_success(self):
         """Test retrieving profile for logged in user."""
-
         res = self.client.get(ME_URL)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -157,13 +149,11 @@ class PrivateUserApiTests(TestCase):
 
     def test_post_me_not_allowed(self):
         """Test that POST is not allowed on the me endpoint."""
-
         res = self.client.post(ME_URL, {})
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_patch_user_success(self):
         """Test updating the user data for authenticated user."""
-
         payload = {
             "password": "newPassword123",
             "username": "NewUsername",
@@ -184,7 +174,6 @@ class PrivateUserApiTests(TestCase):
 
     def test_patch_user_update_email_not_allowed(self):
         """Test that updating the email is not allowed."""
-
         payload = {"email": "new.email@example.com"}
         res = self.client.patch(ME_URL, payload)
         self.user.refresh_from_db()
@@ -193,7 +182,6 @@ class PrivateUserApiTests(TestCase):
 
     def test_patch_user_update_username_allowed(self):
         """Test that updating the username is allowed."""
-
         payload = {"username": "NewUsername"}
         res = self.client.patch(ME_URL, payload)
         self.user.refresh_from_db()
@@ -205,12 +193,12 @@ class TokenAPITests(TestCase):
     """Tests for the user authentication token API."""
 
     def setUp(self):
+        """Set up TokenAPITests."""
         self.client = APIClient()
         self.user_model = get_user_model()
 
     def test_create_token_for_user_valid_credentials(self):
         """Test that a token is created for the user with valid credentials."""
-
         payload = {
             "email": "test@example.com",
             "password": "testpass123",
@@ -223,7 +211,6 @@ class TokenAPITests(TestCase):
 
     def test_create_token_for_user_invalid_credentials(self):
         """Test that a token is not created if invalid credentials are given."""
-
         payload = {
             "email": "test@example.com",
             "password": "testpass123",
@@ -242,7 +229,6 @@ class TokenAPITests(TestCase):
 
     def test_create_token_for_user_missing_fields(self):
         """Test that email and password are required to create a token."""
-
         user_data = {
             "email": "test@example.com",
             "password": "testpass123",

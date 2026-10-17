@@ -14,6 +14,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     """Serializer for the UserProfile model."""
 
     class Meta:
+        """ProfileSerializer Meta class."""
+
         model = UserProfile
         fields = [
             "first_name",
@@ -45,6 +47,8 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for the user object."""
 
     class Meta:
+        """UserSerializer.Meta class."""
+
         model = get_user_model()
         fields = ("email", "password", "username")
         extra_kwargs = {
@@ -53,7 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it."""
-
         if not get_adapter().is_open_for_signup(self.context["request"]):
             raise PermissionDenied(_("Signups are not allowed."))
 
@@ -82,7 +85,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SafeUserSerializer(serializers.ModelSerializer):
+    """Safe user serializer."""
+
     class Meta:
+        """SafeUserSerializer.Meta class."""
+
         model = get_user_model()
         tinyuser_profile = ProfileSerializer(required=False)
         fields = ("email", "username", "password", "tinyuser_profile")
@@ -93,7 +100,6 @@ class SafeUserSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Update a user, setting the password correctly and return it."""
-
         password = validated_data.pop("password", None)
 
         if "email" in validated_data:
@@ -118,6 +124,8 @@ class UserProfileSerializer(serializers.Serializer):
     profile = ProfileSerializer(required=False)
 
     class Meta:
+        """UserProfileSerializer.Meta class."""
+
         model = UserProfile
         fields = ["email", "username", "profile", "password"]
         extra_kwargs = {
@@ -169,15 +177,25 @@ class AuthTokenSerializer(serializers.Serializer):
 
 
 class InvitationSerializer(serializers.Serializer):
+    """Serializer for invitations."""
+
     email = serializers.EmailField()
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
+        """
+        Create a new invitation.
+
+        :param validated_data: a dictionary containing the validated data
+            for creating an invitation.
+        :type validated_data: dict[str, Any]
+        :return: an InvitationModel instance.
+        """
         from invitations.utils import get_invitation_model
 
         if not validated_data.get("email"):
             raise serializers.ValidationError("email is required")
 
-        if not getattr(self.context.get("request"), "user", None):
+        if not validated_data.get("user", getattr(self.context.get("request"), "user", None)):
             raise serializers.ValidationError("inviter is required")
 
         email = validated_data.get("email")
