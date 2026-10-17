@@ -54,15 +54,15 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create a new user with encrypted password and return it."""
 
+        if not get_adapter().is_open_for_signup(self.context["request"]):
+            raise PermissionDenied(_("Signups are not allowed."))
+
         if not validated_data.get("email"):
             raise serializers.ValidationError(_("Email is required."))
         if not validated_data.get("username"):
             raise serializers.ValidationError(_("Username is required."))
         if not validated_data.get("password"):
             raise serializers.ValidationError(_("Password is required."))
-
-        if not get_adapter().is_open_for_signup(self.context["request"]):
-            raise PermissionDenied(_("Signups are not allowed."))
 
         user = get_user_model().objects.create_user(**validated_data)
 
