@@ -851,19 +851,20 @@ reference = "pypi-public"
 
 [[package]]
 name = "dj-templates"
-version = "0.0.25"
+version = "0.0.30"
 description = "Minimal django project"
 optional = false
 python-versions = ">=3.12,<3.15"
 groups = ["main"]
 files = [
-    {file = "dj_templates-0.0.25-py3-none-any.whl", hash = "sha256:e186ccf48b8d6b99bef773d28f0b9763bbf5ed9fb5a2c2a856376c5c0bfd91d0"},
-    {file = "dj_templates-0.0.25.tar.gz", hash = "sha256:82838b20d234deddb3c02bad9130a583496b78cdaf5ea32591aec5d31a5b06a3"},
+    {file = "dj_templates-0.0.30-py3-none-any.whl", hash = "sha256:10bfa1062214e55d4b3be29ed79fdd20a2d762bc46468a8f422a867eb7e1e246"},
+    {file = "dj_templates-0.0.30.tar.gz", hash = "sha256:ef7f34d99836968fa345c468eb770ffda008d7ea670b6e9615ba3bd2fbad0bf6"},
 ]
 
 [package.dependencies]
 django = ">=6.0.6,<7.0.0"
 django-widget-tweaks = ">=1.5.1,<2.0.0"
+markdown = ">=3.10.3,<4.0.0"
 orjson = ">=3.11.9,<4.0.0"
 
 [package.source]
