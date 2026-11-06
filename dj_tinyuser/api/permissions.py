@@ -11,14 +11,14 @@ class IsInvitor(BasePermission):
 
     def has_permission(self, request, view):
         """Check for invitor permission."""
-        if not request.user.is_authenticated or not (
-            request.user.is_staff
-            or bool(
-                request.user.groups.filter(
-                    name__in=settings.INVITE_GROUPS if settings.INVITE_GROUPS else ["invitors"]
-                ).first()
-            )
-        ):
-            raise PermissionDenied("Not an invitor.")
+        if not request.user.is_authenticated:
+            raise PermissionDenied("Not authenticated")
 
-        return True
+        if request.user.is_staff or bool(
+            request.user.groups.filter(
+                name__in=settings.INVITE_GROUPS if settings.INVITE_GROUPS else ["invitors"]
+            ).first()
+        ):
+            return True
+
+        raise PermissionDenied("Not an invitor.")
