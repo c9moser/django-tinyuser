@@ -1,5 +1,5 @@
 [project]
-name="django-tinyuser"
+name="dj-tinyuser"
 dynamic=["version"]
 
 description = "A small minimal user for django using allauth-integration"
@@ -40,7 +40,7 @@ exclude = "(.data/|.git/|.venv/|venv/|.hg/|wiki/)"
 target-version = ["py312","py313", "py314"]
 
 [tool.poetry]
-version = "0.0.1"
+version = "0.0.2"
 package-mode = true
 packages = [
     {include = "dj_tinyuser"},
