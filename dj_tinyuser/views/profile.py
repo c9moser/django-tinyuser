@@ -29,8 +29,8 @@ class MyProfileView(LoginRequiredMixin, HtmxMixin, ThemeMixin, View):
     """
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
-    template_name = "@tinyuser/profile"
-    hx_template_name = "@tinyuser/hx/profile"
+    template_name = "@tinyuser/account/profile"
+    hx_template_name = "@tinyuser/hx/account/profile"
     profile_settings = {
         "show_avatar": True,
         "show_bio": True,
@@ -105,8 +105,8 @@ class ProfileView(HtmxMixin, ThemeMixin, View):
     """
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
-    template_name = "@tinyuser/profile"
-    hx_template_name = "@tinyuser/hx/profile"
+    template_name = "@tinyuser/account/profile"
+    hx_template_name = "@tinyuser/hx/account/profile"
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
@@ -162,7 +162,7 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, ThemeMixin, FormView):
     """
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
-    template_name = "@tinyuser/profile/edit"
+    template_name = "@tinyuser/account/profile/edit"
     hx_template_name = "@tinyuser/hx/profile/edit"
 
     #: Defines the form class for the profile view
