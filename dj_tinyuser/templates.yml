@@ -2,7 +2,7 @@ html:
   templates:
     theme/base: "@tinyuser/base"
     tinyuser/base: "tinyuser/html/base.dj.html"
-    inyuser/account/login: "tinyuser/html/account/login.dj.html"
+    tinyuser/account/login: "tinyuser/html/account/login.dj.html"
     # tinyuser/account/logout: "tinyuser/html/account/logout.dj.html"
     tinyuser/index: "tinyuser/html/index.html"
     tinyuser/account/login: "tinyuser/html/account/login.dj.html"
@@ -19,6 +19,8 @@ bootstrap5:
     theme/base: "@tinyuser/base"
     tinyuser/base: "tinyuser/bootstrap5/base.dj.html"
     tinyuser/account/login: "tinyuser/bootstrap5/account/login.dj.html"
+    tinyuser/account/password_reset: tinyuser/bootstrap/account/password_reset.dj.html
+    tinyuser/account/signup: "tinyuser/bootstrap5/account/signup.dj.html"
 bs5docs:
   templates:
     theme/base: "@tinyuser/base"
