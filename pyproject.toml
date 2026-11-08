@@ -40,7 +40,7 @@ exclude = "(.data/|.git/|.venv/|venv/|.hg/|wiki/)"
 target-version = ["py312","py313", "py314"]
 
 [tool.poetry]
-version = "0.0.8"
+version = "0.0.9"
 package-mode = true
 packages = [
     {include = "dj_tinyuser"},
