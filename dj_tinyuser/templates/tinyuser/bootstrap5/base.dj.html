@@ -1,4 +1,4 @@
-{% extends themes/bootstrap5/base.dj.html %}
+{% extends "themes/bootstrap5/base.dj.html" %}
 
 {% load i18n %}
 
@@ -14,7 +14,7 @@
         <li class="nav-item">
             <form method="post" class="d-inline" action="{% url 'account_logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="navbar-link">{% translate "Logout" %}</button>
+                <button type="submit" class="nav-link">{% translate "Logout" %}</button>
             </form>
         </li>
     {% else %}

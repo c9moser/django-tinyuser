@@ -4,10 +4,10 @@ dynamic=["version"]
 
 description = "A small minimal user for django using allauth-integration"
 authors = [
-    {name = "Christian Moser",email = "dev@c-moser.at"}
+    {name = "Christian Moser",email = "devel@c-moser.at"}
 ]
 maintainers = [
-	{name = "Christian Moser",email = "dev@c-moser.at"}
+	{name = "Christian Moser",email = "devel@c-moser.at"}
 ]
 license = "0BSD"
 license_files = [
@@ -40,7 +40,7 @@ exclude = "(.data/|.git/|.venv/|venv/|.hg/|wiki/)"
 target-version = ["py312","py313", "py314"]
 
 [tool.poetry]
-version = "0.0.2"
+version = "0.0.8"
 package-mode = true
 packages = [
     {include = "dj_tinyuser"},

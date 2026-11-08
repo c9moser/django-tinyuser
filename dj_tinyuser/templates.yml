@@ -16,8 +16,11 @@ html:
     # tinyuser/hx/user/profile: "tinyuser/html/hx/user/profile.dj.html"
 bootstrap5:
   templates:
+    theme/base: "@tinyuser/base"
     tinyuser/base: "tinyuser/bootstrap5/base.dj.html"
-    tinyuser/account/login: "tinyuser/bootstrap5/login.dj.html"
+    tinyuser/account/login: "tinyuser/bootstrap5/account/login.dj.html"
 bs5docs:
   templates:
-    tinyuser/account/login: "tinyuser/bs5docs/login.dj.html"
+    theme/base: "@tinyuser/base"
+    tinyuser/base: "tinyuser/bs5docs/base.dj.html"
+    tinyuser/account/login: "tinyuser/bs5docs/account/login.dj.html"

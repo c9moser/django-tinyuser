@@ -30,7 +30,7 @@ class MyProfileView(LoginRequiredMixin, HtmxMixin, ThemeMixin, View):
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
     template_name = "@tinyuser/profile"
-    htmx_template_name = "@tinyuser/hx/profile"
+    hx_template_name = "@tinyuser/hx/profile"
     profile_settings = {
         "show_avatar": True,
         "show_bio": True,
@@ -41,6 +41,9 @@ class MyProfileView(LoginRequiredMixin, HtmxMixin, ThemeMixin, View):
         "show_mastodon_url": True,
         "show_website": True,
     }
+
+    def get_context_data(self, **kwargs):
+        return ThemeMixin.get_context_data(self, **HtmxMixin.get_context_data(self, **kwargs))
 
     def get(self, request: HttpRequest) -> HttpResponse:
         """
@@ -93,21 +96,20 @@ class MyProfileView(LoginRequiredMixin, HtmxMixin, ThemeMixin, View):
                     except UserProfileSettings.DoesNotExist:
                         context["profile_settings"] = PROFILE_DEFAULTS
 
-        return render(
-            request,
-            self.htmx_template_name if self.is_htmx_request else self.template_name,
-            context,
-        )
+        return render(request, self.get_template_name(), self.get_context_data(**context))
 
 
-class ProfileView(HtmxMixin, View):
+class ProfileView(HtmxMixin, ThemeMixin, View):
     """
     View for the user profile page.
     """
 
     #: Defines the template name for the profile page using the TEMPLATE_MAPPING from settings
     template_name = "@tinyuser/profile"
-    htmx_template_name = "@tinyuser/hx/profile"
+    hx_template_name = "@tinyuser/hx/profile"
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
 
     def get_profile_settings(self, profile, profile_type):
         profile_settings, created = UserProfileSettings.get_or_create(profile=profile, type=profile_type)
@@ -151,14 +153,10 @@ class ProfileView(HtmxMixin, View):
 
         context = {"profile": profile, "profile_settings": profile_settings}
 
-        return render(
-            request,
-            self.htmx_template_name if self.is_htmx_request else self.template_name,
-            context,
-        )
+        return render(request, self.get_template_name(), self.get_context_data(**context))
 
 
-class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
+class ProfileEditView(LoginRequiredMixin, HtmxMixin, ThemeMixin, FormView):
     """
     View for the user profile page.
     """
@@ -177,13 +175,8 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
         :return: Context data for the template
         :rtype: dict
         """
-        context = super().get_context_data(**kwargs)
-        context["profile"] = self.instance
-        if "form" in kwargs:
-            context["form"] = kwargs["form"]
-        else:
-            context["form"] = self.form_class(instance=self.instance)
-        return context
+        kwargs.setdefault("form", self.form_class(instance=self.instance))
+        return super().get_context_data(**kwargs)
 
     def save_avatars(self, instance: UserProfile, files: dict):
         """
@@ -316,11 +309,7 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
         """
         self.instance = UserProfile.objects.get_or_create(user=request.user)[0]
 
-        return render(
-            request,
-            self.htmx_template_name if self.is_htmx_request else self.template_name,
-            self.get_context_data(),
-        )
+        return render(request, self.get_template_name(), self.get_context_data())
 
     def post(self, request: HttpRequest) -> HttpResponse:
         """
@@ -348,32 +337,20 @@ class ProfileEditView(LoginRequiredMixin, HtmxMixin, FormView):
                 context = self.get_context_data()
                 context["failed"] = True
                 context["exception"] = str(e)
-                return render(
-                    request,
-                    (self.htmx_template_name if self.is_htmx_request else self.template_name),
-                    context,
-                )
+                return render(request, self.get_template_name(), self.get_context_data(**context))
 
-            if self.is_htmx_request:
-                return render(
-                    request,
-                    self.htmx_template_name,
-                    context,
-                )
+            if self.is_hx_request:
+                return render(request, self.hx_template_name, self.get_context_data(**context))
             else:
                 return redirect("tinyuser:profile")
 
         context = self.get_context_data()
         context["form"] = form
         context["failed"] = True
-        return render(
-            request,
-            self.htmx_template_name if self.is_htmx_request else self.template_name,
-            context,
-        )
+        return render(request, self.get_template_name(), self.get_context_data(**context))
 
 
-class ProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
+class ProfileSettingsView(LoginRequiredMixin, HtmxMixin, ThemeMixin, View):
     """
     View for managing user profile settings.
     """
@@ -410,11 +387,7 @@ class ProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
     def get(self, request: HttpRequest, profile: str) -> HttpResponse:
         self.init_variables(profile)
 
-        return render(
-            request,
-            self.htmx_template_name if self.is_htmx_request else self.template_name,
-            self.get_context_data(),
-        )
+        return render(request, self.get_template_name(), self.get_context_data())
 
     def post(self, request: HttpRequest, profile: str) -> HttpResponse:
         self.init_variables(profile)
@@ -425,11 +398,7 @@ class ProfileSettingsView(LoginRequiredMixin, HtmxMixin, View):
         else:
             context = self.get_context_data(form=form, failed=True)
 
-        return render(
-            request,
-            (self.htmx_template_name if self.is_htmx_request else self.template_name),
-            context,
-        )
+        return render(request, self.get_template_name(), self.get_context_data(**context))
 
 
 # class ProfileSettingsView(LoginRequiredMixin, View):
