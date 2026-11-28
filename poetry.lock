@@ -880,14 +880,14 @@ reference = "pypi-public"
 
 [[package]]
 name = "dj-templates"
-version = "0.0.28"
+version = "0.0.31"
 description = "Minimal django project"
 optional = false
 python-versions = ">=3.12,<3.15"
 groups = ["main"]
 files = [
-    {file = "dj_templates-0.0.28-py3-none-any.whl", hash = "sha256:d54267614b3bdcd02ec8cd3b48e846b5f20f1cb3fc49d0b34bdeb56dd89936a9"},
-    {file = "dj_templates-0.0.28.tar.gz", hash = "sha256:09037559fa2ed050882658c562feb57fa1833d37c6cbac85c312be2a1c61125d"},
+    {file = "dj_templates-0.0.31-py3-none-any.whl", hash = "sha256:2bcf5f416226ffb0aab20700ba8cfd9e830867e704f0c39f73474e6d2048db03"},
+    {file = "dj_templates-0.0.31.tar.gz", hash = "sha256:89565bb3806cbf9484b2addb5f5348ad70aa8bec91d3329181d68f5377f4a257"},
 ]
 
 [package.dependencies]
